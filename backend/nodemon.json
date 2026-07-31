@@ -1,0 +1,16 @@
+{
+  "watch": ["server.js", "controllers/", "models/", "middleware/", "routes/", "utils/"],
+  "ext": "js,json",
+  "ignore": [
+    "node_modules/",
+    "frontend/",
+    "*.test.js",
+    "*.spec.js",
+    ".git/",
+    "logs/",
+    "public/",
+    "*.log"
+  ],
+  "delay": 2000,
+  "verbose": true
+}

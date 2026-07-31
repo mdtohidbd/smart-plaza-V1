@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        .logo-test {
+            margin: 20px 0;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 8px;
+        }
+        img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+        }
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .error {
+            color: #f44336;
+            font-weight: bold;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎯 Logo Loading Test</h1>
+        
+        <div class="info">
+            This page tests if the logo.jpeg file can be loaded from the public folder.
+        </div>
+
+        <h3>Test 1: Direct Path (/logo.jpeg)</h3>
+        <div class="logo-test">
+            <img 
+                id="logo1" 
+                src="/logo.jpeg" 
+                alt="Logo Test 1"
+                onload="document.getElementById('status1').innerHTML = '✅ SUCCESS - Logo loaded!'; document.getElementById('status1').className = 'success';"
+                onerror="document.getElementById('status1').innerHTML = '❌ FAILED - Check console for details'; document.getElementById('status1').className = 'error'; console.error('Logo failed to load:', this.src);"
+            />
+            <p id="status1">Loading...</p>
+        </div>
+
+        <h3>Test 2: Relative Path (./logo.jpeg)</h3>
+        <div class="logo-test">
+            <img 
+                id="logo2" 
+                src="./logo.jpeg" 
+                alt="Logo Test 2"
+                onload="document.getElementById('status2').innerHTML = '✅ SUCCESS - Logo loaded!'; document.getElementById('status2').className = 'success';"
+                onerror="document.getElementById('status2').innerHTML = '❌ FAILED - Check console for details'; document.getElementById('status2').className = 'error'; console.error('Logo failed to load:', this.src);"
+            />
+            <p id="status2">Loading...</p>
+        </div>
+
+        <h3>Browser Information:</h3>
+        <div class="info" id="browser-info"></div>
+        
+        <script>
+            // Display browser info
+            document.getElementById('browser-info').innerHTML = `
+                <strong>URL:</strong> ${window.location.href}<br>
+                <strong>Origin:</strong> ${window.location.origin}<br>
+                <strong>User Agent:</strong> ${navigator.userAgent}
+            `;
+            
+            // Log additional info
+            console.log('🔍 Logo Test Page Loaded');
+            console.log('📍 Current URL:', window.location.href);
+            console.log('📍 Origin:', window.location.origin);
+        </script>
+    </div>
+</body>
+</html>

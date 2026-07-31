@@ -1,4 +1,32 @@
 
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+backend/error_log.txt
+
+# Temporary / Test / Script files
+diff.txt
+
+# Build output
+dist/
+build/
+
+# IDE / Editor files
+.vscode/
+.idea/
+.DS_Store
+
 AGENT.md
 CLAUDE.md
 .agent-mem/
@@ -13,3 +41,4 @@ CLAUDE.md
 .windsurfrules
 .gemini/
 .cline/
+

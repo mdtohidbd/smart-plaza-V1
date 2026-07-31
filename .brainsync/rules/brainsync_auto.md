@@ -1,7 +1,7 @@
 
 
-# Project Memory — smart-plaza-main
-> 30 notes | Score threshold: >40
+# Project Memory — smart-plaza-V1
+> 31 notes | Score threshold: >40
 
 ## Safety — Never Run Destructive Commands
 
@@ -18,10 +18,9 @@
 
 **Stack:** JavaScript · Express + React · DB: MongoDB
 
-## Active: `backend`
+## 📝 NOTE: 1 uncommitted file(s) in working tree.\n\n## Active: `.git`
 
-- **🟢 Edited backend/.env (6 changes, 18min)**
-- **🟢 Edited backend/.env.cpanel.example (9 changes, 13min)**
+- **convention in .gitignore**
 
 ## Project Standards
 

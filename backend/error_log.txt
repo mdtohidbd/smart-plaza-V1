@@ -6545,3 +6545,29 @@ MongoServerError: E11000 duplicate key error collection: smartplaza.categories i
     at async model.create (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\mongoose\lib\model.js:2763:5)
     at async E:\MY-Portfolio\lovable\smart-plaza-main\backend\controllers\categoryController.js:53:20
 
+2026-07-31T13:25:20.291Z
+Error: Not Found - /api/routes
+    at notFound (E:\MY-Portfolio\lovable\smart-plaza-main\backend\middleware\errorMiddleware.js:2:17)
+    at Layer.handleRequest (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:342:13)
+    at E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:297:9
+    at processParams (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:582:12)
+    at next (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:291:5)
+    at E:\MY-Portfolio\lovable\smart-plaza-main\backend\server.js:114:3
+    at Layer.handleRequest (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:342:13)
+    at E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:297:9
+
+2026-07-31T13:25:21.382Z
+Error: Not Found - /api/routes
+    at notFound (E:\MY-Portfolio\lovable\smart-plaza-main\backend\middleware\errorMiddleware.js:2:17)
+    at Layer.handleRequest (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:342:13)
+    at E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:297:9
+    at processParams (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:582:12)
+    at next (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:291:5)
+    at E:\MY-Portfolio\lovable\smart-plaza-main\backend\server.js:114:3
+    at Layer.handleRequest (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:342:13)
+    at E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:297:9
+
