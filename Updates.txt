@@ -1,0 +1,45 @@
+# SmartPlaza - Feature Update Log
+
+## Release v1.0.0-EMIOverdue (May 18, 2026)
+
+### Phase 1: Removed Redundant Systems
+- Commented out Shop Management views, context selectors, menu routes, and controllers.
+- Commented out Delivery Routes settings views and mutation handlers.
+- Removed Testimonials from layouts and sidebar views.
+- Removed SR/DSR specific user assignment UI interfaces.
+- Trimmed stand-alone Brands sidebar navigation.
+- Disabled modules settings and opening stock views.
+- Cleaned up obsolete report charts (RouteWiseTopChart, DeliveryWiseTopChart).
+
+### Phase 2: Obsolete Controllers/Views Cleaned
+- Deleted redundant files (`investmentEmailController.js`, `investorController_exports.js`, `shopSRDSRController.js`).
+
+### Phase 3 & 4: Role Realignment & Customer Schema Expansion
+- Configured clean role priorities: Super Admin, Admin, Manager, Sales Staff, E-Commerce Admin, Customers.
+- Extended Customer schema to capture critical risk mitigation variables:
+  - `guarantor` details (Name, Contact, Address, Relation)
+  - `workplace`
+  - `salary`
+  - `alternativeContactNumber`
+
+### Phase 6: Full Quotation Lifecycle
+- Added backend `Quotation` schemas, routes, controllers, and permissions.
+- Designed premium `QuotationList.jsx`, `CreateQuotation.jsx`, and `QuotationDetail.jsx` views with standard white aesthetic.
+
+### Phase 7: Invoice Type Enhancements
+- Added `invoiceType` (`retail`, `wholesale`) to backend and frontend sales flows.
+- Extended `paymentMethod` supported enums (`Cash, Bank, Mobile Banking, Credit, bKash, Nagad, Card`).
+
+### Phase 8: Overdue EMI Handling & Repossession
+- Added repossessed array and late fee collection fields to `EMIInvoice.js` schema.
+- Added dynamic late fee algorithm (৳100 + ৳10/day overdue penalty) within collections.
+- Added professional Legal Notice PDF generation utilizing headless Puppeteer formatting.
+- Integrated standard post-repossession stock-in workflow that routes returned assets back to warehouse inventory.
+- Created beautiful overdue collections center with print notice triggers and repossession selectors inside `EMIOverdue.jsx`.
+
+### Layout & Navigation Enhancements
+- Relocated "Shop" button from the admin sidebar menu to a prominent, responsive "Go Back to E-commerce" action in the top header (AppBar), utilizing Material-UI styling consistent with the design system.
+
+### Bug Fixes (June 10, 2026)
+- Fixed `500 Internal Server Error` during product transfer creation by refactoring reference number generation logic. The new system performs a global increment search and handles pre-existing and duplicate keys dynamically in a query loop to guarantee uniqueness.
+- Made the `supplier` field optional in both `Add Product` and `Edit Product` forms, allowing products to be registered without pre-assigning a supplier (which will instead be linked dynamically during purchase transactions). Added a "None" select option to the dropdown and sanitized empty supplier payloads as `null` to prevent mongoose ObjectId validation failures.
