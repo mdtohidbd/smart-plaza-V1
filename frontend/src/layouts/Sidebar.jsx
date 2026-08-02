@@ -18,6 +18,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useMenu } from '../hooks/useMenu';
+import Logo from '../components/Logo';
 
 export const drawerWidth = 260;
 
@@ -464,11 +465,19 @@ const Sidebar = ({ open, setOpen, isMobile }) => {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'flex-end',
-          px: 1,
+          justifyContent: open ? 'space-between' : 'center',
+          px: 2,
           minHeight: '64px !important',
         }}
       >
+        {open && (
+          <Logo 
+            variant="admin"
+            height={36}
+            fontSize="1.1rem"
+            color="#1E293B"
+          />
+        )}
         {open && (
           <IconButton onClick={handleDrawerClose} sx={{ color: '#64748B' }}>
             <ChevronLeftIcon />

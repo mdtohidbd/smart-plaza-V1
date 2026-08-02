@@ -1,11 +1,18 @@
 import React from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { BRAND, PhoneIcon, MailIcon, PinIcon } from './invoiceTheme';
+import { useSettings } from '../../context/SettingsContext';
 
-const logo = '/logo-final.jpeg';
 const money = (n) => (typeof n === 'number' ? n.toLocaleString() : '0');
 
 const FabricatedSalesInvoice = ({ invoiceData, sale }) => {
+  const { settings } = useSettings();
+  const logo = settings?.logo || '/logo-final.jpeg';
+  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const phone = settings?.phone || '01842-144844';
+  const email = settings?.email || 'smartplazabd@gmail.com';
+  const address = settings?.companyAddress || '1, KDA Avenue, Khulna';
+  const website = settings?.website || email;
   if (!invoiceData) return null;
 
   const items = invoiceData.items || [];
@@ -23,15 +30,14 @@ const FabricatedSalesInvoice = ({ invoiceData, sale }) => {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `2px solid ${BRAND.border}`, position: 'relative', height: '90px' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, zIndex: 1, pl: 4 }}>
             <Box sx={{ width: 72, display: 'flex', alignItems: 'center' }}>
-              <img src={logo} alt="Smart Plaza Logo" style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
+              <img src={logo} alt="Company Logo" style={{ width: '100%', height: 'auto', objectFit: 'contain', maxHeight: '60px' }} />
             </Box>
             <Box>
-              <Typography sx={{ fontWeight: 900, fontSize: 28, lineHeight: 1, letterSpacing: '-1px' }}>
-                <Box component="span" sx={{ color: BRAND.orange }}>Smart</Box>{' '}
-                <Box component="span" sx={{ color: BRAND.teal }}>Plaza</Box>
+              <Typography sx={{ fontWeight: 900, fontSize: 26, lineHeight: 1.1, color: BRAND.teal, letterSpacing: '-0.5px' }}>
+                {companyName}
               </Typography>
-              <Typography sx={{ fontSize: 11, fontWeight: 'bold', color: BRAND.ink, mt: 0.3 }}>
-                Electronics&nbsp;&nbsp;Smartphones&nbsp;&nbsp;Gadgets
+              <Typography sx={{ fontSize: 11, fontWeight: 'bold', color: BRAND.ink, mt: 0.5 }}>
+                {email}
               </Typography>
             </Box>
           </Box>
@@ -196,7 +202,7 @@ const FabricatedSalesInvoice = ({ invoiceData, sale }) => {
               <Box sx={{ bgcolor: BRAND.orange, borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <PinIcon size={11} />
               </Box>
-              1, KDA Avenue, Khulna
+              {address}
             </Typography>
           </Box>
           <Box sx={{ position: 'absolute', bottom: 15, left: '20px', display: 'flex', alignItems: 'center', gap: 4, zIndex: 2 }}>
@@ -204,13 +210,13 @@ const FabricatedSalesInvoice = ({ invoiceData, sale }) => {
               <Box sx={{ bgcolor: 'black', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                  <PhoneIcon size={11} />
               </Box>
-              01842144844
+              {phone}
             </Typography>
             <Typography sx={{ color: '#fff', fontSize: 11, display: 'flex', alignItems: 'center', gap: 0.7, fontWeight: 'bold' }}>
               <Box sx={{ bgcolor: 'black', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                  <MailIcon size={11} />
               </Box>
-              www.smartplazabd.com
+              {website}
             </Typography>
           </Box>
         </Box>

@@ -4,10 +4,12 @@ import { Facebook, Instagram, YouTube, LinkedIn, ArrowUpward, ChevronRight } fro
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../components/Logo';
 import { useAuth } from '../../context/AuthContext';
+import { useSettings } from '../../context/SettingsContext';
 
 const EcommerceFooter = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const { settings } = useSettings();
   const isStaffUser = ['Super Admin', 'Admin', 'Manager', 'SR', 'DSR', 'Investor'].includes(user?.role);
 
   const scrollToTop = () => {
@@ -45,13 +47,13 @@ const EcommerceFooter = () => {
             sx={{ mb: 0.5 }}
           />
           <Typography variant="body2" sx={{ color: '#3c4a41', lineHeight: 1.6, fontSize: { xs: '0.8rem', md: '0.9rem' } }}>
-            1 KDA Avenue, Shibbari, Khulna, Bangladesh
+            {settings?.companyAddress || '1 KDA Avenue, Shibbari, Khulna, Bangladesh'}
           </Typography>
           <Typography variant="body2" sx={{ color: '#3c4a41', fontSize: { xs: '0.8rem', md: '0.9rem' } }}>
-            Phone: +880-1842-144844
+            Phone: {settings?.phone || '+880-1842-144844'}
           </Typography>
           <Typography variant="body2" sx={{ color: '#3c4a41', fontSize: { xs: '0.8rem', md: '0.9rem' } }}>
-            Email: smartplazabd@gmail.com
+            Email: {settings?.email || 'smartplazabd@gmail.com'}
           </Typography>
         </Stack>
       )
@@ -183,7 +185,7 @@ const EcommerceFooter = () => {
           gap: { xs: 2.5, md: 2 }
         }}>
           <Typography variant="body2" sx={{ color: '#3c4a41', fontWeight: 500, fontSize: { xs: '0.8rem', md: '0.9rem' }, textAlign: 'center' }}>
-            © {new Date().getFullYear()} Smart Plaza BD. All rights reserved.
+            © {new Date().getFullYear()} {settings?.companyName || 'Smart Plaza BD'}. All rights reserved.
           </Typography>
           
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>

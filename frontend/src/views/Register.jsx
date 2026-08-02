@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 import {
   Box,
   Typography,
@@ -69,6 +70,7 @@ const Register = ({ isEcommerce = false }) => {
   const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
+  const { settings } = useSettings();
   const navigate = useNavigate();
 
   const passwordsMatch = confirmPassword.length > 0 && password === confirmPassword;
@@ -232,7 +234,7 @@ const Register = ({ isEcommerce = false }) => {
           fontSize: '0.8rem', color: '#64748B',
           position: 'relative', zIndex: 1
         }}>
-          © {new Date().getFullYear()} Smart Plaza BD. All rights reserved.
+          © {new Date().getFullYear()} {settings?.companyName || 'Smart Plaza BD'}. All rights reserved.
         </Typography>
       </Box>
 

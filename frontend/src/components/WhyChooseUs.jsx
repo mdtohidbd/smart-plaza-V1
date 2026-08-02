@@ -6,6 +6,7 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import { useSettings } from '../context/SettingsContext';
 
 const features = [
   {
@@ -41,17 +42,20 @@ const features = [
 ];
 
 const WhyChooseUs = () => {
+  const { settings } = useSettings();
+  const companyName = settings?.companyName || 'Smart Plaza BD';
+
   return (
     <Box 
       sx={{ 
-        py: 8, 
-        backgroundColor: '#FAFAF8',
-        borderTop: '1px solid #E2E8F0'
+        py: { xs: 8, md: 12 }, 
+        bgcolor: '#F8FAFC',
+        position: 'relative'
       }}
     >
       <Container maxWidth="lg">
         {/* Section Header */}
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
+        <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 8 } }}>
           <Typography 
             variant="h4" 
             component="h2" 
@@ -63,7 +67,7 @@ const WhyChooseUs = () => {
               fontSize: { xs: '1.75rem', md: '2.25rem' }
             }}
           >
-            Why Choose Smart Plaza BD?
+            Why Choose {companyName}?
           </Typography>
           <Typography 
             variant="body1" 
@@ -174,7 +178,7 @@ const WhyChooseUs = () => {
               mb: 3
             }}
           >
-            Join hundreds of successful businesses using Smart Plaza BD
+            Join hundreds of successful businesses using {companyName}
           </Typography>
         </Box>
       </Container>

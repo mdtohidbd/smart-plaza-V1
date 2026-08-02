@@ -376,6 +376,29 @@ exports.getApprovedTestimonials = async (req, res) => {
   }
 };
 
+// @desc    Get public shop settings
+// @route   GET /api/public/settings
+exports.getPublicSettings = async (req, res) => {
+  try {
+    const Setting = require('../models/Setting');
+    let settings = await Setting.findOne().sort({ updatedAt: -1 }).lean();
+    if (!settings) {
+      settings = {
+        companyName: 'Smart Plaza BD',
+        companyAddress: '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
+        phone: '01842-144844',
+        email: 'smartplazabd@gmail.com',
+        logo: '/website-logo.png',
+        website: ''
+      };
+    }
+    res.status(200).json({ success: true, data: settings });
+  } catch (error) {
+    console.error('Error fetching public settings:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch public settings' });
+  }
+};
+
 // @desc    Get public logo
 // @route   GET /api/public/logo
 exports.getLogo = (req, res) => {
@@ -403,3 +426,4 @@ exports.getLogo = (req, res) => {
     res.status(500).json({ message: 'Error serving logo' });
   }
 };
+

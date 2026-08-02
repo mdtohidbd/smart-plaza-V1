@@ -8,14 +8,18 @@ import {
   Button,
   FormControlLabel,
   Switch,
-  Alert
+  Alert,
+  CircularProgress
 } from '@mui/material';
+import { CloudUpload as CloudUploadIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
+import { useSettings } from '../../context/SettingsContext';
 
 const General = () => {
   const { user } = useAuth();
+  const { fetchSettings, setSettings } = useSettings();
   const [formData, setFormData] = useState({
     companyName: '',
     companyAddress: '',
@@ -23,6 +27,7 @@ const General = () => {
     alternativePhone: '',
     email: '',
     website: '',
+    logo: '',
     enableMultipleWarehouse: false,
     enableWholesale: true,
     enableRetail: false,
@@ -33,6 +38,7 @@ const General = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -52,9 +58,10 @@ const General = () => {
           alternativePhone: data.alternativePhone || '',
           email: data.email || '',
           website: data.website || '',
+          logo: data.logo || '',
           enableMultipleWarehouse: data.enableMultipleWarehouse || false,
-          enableWholesale: data.enableWholesale || true,
-          enableRetail: data.enableRetail || false,
+          enableWholesale: data.enableWholesale !== undefined ? data.enableWholesale : true,
+          enableRetail: data.enableRetail !== undefined ? data.enableRetail : false,
           enableSalesNotification: data.enableSalesNotification || false,
           enableSalesReturnNotification: data.enableSalesReturnNotification || false,
           enablePaymentReceivedNotification: data.enablePaymentReceivedNotification || false
@@ -70,15 +77,24 @@ const General = () => {
 
   // Update settings mutation
   const updateSettingsMutation = useMutation(
-    (data) => api.put('/api/settings', data),
+    async (data) => {
+      const response = await api.put('/api/settings', data);
+      return response;
+    },
     {
-      onSuccess: () => {
+      onSuccess: (res) => {
         queryClient.invalidateQueries('settings');
+        if (res?.data?.data) {
+          setSettings(res.data.data);
+        } else {
+          setSettings(prev => ({ ...prev, ...formData }));
+        }
+        fetchSettings(); // Instantly sync across public and auth states
         alert('Settings updated successfully!');
       },
       onError: (error) => {
         console.error('Error updating settings:', error);
-        alert('Error updating settings: ' + error.response?.data?.message || error.message);
+        alert('Error updating settings: ' + (error.response?.data?.message || error.message));
       }
     }
   );
@@ -89,6 +105,30 @@ const General = () => {
       ...formData,
       [name]: type === 'checkbox' ? checked : value
     });
+  };
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fd = new FormData();
+    fd.append('image', file);
+
+    setUploadingLogo(true);
+    try {
+      const response = await api.post('/api/upload', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (response.data && response.data.url) {
+        setFormData(prev => ({ ...prev, logo: response.data.url }));
+        alert('Logo image uploaded successfully!');
+      }
+    } catch (error) {
+      console.error('Logo upload error:', error);
+      alert('Failed to upload logo image: ' + (error.response?.data?.message || error.message));
+    } finally {
+      setUploadingLogo(false);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -188,13 +228,95 @@ const General = () => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Website"
+              label="Website URL"
               name="website"
               value={formData.website}
               onChange={handleInputChange}
               variant="outlined"
               sx={inputStyles}
             />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Box sx={{ p: 2.5, border: '1px dashed #CBD5E1', borderRadius: '12px', bgcolor: '#F8FAFC' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#334155', mb: 1.5 }}>
+                Logo Image (Website Header & Favicon Icon)
+              </Typography>
+              
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} sm={8}>
+                  <TextField
+                    fullWidth
+                    label="Logo Image URL"
+                    name="logo"
+                    value={formData.logo}
+                    onChange={handleInputChange}
+                    placeholder="Upload image or paste direct image URL (.png, .jpg)"
+                    variant="outlined"
+                    sx={inputStyles}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    fullWidth
+                    disabled={uploadingLogo}
+                    startIcon={!uploadingLogo && <CloudUploadIcon />}
+                    sx={{
+                      height: '54px',
+                      borderRadius: '10px',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      bgcolor: '#0EA5E9',
+                      '&:hover': { bgcolor: '#0284C7' },
+                      boxShadow: '0 4px 12px rgba(14, 165, 233, 0.25)'
+                    }}
+                  >
+                    {uploadingLogo ? (
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <CircularProgress size={20} color="inherit" />
+                        <span>Uploading...</span>
+                      </Box>
+                    ) : (
+                      'Upload Logo Image'
+                    )}
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleLogoUpload}
+                    />
+                  </Button>
+                </Grid>
+              </Grid>
+
+              {formData.logo && !formData.logo.includes('google.com/imgres') && (
+                <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', gap: 2, p: 1.5, bgcolor: '#FFFFFF', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                  <Box
+                    component="img"
+                    src={formData.logo}
+                    alt="Logo Preview"
+                    sx={{ height: 40, width: 'auto', objectFit: 'contain', maxHeight: 40 }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                  <Typography variant="body2" sx={{ color: '#64748B', fontSize: '0.85rem' }}>
+                    Preview of selected logo
+                  </Typography>
+                  <Button
+                    size="small"
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    sx={{ ml: 'auto', textTransform: 'none' }}
+                    onClick={() => setFormData(prev => ({ ...prev, logo: '' }))}
+                  >
+                    Remove
+                  </Button>
+                </Box>
+              )}
+            </Box>
           </Grid>
 
           <Grid item xs={12}>
@@ -214,7 +336,7 @@ const General = () => {
         </Grid>
 
         <Box sx={{ mt: 5, display: 'flex', justifyContent: 'flex-end' }}>
-          {user?.permissions?.settings?.update && (
+          {(user?.role === 'Super Admin' || user?.permissions?.settings?.update || user?.role === 'Admin') ? (
             <Button
               variant="contained"
               type="submit"
@@ -237,6 +359,10 @@ const General = () => {
             >
               {updateSettingsMutation.isLoading ? 'Saving...' : 'Save Changes'}
             </Button>
+          ) : (
+            <Alert severity="info" sx={{ width: '100%' }}>
+              You do not have permission to update system settings. Please contact Super Admin.
+            </Alert>
           )}
         </Box>
       </form>

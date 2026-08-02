@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { useSettings } from '../../context/SettingsContext';
 
 // Helper for Number to Words (Indian Numbering System)
 const numberToWords = (num) => {
@@ -23,6 +24,9 @@ const numberToWords = (num) => {
 }
 
 const CustomerTaxInvoice = ({ invoiceData, sale, title }) => {
+  const { settings } = useSettings();
+  const companyName = settings?.companyName || 'Smart Plaza';
+  const address = settings?.companyAddress || '1, KDA Avenue, Khulna';
   if (!invoiceData) return null;
 
   const isFabricated = title === 'Retail Tax Invoice';
@@ -56,10 +60,10 @@ const CustomerTaxInvoice = ({ invoiceData, sale, title }) => {
       {/* Info Section */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #000', pt: 1, mb: 1 }}>
         <Box sx={{ width: '60%', pr: 2 }}>
-          <Typography variant="body2" sx={{ fontSize: '11px' }}><strong>Name of Registered Person:</strong> Smart Plaza</Typography>
+          <Typography variant="body2" sx={{ fontSize: '11px' }}><strong>Name of Registered Person:</strong> {companyName}</Typography>
           <Typography variant="body2" sx={{ fontSize: '11px' }}><strong>BIN of Registered Person:</strong> 006617818-0801</Typography>
-          <Typography variant="body2" sx={{ fontSize: '11px' }}><strong>Address:</strong> 1, KDA Avenue, Khulna</Typography>
-          <Typography variant="body2" sx={{ fontSize: '11px' }}><strong>Challan Issuing Address:</strong> 1, KDA Avenue, Khulna</Typography>
+          <Typography variant="body2" sx={{ fontSize: '11px' }}><strong>Address:</strong> {address}</Typography>
+          <Typography variant="body2" sx={{ fontSize: '11px' }}><strong>Challan Issuing Address:</strong> {address}</Typography>
           
           <Box sx={{ mt: 1 }}>
             <Typography variant="body2" sx={{ fontSize: '11px' }}><strong>Name of Purchaser:</strong> {sale?.customer?.contactName || 'Walk-in Customer'}</Typography>

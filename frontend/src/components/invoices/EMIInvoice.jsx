@@ -1,9 +1,14 @@
 import React from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Divider, Grid } from '@mui/material';
-
-const logo = '/logo-final.jpeg';
+import { useSettings } from '../../context/SettingsContext';
 
 const EMIInvoice = ({ emiInvoice, sale, title }) => {
+  const { settings } = useSettings();
+  const logo = settings?.logo || '/logo-final.jpeg';
+  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const phone = settings?.phone || '01842-144844';
+  const email = settings?.email || 'smartplazabd@gmail.com';
+  const address = settings?.companyAddress || '1 KDA Avenue, Shibbari, Khulna, Bangladesh, 9100';
   // Use emiInvoice if available, fallback to sale if somehow emiInvoice is missing but it's an EMI sale
   if (!emiInvoice && !sale) return null;
 
@@ -23,12 +28,12 @@ const EMIInvoice = ({ emiInvoice, sale, title }) => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, borderBottom: '2px solid #0f172a', pb: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
           <Box sx={{ width: 100, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <img src={logo} alt="Smart Plaza Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <img src={logo} alt="Company Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </Box>
           <Box>
-            <Typography variant="h3" sx={{ fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>SmartPlaza</Typography>
-            <Typography variant="body2" sx={{ color: '#64748b' }}>1 KDA Avenue, Shibabari, Khulna, Bangladesh, 9100</Typography>
-            <Typography variant="body2" sx={{ color: '#64748b' }}>Phone: 01842-144844 | Email: smartplazabd@gmail.com</Typography>
+            <Typography variant="h3" sx={{ fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>{companyName}</Typography>
+            <Typography variant="body2" sx={{ color: '#64748b' }}>{address}</Typography>
+            <Typography variant="body2" sx={{ color: '#64748b' }}>Phone: {phone} | Email: {email}</Typography>
           </Box>
         </Box>
         <Box sx={{ textAlign: 'right' }}>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 import {
   Box,
   Typography,
@@ -126,6 +127,7 @@ const Login = ({ isEcommerce = false }) => {
   const [activeQuickRole, setActiveQuickRole] = useState(null);
 
   const { login } = useAuth();
+  const { settings } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || (isEcommerce ? '/account' : '/dashboard');
@@ -313,7 +315,7 @@ const Login = ({ isEcommerce = false }) => {
           color: '#64748B',
           position: 'relative', zIndex: 1
         }}>
-          © {new Date().getFullYear()} Smart Plaza BD. All rights reserved.
+          © {new Date().getFullYear()} {settings?.companyName || 'Smart Plaza BD'}. All rights reserved.
         </Typography>
       </Box>
 

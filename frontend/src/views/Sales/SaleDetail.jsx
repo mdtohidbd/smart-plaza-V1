@@ -635,7 +635,7 @@ const SaleDetail = () => {
         <InvoicePrint
           ref={invoicePrintRef}
           sale={sale}
-          companyInfo={{
+          companyInfo={companyInfo?.companyName ? companyInfo : {
             companyName: 'Smart Plaza BD',
             companyAddress: '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
             phone: '01842-144844',

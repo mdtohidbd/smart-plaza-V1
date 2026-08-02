@@ -12,8 +12,12 @@ const {
   getPublicProducts,
   getPublicCategories,
   getApprovedTestimonials,
+  getPublicSettings,
   getLogo
 } = require('../controllers/publicController');
+
+// Settings
+router.get('/settings', getPublicSettings);
 
 // Banners & Brands
 router.get('/banners', getPublicBanners);

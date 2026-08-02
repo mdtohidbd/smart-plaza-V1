@@ -8,9 +8,13 @@ import {
   Send as SendIcon
 } from '@mui/icons-material';
 import EcommerceLayout from '../../ecommerce/layout/EcommerceLayout';
+import { useSettings } from '../../context/SettingsContext';
 
 const Contact = () => {
   console.log('Contact component rendering');
+  const { settings } = useSettings();
+  const companyName = settings?.companyName || 'Smart Plaza BD';
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -52,19 +56,19 @@ const Contact = () => {
     {
       icon: <PhoneIcon />,
       title: 'Call Us',
-      details: ['+880 1842-144844', '+880 1234-567890'],
+      details: [settings?.phone || '+880 1842-144844', settings?.alternativePhone || ''].filter(Boolean),
       action: 'Call now'
     },
     {
       icon: <EmailIcon />,
       title: 'Email Us',
-      details: ['smartplazabd@gmail.com', 'support@smartplazabd.com'],
+      details: [settings?.email || 'smartplazabd@gmail.com'],
       action: 'Send email'
     },
     {
       icon: <LocationIcon />,
       title: 'Visit Our Store',
-      details: ['1 KDA Avenue, Shibbari', 'Khulna-9100, Bangladesh'],
+      details: [settings?.companyAddress || '1 KDA Avenue, Shibbari, Khulna-9100, Bangladesh'],
       action: 'Get directions'
     },
     {
@@ -90,7 +94,7 @@ const Contact = () => {
           Contact Us
         </Typography>
         <Typography variant="h6" sx={{ opacity: 0.9 }}>
-          Get in touch with Smart Plaza BD
+          Get in touch with {companyName}
         </Typography>
       </Box>
 
@@ -247,12 +251,10 @@ const Contact = () => {
             {/* Main Showroom */}
             <Box sx={{ mb: 3 }}>
               <Typography variant="subtitle1" fontWeight="bold">
-                Smart Plaza BD - Khulna Showroom
+                {companyName} - Showroom
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                1 KDA Avenue, Shibbari
-                <br />
-                Khulna-9100, Bangladesh
+              <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: 'pre-line' }}>
+                {settings?.companyAddress || '1 KDA Avenue, Shibbari\nKhulna-9100, Bangladesh'}
               </Typography>
             </Box>
 

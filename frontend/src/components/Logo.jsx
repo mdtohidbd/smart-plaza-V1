@@ -1,11 +1,10 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useSettings } from '../context/SettingsContext';
 
 /**
- * Smart Plaza Centralized Logo Component
- * 
- * This component uses the new website-logo.png as the 'S' in Smart Plaza.
+ * Smart Plaza Centralized Dynamic Logo Component
  */
 const Logo = ({ 
   height = 45, 
@@ -15,6 +14,12 @@ const Logo = ({
   variant = 'default', // 'default' or 'admin'
   sx = {} 
 }) => {
+  const { settings } = useSettings();
+  
+  // Dynamic values from Settings
+  const logoSrc = settings?.logo || '/website-logo.png';
+  const companyName = settings?.companyName || 'Skybridge Systems';
+
   return (
     <Box
       component={Link}
@@ -31,8 +36,8 @@ const Logo = ({
       }}
     >
       <img
-        src="/website-logo.png"
-        alt="Smart Plaza"
+        src={logoSrc}
+        alt={companyName}
         style={{
           height: height,
           width: 'auto',
@@ -42,7 +47,7 @@ const Logo = ({
         }}
         onError={(e) => {
           e.target.onerror = null;
-          e.target.src = '/logo.jpeg'; // Fallback
+          e.target.src = '/website-logo.png'; // Fallback
         }}
       />
       {showText && (
@@ -52,14 +57,14 @@ const Logo = ({
             fontWeight: 800, 
             letterSpacing: '-0.02em',
             fontSize: fontSize,
-            ml: 0.4, // Small natural gap after the "S" logo
+            ml: 0.4,
             fontFamily: '"Outfit", sans-serif',
             lineHeight: 1,
             display: 'flex',
             alignItems: 'center'
           }}
         >
-          mart Plaza{variant === 'admin' ? ' BD' : ''}
+          {companyName}
         </Typography>
       )}
     </Box>

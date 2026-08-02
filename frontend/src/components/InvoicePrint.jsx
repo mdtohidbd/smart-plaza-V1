@@ -22,19 +22,21 @@ import CloseIcon from '@mui/icons-material/Close';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import logo from '../assets/logo.jpeg';
 import { downloadPdfFromElement } from '../utils/pdfGenerator';
-// QR code image not available - using placeholder
+import { useSettings } from '../context/SettingsContext';
 
-const InvoicePrint = forwardRef(({ sale }, ref) => {
+const InvoicePrint = forwardRef(({ sale, companyInfo: customCompanyInfo }, ref) => {
+  const { settings } = useSettings();
   const [open, setOpen] = useState(false);
   const [printReady, setPrintReady] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  // Static company information
-  const companyInfo = {
-    companyName: 'Smart Plaza BD',
-    companyAddress: '1 KDA Avenue, Shibbari, Khulna, Bangladesh, 9100',
-    phone: '01842-144844',
-    email: 'smartplazabd@gmail.com'
+  // Dynamic company information fallback
+  const companyInfo = customCompanyInfo || {
+    companyName: settings?.companyName || 'Smart Plaza BD',
+    companyAddress: settings?.companyAddress || '1 KDA Avenue, Shibbari, Khulna, Bangladesh, 9100',
+    phone: settings?.phone || '01842-144844',
+    email: settings?.email || 'smartplazabd@gmail.com',
+    logo: settings?.logo || logo
   };
 
   useImperativeHandle(ref, () => ({
@@ -234,7 +236,7 @@ const InvoicePrint = forwardRef(({ sale }, ref) => {
               <Grid item xs={12} md={7}>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 3 }}>
                   <img 
-                    src={logo} 
+                    src={companyInfo.logo || logo} 
                     alt="Company Logo" 
                     style={{ 
                       maxHeight: '100px', 

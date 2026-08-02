@@ -1,8 +1,12 @@
 import React from 'react';
 import { Box, Container, Typography, Grid, Card, CardContent, Avatar } from '@mui/material';
 import EcommerceLayout from '../../ecommerce/layout/EcommerceLayout';
+import { useSettings } from '../../context/SettingsContext';
 
 const About = () => {
+  const { settings } = useSettings();
+  const companyName = settings?.companyName || 'Smart Plaza BD';
+
   const team = [
     {
       name: "Akash Ghosh",
@@ -29,10 +33,10 @@ const About = () => {
       }}>
         <Container maxWidth="xl">
           <Typography variant="h2" fontWeight="bold" gutterBottom>
-            About Smart Plaza BD
+            About {companyName}
           </Typography>
           <Typography variant="h6" sx={{ opacity: 0.9, maxWidth: '800px', mx: 'auto' }}>
-            Empowering businesses with innovative solutions since 2024
+            Empowering businesses with innovative solutions
           </Typography>
         </Container>
       </Box>
@@ -58,7 +62,7 @@ const About = () => {
               Top-quality Electronics & Home Appliances in Bangladesh!
             </Typography>
             <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-              Smart Plaza BD is your trusted destination for premium electronics and home appliances 
+              {companyName} is your trusted destination for premium electronics and home appliances 
               across Bangladesh. We offer an extensive range of products from leading brands, 
               combining great deals with expert advice to help you make informed decisions.
             </Typography>
@@ -81,7 +85,7 @@ const About = () => {
       <Box sx={{ bgcolor: 'background.default', py: 8, borderTop: (theme) => `1px solid ${theme.palette.divider}` }}>
         <Container maxWidth="xl">
           <Typography variant="h3" fontWeight="bold" align="center" gutterBottom color="text.primary">
-            Why Choose Smart Plaza BD?
+            Why Choose {companyName}?
           </Typography>
           <Box
             sx={{
@@ -267,10 +271,10 @@ const About = () => {
             Get in touch with us today
           </Typography>
           <Typography variant="body1">
-            📍 1 KDA Avenue, Shibbari, Khulna, Bangladesh, 9100
+            📍 {settings?.companyAddress || '1 KDA Avenue, Shibbari, Khulna, Bangladesh, 9100'}
           </Typography>
           <Typography variant="body1">
-            📞 01842-144844 | ✉️ smartplazabd@gmail.com
+            📞 {settings?.phone || '01842-144844'} | ✉️ {settings?.email || 'smartplazabd@gmail.com'}
           </Typography>
         </Container>
       </Box>

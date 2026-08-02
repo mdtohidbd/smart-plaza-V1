@@ -1,7 +1,7 @@
 
 
 # Project Memory — smart-plaza-V1
-> 31 notes | Score threshold: >40
+> 34 notes | Score threshold: >40
 
 ## Safety — Never Run Destructive Commands
 
@@ -18,20 +18,21 @@
 
 **Stack:** JavaScript · Express + React · DB: MongoDB
 
-## 📝 NOTE: 1 uncommitted file(s) in working tree.\n\n## Active: `.git`
+## Active: `.`
 
+- **convention in .gitignore**
 - **convention in .gitignore**
 
 ## Project Standards
 
 - convention in .gitignore
-- Rate limit API endpoints to prevent abuse
-- Validate request body with a schema validator (Joi, Zod)
-- Use helmet for security headers
+- convention in .gitignore
+- Extract repeated class patterns into components
+- Use responsive prefixes consistently (sm:, md:, lg:, xl:)
+- Don't use arbitrary values when a utility class exists
 - Use Suspense and Error Boundaries for async operations
 - Don't prop-drill more than 2 levels — use Context or state management
 - Use useMemo for expensive computations, useCallback for stable references
-- Enable strict mode in tsconfig.json
 
 ## Verified Best Practices
 

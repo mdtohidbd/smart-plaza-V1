@@ -5,8 +5,12 @@ const asyncHandler = require('express-async-handler');
 // @route   GET /api/settings
 // @access  Private
 const getSettings = asyncHandler(async (req, res) => {
-  // Get settings for the current shop
-  let settings = await Setting.findOne({ shop: req.shopId });
+  // Get settings for the current shop or fallback to latest settings document
+  let settings = await Setting.findOne(req.shopId ? { shop: req.shopId } : {}).sort({ updatedAt: -1 });
+
+  if (!settings) {
+    settings = await Setting.findOne().sort({ updatedAt: -1 });
+  }
 
   if (!settings) {
     // If no settings exist, create default settings with required fields
@@ -15,7 +19,7 @@ const getSettings = asyncHandler(async (req, res) => {
       companyAddress: '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
       phone: '01842-144844',
       email: 'smartplazabd@gmail.com',
-      shop: req.shopId
+      shop: req.shopId || undefined
     });
   }
 
@@ -29,7 +33,11 @@ const getSettings = asyncHandler(async (req, res) => {
 // @route   PUT /api/settings
 // @access  Private
 const updateSettings = asyncHandler(async (req, res) => {
-  let settings = await Setting.findOne({ shop: req.shopId });
+  let settings = await Setting.findOne(req.shopId ? { shop: req.shopId } : {}).sort({ updatedAt: -1 });
+
+  if (!settings) {
+    settings = await Setting.findOne().sort({ updatedAt: -1 });
+  }
 
   if (!settings) {
     // If no settings exist, create them with default values for required fields
@@ -38,7 +46,7 @@ const updateSettings = asyncHandler(async (req, res) => {
       companyAddress: req.body.companyAddress || '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
       phone: req.body.phone || '01842-144844',
       email: req.body.email || 'smartplazabd@gmail.com',
-      shop: req.shopId
+      shop: req.shopId || undefined
     };
     
     // Add any other provided fields
@@ -63,11 +71,17 @@ const updateSettings = asyncHandler(async (req, res) => {
     if (!settings.phone) settings.phone = '01842-144844';
     if (!settings.email) settings.email = 'smartplazabd@gmail.com';
     
-    // Use updateOne to bypass validation temporarily
-    await Setting.updateOne({ _id: settings._id }, { $set: settings.toObject() });
+    // Update all setting documents so there's never any mismatch across different shops or public endpoints
+    await Setting.updateMany({}, { $set: req.body });
     
     // Fetch the updated document
     settings = await Setting.findById(settings._id);
+  }
+
+  // Also update Shop document names across all shops
+  if (req.body.companyName) {
+    const Shop = require('../models/Shop');
+    await Shop.updateMany({}, { $set: { name: req.body.companyName } });
   }
 
   res.status(200).json({

@@ -1,10 +1,16 @@
 import React from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { BRAND, PhoneIcon, MailIcon, PinIcon } from './invoiceTheme';
-
-const logo = '/logo-final.jpeg';
+import { useSettings } from '../../context/SettingsContext';
 
 const CustomerSalesInvoice = ({ invoiceData, sale, title }) => {
+  const { settings } = useSettings();
+  const logo = settings?.logo || '/logo-final.jpeg';
+  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const phone = settings?.phone || '01842-144844';
+  const email = settings?.email || 'smartplazabd@gmail.com';
+  const address = settings?.companyAddress || '1, KDA Avenue, Khulna';
+  const website = settings?.website || email;
   if (!invoiceData) return null;
 
   const baseDate = sale?.date ? new Date(sale.date) : new Date();
@@ -36,17 +42,14 @@ const CustomerSalesInvoice = ({ invoiceData, sale, title }) => {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 0, borderBottom: `2px solid ${BRAND.border}`, position: 'relative', height: '90px' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, zIndex: 1, pl: 4 }}>
             <Box sx={{ width: 80, height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src={logo} alt="Smart Plaza Logo" style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
+              <img src={logo} alt="Company Logo" style={{ width: '100%', height: 'auto', objectFit: 'contain', maxHeight: '60px' }} />
             </Box>
             <Box>
-              <Typography variant="h3" fontWeight="900" sx={{ m: 0, lineHeight: 1, letterSpacing: '-1px' }}>
-                <Box component="span" sx={{ color: BRAND.orange }}>Smart</Box>{' '}
-                <Box component="span" sx={{ color: BRAND.teal }}>Plaza</Box>
+              <Typography variant="h4" fontWeight="900" sx={{ m: 0, lineHeight: 1.1, color: BRAND.teal, letterSpacing: '-0.5px' }}>
+                {companyName}
               </Typography>
-              <Typography variant="caption" sx={{ color: BRAND.ink, fontWeight: 'bold', fontSize: '11px', display: 'flex', gap: 1 }}>
-                <span>Electronics</span>
-                <span>Smartphones</span>
-                <span>Gadgets</span>
+              <Typography variant="caption" sx={{ color: BRAND.ink, fontWeight: 'bold', fontSize: '11px', display: 'block', mt: 0.5 }}>
+                {email}
               </Typography>
             </Box>
           </Box>
@@ -454,12 +457,12 @@ const CustomerSalesInvoice = ({ invoiceData, sale, title }) => {
             <Box sx={{ position: 'absolute', top: 0, right: 0, width: '38px', height: '100%' }}>
               <Box sx={{ position: 'absolute', inset: 0, bgcolor: '#333' }} />
             </Box>
-            <Box sx={{ position: 'absolute', top: 0, left: 0, width: 'calc(100% - 38px)', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', pr: 4, zIndex: 1 }}>
+             <Box sx={{ position: 'absolute', top: 0, left: 0, width: 'calc(100% - 38px)', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', pr: 4, zIndex: 1 }}>
              <Typography variant="caption" sx={{ color: 'white', display: 'flex', alignItems: 'center', gap: 1 }}>
                <Box sx={{ bgcolor: BRAND.orange, borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                  <PinIcon size={11} />
                </Box>
-               1, KDA Avenue, Khulna
+               {address}
              </Typography>
             </Box>
           </Box>
@@ -469,13 +472,13 @@ const CustomerSalesInvoice = ({ invoiceData, sale, title }) => {
                <Box sx={{ bgcolor: 'black', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                  <PhoneIcon size={11} />
                </Box>
-               01842144844
+               {phone}
              </Typography>
              <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.7, color: 'white', fontWeight: 'bold' }}>
                <Box sx={{ bgcolor: 'black', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                  <MailIcon size={11} />
                </Box>
-               www.smartplazabd.com
+               {website}
              </Typography>
           </Box>
         </Box>

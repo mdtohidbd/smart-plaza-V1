@@ -9,8 +9,11 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import SubmitTestimonial from '../../components/SubmitTestimonial';
 import axios from 'axios';
 import { getPublicApiBase } from '../../utils/publicApi';
+import { useSettings } from '../../context/SettingsContext';
 
 const Testimonials = () => {
+  const { settings } = useSettings();
+  const companyName = settings?.companyName || 'Smart Plaza BD';
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
@@ -93,7 +96,7 @@ const Testimonials = () => {
               color: '#64748B', fontSize: { xs: '0.85rem', md: '1rem' }, lineHeight: 1.7,
               fontFamily: 'Inter, sans-serif',
             }}>
-              Real reviews from real customers who shop at Smart Plaza BD
+              Real reviews from real customers who shop at {companyName}
             </Typography>
           </Box>
 
