@@ -60,8 +60,9 @@ const RequireAuth = ({ children }) => {
     );
   }
 
-  // If there's an authentication error, show it
-  if (error && !isAuthenticated) {
+  // If there's a fatal authentication error (no token in storage), show login prompt
+  const storedToken = localStorage.getItem('token');
+  if (error && !isAuthenticated && !storedToken) {
     return (
       <div style={{
         display: 'flex',

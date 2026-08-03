@@ -109,6 +109,8 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         try {
           console.log('Validating token with profile API...');
+          // Ensure axios header is set before making profile request
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           const userData = await validateToken(token);
           console.log('Profile response:', userData);
 
@@ -167,18 +169,22 @@ export const AuthProvider = ({ children }) => {
             url: error.config?.url
           });
 
-          // Only remove token if it's a clear authentication failure
-          if (error.response?.status === 401) {
-            console.log('401 error - removing token and logging out');
+          // Only remove token if it's a clear 401 unauthorized or 403 forbidden failure
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            console.log('Authentication error - removing token and logging out');
             localStorage.removeItem('token');
-            // Only update state if component is still mounted
+            delete api.defaults.headers.common['Authorization'];
             if (!isCancelled) {
               dispatch({ type: 'LOGOUT' });
             }
           } else {
-            // For other errors, ensure state reflects that user is not authenticated
+            // For network errors or server 500s during refresh, retry/keep existing token state rather than logging user out
+            console.warn('Network or server error during token check, keeping token intact.');
             if (!isCancelled) {
-              dispatch({ type: 'LOGIN_ERROR', payload: 'Failed to validate session' });
+              dispatch({ 
+                type: 'LOGIN_ERROR', 
+                payload: error.response?.data?.message || 'Server connection error. Retrying...' 
+              });
             }
           }
         }
