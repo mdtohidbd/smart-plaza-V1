@@ -354,7 +354,27 @@ const DEMO_ACCOUNTS_DEF = [
 const ensureDemoAccounts = async () => {
   try {
     const Shop = require('../models/Shop');
-    const mainShop = await Shop.findOne({});
+    let systemsShop = await Shop.findOne({ name: 'systems' });
+    if (!systemsShop) {
+      systemsShop = await Shop.create({
+        name: 'systems',
+        address: 'Mymensingh',
+        phone: '01316884689',
+        email: 'mdtohid222020@gmail.com',
+        isActive: true
+      });
+    }
+    let skybridgeShop = await Shop.findOne({ name: 'skybridge-systems-demo' });
+    if (!skybridgeShop) {
+      skybridgeShop = await Shop.create({
+        name: 'skybridge-systems-demo',
+        address: 'Level 4, Multiplan Center, Elephant Road, Dhaka-1205',
+        phone: '+8801700000000',
+        email: 'info@smartplazabd.com',
+        isActive: true
+      });
+    }
+    const mainShop = systemsShop || (await Shop.findOne({}));
     const shopId = mainShop ? mainShop._id : null;
 
     for (const item of DEMO_ACCOUNTS_DEF) {
