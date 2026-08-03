@@ -140,8 +140,13 @@ const fixLegacyIndexes = async () => {
 };
 
 const connectDB = async () => {
+  if (mongoose.connection && mongoose.connection.readyState >= 1) {
+    return;
+  }
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/smartplaza');
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/smartplaza', {
+      serverSelectionTimeoutMS: 5000,
+    });
     console.log(`MongoDB Connected: ${conn.connection.host}`);
     await initializePermanentRoles();
     await fixLegacyIndexes();
