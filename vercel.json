@@ -18,9 +18,6 @@
       }
     },
     {
-      "handle": "filesystem"
-    },
-    {
       "source": "/((?!api).*)",
       "destination": {
         "service": "frontend",
