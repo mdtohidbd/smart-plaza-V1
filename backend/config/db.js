@@ -168,25 +168,31 @@ const connectDB = async () => {
       }
       console.log(`========================================================================\n`);
 
-      console.log('🔄 Attempting fallback connection to local MongoDB database...');
-      try {
-        const localConn = await mongoose.connect('mongodb://127.0.0.1:27017/smartplaza');
-        console.log(`✅ Success! MongoDB Connected to Local Fallback: ${localConn.connection.host}`);
-        await initializePermanentRoles();
-        await fixLegacyIndexes();
+      if (!process.env.VERCEL) {
+        console.log('🔄 Attempting fallback connection to local MongoDB database...');
         try {
-          const { ensureDemoAccounts } = require('../controllers/authController');
-          await ensureDemoAccounts();
-        } catch (e) {
-          console.error('Demo accounts init note:', e.message);
+          const localConn = await mongoose.connect('mongodb://127.0.0.1:27017/smartplaza');
+          console.log(`✅ Success! MongoDB Connected to Local Fallback: ${localConn.connection.host}`);
+          await initializePermanentRoles();
+          await fixLegacyIndexes();
+          try {
+            const { ensureDemoAccounts } = require('../controllers/authController');
+            await ensureDemoAccounts();
+          } catch (e) {
+            console.error('Demo accounts init note:', e.message);
+          }
+          return;
+        } catch (localError) {
+          console.error('❌ Local fallback connection failed:', localError.message);
+          console.log('👉 Make sure you have MongoDB running locally: net start MongoDB');
         }
-        return;
-      } catch (localError) {
-        console.error('❌ Local fallback connection failed:', localError.message);
-        console.log('👉 Make sure you have MongoDB running locally: net start MongoDB');
       }
     }
-    process.exit(1);
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    } else {
+      console.error('⚠️ Running on Vercel: skipping process.exit(1) to prevent Serverless function crash.');
+    }
   }
 };
 

@@ -184,9 +184,11 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5001;
 const HOST = process.env.HOST || '0.0.0.0';
 
-// Initialize Cron Jobs
-const startCronJobs = require('./jobs/index');
-startCronJobs();
+// Initialize Cron Jobs (only in long-running servers, not serverless)
+if (!process.env.VERCEL) {
+  const startCronJobs = require('./jobs/index');
+  startCronJobs();
+}
 
 if (!process.env.VERCEL) {
   app.listen(PORT, HOST, () => {
