@@ -188,7 +188,7 @@ const HOST = process.env.HOST || '0.0.0.0';
 const startCronJobs = require('./jobs/index');
 startCronJobs();
 
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+if (!process.env.VERCEL) {
   app.listen(PORT, HOST, () => {
     console.clear(); // Clear the terminal logs on restart
     console.log(`\n=======================================`);
