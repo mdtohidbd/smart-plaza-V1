@@ -62,7 +62,7 @@ import { BRAND_PRIMARY, BRAND_PRIMARY_HOVER } from '../../theme/brandColors';
 const OwnerDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [showValues, setShowValues] = useState(false);
+  const [showValues, setShowValues] = useState(true);
   
   const hasPermission = (module, action = 'read') => {
     if (!user) return false;

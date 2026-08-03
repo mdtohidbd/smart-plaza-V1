@@ -6722,3 +6722,23 @@ Error: Not Found - /api/routes
     at next (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:291:5)
     at E:\MY-Portfolio\lovable\smart-plaza-main\backend\server.js:128:3
 
+2026-08-03T16:42:22.649Z
+Error: Not Found - /api/routes
+    at notFound (E:\MY-Portfolio\lovable\smart-plaza-main\backend\middleware\errorMiddleware.js:2:17)
+    at Layer.handleRequest (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:342:13)
+    at E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:297:9
+    at processParams (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:582:12)
+    at next (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:291:5)
+    at E:\MY-Portfolio\lovable\smart-plaza-main\backend\server.js:128:3
+
+2026-08-03T16:42:23.729Z
+Error: Not Found - /api/routes
+    at notFound (E:\MY-Portfolio\lovable\smart-plaza-main\backend\middleware\errorMiddleware.js:2:17)
+    at Layer.handleRequest (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:342:13)
+    at E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:297:9
+    at processParams (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:582:12)
+    at next (E:\MY-Portfolio\lovable\smart-plaza-main\backend\node_modules\router\index.js:291:5)
+    at E:\MY-Portfolio\lovable\smart-plaza-main\backend\server.js:128:3
+
