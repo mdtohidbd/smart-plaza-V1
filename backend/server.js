@@ -172,6 +172,11 @@ app.use('/api/offers', require('./routes/offers'));
 app.use('/api/pos-machines', require('./routes/posMachines'));
 app.use('/api/mfs-providers', require('./routes/mfsProviders'));
 
+// Root API check endpoint
+app.get(['/api', '/api/'], (req, res) => {
+  res.json({ success: true, message: 'Smart Plaza API is running', environment: process.env.NODE_ENV || 'development' });
+});
+
 // Serve index.html for any routes that don't match API routes
 app.get('/', (req, res) => {
   res.send('backend is running');

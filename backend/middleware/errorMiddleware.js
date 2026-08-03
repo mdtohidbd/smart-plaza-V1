@@ -21,7 +21,13 @@ const errorHandler = (err, req, res, next) => {
     }
   }
 
-  fs.appendFileSync('error_log.txt', new Date().toISOString() + '\n' + (err.stack || err) + '\n\n');
+  try {
+    if (!process.env.VERCEL) {
+      fs.appendFileSync('error_log.txt', new Date().toISOString() + '\n' + (err.stack || err) + '\n\n');
+    }
+  } catch (logErr) {
+    console.error('Failed to write error log:', logErr.message);
+  }
   res.status(statusCode);
   res.json({
     success: false,
