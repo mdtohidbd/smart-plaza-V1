@@ -78,8 +78,10 @@ app.use((req, res, next) => {
 });
 
 
-// Serve static files from frontend dist folder
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+// Serve static files from frontend dist folder (only in local development)
+if (!process.env.VERCEL) {
+  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+}
 
 // Session middleware
 app.use(session({
