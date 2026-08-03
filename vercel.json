@@ -9,18 +9,17 @@
       "entrypoint": "server.js"
     }
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "/backend/api/$1"
+      "src": "/api/(.*)",
+      "dest": "/backend/api/$1"
     },
     {
-      "source": "/((?!api|assets|.*\\..*).*)",
-      "destination": "/frontend/index.html"
+      "handle": "filesystem"
     },
     {
-      "source": "/(.*)",
-      "destination": "/frontend/$1"
+      "src": "/(.*)",
+      "dest": "/frontend/index.html"
     }
   ]
 }
