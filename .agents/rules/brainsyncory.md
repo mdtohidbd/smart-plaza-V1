@@ -1,7 +1,7 @@
 
 
 # Project Memory — smart-plaza-V1
-> 34 notes | Score threshold: >40
+> 37 notes | Score threshold: >40
 
 ## Safety — Never Run Destructive Commands
 
@@ -17,11 +17,6 @@
 - When in doubt, **show the command first** and wait for approval.
 
 **Stack:** JavaScript · Express + React · DB: MongoDB
-
-## Active: `.`
-
-- **convention in .gitignore**
-- **convention in .gitignore**
 
 ## Project Standards
 

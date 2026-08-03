@@ -1,7 +1,7 @@
 
 
 # Project Memory — smart-plaza-V1
-> 34 notes | Score threshold: >40
+> 37 notes | Score threshold: >40
 
 ## Safety — Never Run Destructive Commands
 
@@ -18,12 +18,7 @@
 
 **Stack:** JavaScript · Express + React · DB: MongoDB
 
-## 📝 NOTE: 1 uncommitted file(s) in working tree.\n\n## Active: `.`
-
-- **convention in .gitignore**
-- **convention in .gitignore**
-
-## Project Standards
+## 📝 NOTE: 1 uncommitted file(s) in working tree.\n\n## Project Standards
 
 - convention in .gitignore
 - convention in .gitignore

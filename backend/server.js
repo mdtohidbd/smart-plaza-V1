@@ -40,8 +40,14 @@ const corsOptions = {
       'http://127.0.0.1:5001'
     ];
     
-    // Check if origin is allowed (including any localhost ports)
-    if (allowedOrigins.indexOf(origin) !== -1 || origin.match(/^http:\/\/localhost:\d+$/) || origin.match(/^http:\/\/127\.0\.0\.1:\d+$/)) {
+    // Check if origin is allowed (including any localhost ports and vercel deployments)
+    if (
+      allowedOrigins.indexOf(origin) !== -1 || 
+      origin.match(/^http:\/\/localhost:\d+$/) || 
+      origin.match(/^http:\/\/127\.0\.0\.1:\d+$/) ||
+      origin.endsWith('.vercel.app') ||
+      origin.match(/^https:\/\/.*\.vercel\.app$/)
+    ) {
       callback(null, true);
     } else {
       console.log('Blocked by CORS:', origin);
@@ -182,14 +188,17 @@ const HOST = process.env.HOST || '0.0.0.0';
 const startCronJobs = require('./jobs/index');
 startCronJobs();
 
-app.listen(PORT, HOST, () => {
-  console.clear(); // Clear the terminal logs on restart
-  console.log(`\n=======================================`);
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Frontend URL: ${process.env.FRONTEND_URL || 'not set'}`);
-  console.log(`Access server at: http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}`);
-  console.log(`=======================================\n`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, HOST, () => {
+    console.clear(); // Clear the terminal logs on restart
+    console.log(`\n=======================================`);
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Frontend URL: ${process.env.FRONTEND_URL || 'not set'}`);
+    console.log(`Access server at: http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}`);
+    console.log(`=======================================\n`);
+  });
+}
 
-// force nodemon restart
+module.exports = app;
+

@@ -71,4 +71,18 @@ router.put('/invoices/:id/default',   protect, checkPermission('emi', 'update'),
 router.get('/invoices/:id/legal-notice', protect, checkPermission('emi', 'read'), generateLegalNotice);
 router.post('/invoices/:id/repossess',protect, checkPermission('emi', 'update'), repossessProduct);
 
+// Trigger route for Vercel Serverless Cron Jobs
+const { checkOverdueEMIs, sendEMIReminders } = require('../jobs/emiJobs');
+router.get('/trigger-cron', async (req, res) => {
+  try {
+    await checkOverdueEMIs();
+    await sendEMIReminders();
+    res.json({ success: true, message: 'EMI cron jobs executed successfully' });
+  } catch (error) {
+    console.error('Error running EMI cron jobs via route:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;
+

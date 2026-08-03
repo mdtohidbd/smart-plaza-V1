@@ -1,6 +1,10 @@
 > **BrainSync Context Pumper** 🧠
-> Dynamically loaded for active file: `frontend\src\context\SettingsContext.jsx` (Domain: **Frontend (React/UI)**)
+> Dynamically loaded for active file: `backend\vercel.json` (Domain: **Config/Infrastructure**)
 
-### 📐 Frontend (React/UI) Conventions & Fixes
-- **[what-changed] 🟢 Edited frontend/src/components/Logo.jsx (5 changes, 53min)**: Active editing session on frontend/src/components/Logo.jsx.
-5 content changes over 53 minutes.
+### 📐 Config/Infrastructure Conventions & Fixes
+- **[what-changed] 🟢 Edited backend/.env (16 changes, 35min)**: Active editing session on backend/.env.
+16 content changes over 35 minutes.
+- **[what-changed] 🟢 Edited backend/.env (6 changes, 18min)**: Active editing session on backend/.env.
+6 content changes over 18 minutes.
+- **[what-changed] 🟢 Edited backend/.env.cpanel.example (9 changes, 13min)**: Active editing session on backend/.env.cpanel.example.
+9 content changes over 13 minutes.
