@@ -143,11 +143,21 @@ const connectDB = async () => {
   if (mongoose.connection && mongoose.connection.readyState >= 1) {
     return;
   }
+
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    console.error('❌ MONGODB_URI is NOT defined in Vercel environment variables! Mongoose will fall back to localhost.');
+  } else {
+    // Mask password in logs for security
+    const maskedUri = uri.replace(/:([^:@]+)@/, ':******@');
+    console.log(`🔌 Vercel: Attempting to connect to MongoDB Atlas using URI: ${maskedUri}`);
+  }
+
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/smartplaza', {
+    const conn = await mongoose.connect(uri || 'mongodb://localhost:27017/smartplaza', {
       serverSelectionTimeoutMS: 5000,
     });
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log(`✅ MongoDB Connected Successfully: ${conn.connection.host}`);
     await initializePermanentRoles();
     await fixLegacyIndexes();
     try {
