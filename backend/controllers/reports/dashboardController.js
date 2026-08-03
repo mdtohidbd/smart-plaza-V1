@@ -145,8 +145,14 @@ const getRoleBasedDashboard = asyncHandler(async (req, res) => {
   const startOfPrevMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
   const endOfPrevMonth = new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59, 999);
   
-  // Default to getting data for all time
-  const allTimeMatch = req.shopId ? { shop: new mongoose.Types.ObjectId(req.shopId) } : {};
+  // Allow matching records with specific shop OR records created without explicit shop binding (fallback)
+  const allTimeMatch = req.shopId ? {
+    $or: [
+      { shop: new mongoose.Types.ObjectId(req.shopId) },
+      { shop: { $exists: false } },
+      { shop: null }
+    ]
+  } : {};
   // EMIInvoice has NO `shop` field (uses `showroom` string) — use a separate match object
   const emiMatch = {};
   
@@ -177,7 +183,13 @@ const getRoleBasedDashboard = asyncHandler(async (req, res) => {
     todayEnd.setHours(23, 59, 59, 999);
     
     const todayMatch = { 
-      ...(req.shopId && { shop: new mongoose.Types.ObjectId(req.shopId) }), 
+      ...(req.shopId && {
+        $or: [
+          { shop: new mongoose.Types.ObjectId(req.shopId) },
+          { shop: { $exists: false } },
+          { shop: null }
+        ]
+      }), 
       date: { 
         $gte: todayStart, 
         $lte: todayEnd 
