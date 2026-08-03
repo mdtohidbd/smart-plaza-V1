@@ -15,17 +15,36 @@ const getShops = asyncHandler(async (req, res) => {
     shops = await Shop.find({ isActive: true }).populate('owner', 'name email').sort({ createdAt: -1 });
   }
 
-  // Ensure at least one shop exists in DB
-  if (!shops || shops.length === 0) {
-    const defaultShop = await Shop.create({
-      name: 'Smart Plaza Main Branch',
+  // Ensure default demo shops exist in DB (even if another default shop already exists on live hosting)
+  const systemsShopExists = await Shop.findOne({ name: 'systems' });
+  if (!systemsShopExists) {
+    await Shop.create({
+      name: 'systems',
       owner: req.user._id,
-      address: '1 KDA Avenue, Shibbari, Khulna',
-      phone: '01842-144844',
-      email: 'smartplazabd@gmail.com',
+      address: 'Mymensingh',
+      phone: '01316884689',
+      email: 'mdtohid222020@gmail.com',
       isActive: true
     });
-    shops = [defaultShop];
+  }
+
+  const skybridgeShopExists = await Shop.findOne({ name: 'skybridge-systems-demo' });
+  if (!skybridgeShopExists) {
+    await Shop.create({
+      name: 'skybridge-systems-demo',
+      owner: req.user._id,
+      address: 'Level 4, Multiplan Center, Elephant Road, Dhaka-1205',
+      phone: '+8801700000000',
+      email: 'info@smartplazabd.com',
+      isActive: true
+    });
+  }
+
+  // Re-fetch shops list so newly created default shops are included
+  if (['Super Admin', 'Admin'].includes(req.user.role)) {
+    shops = await Shop.find().populate('owner', 'name email').sort({ createdAt: 1 });
+  } else {
+    shops = await Shop.find({ isActive: true }).populate('owner', 'name email').sort({ createdAt: 1 });
   }
 
   res.status(200).json({
