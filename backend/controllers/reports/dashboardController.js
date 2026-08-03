@@ -225,10 +225,18 @@ const getRoleBasedDashboard = asyncHandler(async (req, res) => {
     const todaySalesTotal = (todaySaleOrders[0]?.total || 0) + (todayTraditionalSales[0]?.total || 0);
     const todaySalesCount = (todaySaleOrders[0]?.count || 0) + (todayTraditionalSales[0]?.count || 0);
     
+    const shopOrCondition = req.shopId ? {
+      $or: [
+        { shop: new mongoose.Types.ObjectId(req.shopId) },
+        { shop: { $exists: false } },
+        { shop: null }
+      ]
+    } : {};
+
     // Get this week's, month's, prev-month's, and all-time sales — all in parallel
-    const weekMatch = { ...(req.shopId && { shop: new mongoose.Types.ObjectId(req.shopId) }), date: { $gte: startOfWeek, $lt: endOfWeek } };
-    const monthMatch = { ...(req.shopId && { shop: new mongoose.Types.ObjectId(req.shopId) }), date: { $gte: startOfMonth, $lte: endOfMonth } };
-    const prevMonthMatch = { ...(req.shopId && { shop: new mongoose.Types.ObjectId(req.shopId) }), date: { $gte: startOfPrevMonth, $lte: endOfPrevMonth } };
+    const weekMatch = { ...shopOrCondition, date: { $gte: startOfWeek, $lt: endOfWeek } };
+    const monthMatch = { ...shopOrCondition, date: { $gte: startOfMonth, $lte: endOfMonth } };
+    const prevMonthMatch = { ...shopOrCondition, date: { $gte: startOfPrevMonth, $lte: endOfPrevMonth } };
 
     const [
       weekSaleOrders, weekTraditionalSales,
@@ -550,7 +558,7 @@ const getRoleBasedDashboard = asyncHandler(async (req, res) => {
     todayPurchaseEnd.setHours(23, 59, 59, 999);
 
     const monthIncomeMatch = {
-      ...(req.shopId && { shop: new mongoose.Types.ObjectId(req.shopId) }),
+      ...shopOrCondition,
       date: { $gte: startOfMonth, $lte: endOfMonth }
     };
     // Reuse dashboardPurchaseHeadIds (already fetched above for monthlyExpenseMatch)
@@ -560,7 +568,7 @@ const getRoleBasedDashboard = asyncHandler(async (req, res) => {
       allTimeExpenseMatch.expenseHead = { $nin: allTimePurchaseHeadIds };
     }
     const monthExpenseMatch = {
-      ...(req.shopId && { shop: new mongoose.Types.ObjectId(req.shopId) }),
+      ...shopOrCondition,
       date: { $gte: startOfMonth, $lte: endOfMonth }
     };
     if (dashboardPurchaseHeadIds.length > 0) {
