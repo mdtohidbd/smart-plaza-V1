@@ -9,12 +9,22 @@ import { PhoneIcon, MailIcon, PinIcon } from '../../components/invoices/invoiceT
 import { downloadPdfFromElement } from '../../utils/pdfGenerator';
 
 
+import { useSettings } from '../../context/SettingsContext';
+
 const QuotationDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { settings } = useSettings();
   const [isDownloading, setIsDownloading] = React.useState(false);
   
+  const logo = settings?.logo || '/logo-final.jpeg';
+  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const phone = settings?.phone || '01842-144844';
+  const email = settings?.email || 'smartplazabd@gmail.com';
+  const address = settings?.companyAddress || '1, KDA Avenue, Khulna';
+  const website = settings?.website || 'www.smartplazabd.com';
+
   const isAdmin = user?.role === 'Admin' || user?.role === 'Super Admin';
   const canUpdateStatus = isAdmin || user?.permissions?.sales?.update;
 
@@ -141,17 +151,14 @@ const QuotationDetail = () => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 0, borderBottom: `2px solid #E2E8F0`, position: 'relative', height: '90px', mx: { xs: -2.5, md: -4 }, mt: { xs: -2.5, md: -4 }, px: { xs: 2.5, md: 4 } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, zIndex: 1, pl: 1 }}>
               <Box sx={{ width: 80, height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src="/logo-final.jpeg" alt="Smart Plaza Logo" style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
+                <img src={logo} alt={companyName} style={{ width: '100%', height: 'auto', objectFit: 'contain', maxHeight: '60px' }} />
               </Box>
               <Box>
-                <Typography variant="h3" fontWeight="900" sx={{ m: 0, lineHeight: 1, letterSpacing: '-1px', fontSize: '1.7rem' }}>
-                  <Box component="span" sx={{ color: '#E67E22' }}>Smart</Box>{' '}
-                  <Box component="span" sx={{ color: '#13B5A6' }}>Plaza</Box>
+                <Typography variant="h4" fontWeight="900" sx={{ m: 0, lineHeight: 1.1, color: '#E67E22', letterSpacing: '-0.5px', fontSize: '1.5rem' }}>
+                  {companyName}
                 </Typography>
-                <Typography variant="caption" sx={{ color: '#4b5563', fontWeight: 'bold', fontSize: '11px', display: 'flex', gap: 1 }}>
-                  <span>Electronics</span>
-                  <span>Smartphones</span>
-                  <span>Gadgets</span>
+                <Typography variant="caption" sx={{ color: '#4b5563', fontWeight: 'bold', fontSize: '11px', display: 'block', mt: 0.5 }}>
+                  {email}
                 </Typography>
               </Box>
             </Box>
@@ -409,13 +416,13 @@ const QuotationDetail = () => {
                  <Box sx={{ bgcolor: 'black', borderRadius: '50%', width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                    <PhoneIcon size={12} />
                  </Box>
-                 01842144844
+                 {phone}
                </Typography>
                <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.8, color: 'white', fontWeight: 'bold', fontSize: '11px' }}>
                  <Box sx={{ bgcolor: 'black', borderRadius: '50%', width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                    <MailIcon size={12} />
                  </Box>
-                 www.smartplazabd.com
+                 {website}
                </Typography>
             </Box>
             
@@ -425,7 +432,7 @@ const QuotationDetail = () => {
                  <Box sx={{ bgcolor: '#E67E22', borderRadius: '50%', width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                    <PinIcon size={12} />
                  </Box>
-                 1, KDA Avenue, Khulna
+                 {address}
                </Typography>
             </Box>
           </Box>
