@@ -122,8 +122,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Database connection
-connectDB();
+// Database connection (Middleware to ensure DB is connected for serverless)
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));

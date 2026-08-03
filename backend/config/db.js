@@ -155,7 +155,7 @@ const connectDB = async () => {
 
   try {
     const conn = await mongoose.connect(uri || 'mongodb://localhost:27017/smartplaza', {
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 30000,
     });
     console.log(`✅ MongoDB Connected Successfully: ${conn.connection.host}`);
     await initializePermanentRoles();
