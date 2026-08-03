@@ -57,7 +57,7 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With', 'Access-Control-Request-Method', 'Access-Control-Request-Headers', 'x-shop-id']
+  allowedHeaders: ['Content-Type', 'Authorization', 'authorization', 'x-access-token', 'x-auth-token', 'token', 'Accept', 'X-Requested-With', 'Access-Control-Request-Method', 'Access-Control-Request-Headers', 'x-shop-id', 'X-Shop-Id', 'shopid', 'x-guest-email', 'X-Guest-Email']
 };
 
 app.use(cors(corsOptions));
@@ -67,7 +67,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers, x-shop-id');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, authorization, x-access-token, x-auth-token, token, Accept, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers, x-shop-id, X-Shop-Id, shopid, x-guest-email, X-Guest-Email');
   res.header('Access-Control-Expose-Headers', 'Content-Range, X-Content-Range');
   
   // Handle preflight requests
@@ -156,6 +156,7 @@ app.use('/api/reports', require('./routes/reports'));
 app.use('/api/roles', require('./routes/roles'));
 app.use('/api/messages', require('./routes/messages'));
 app.use('/api/settings', require('./routes/settings'));
+app.use('/api/shops', require('./routes/shops'));
 app.use('/api/warranty', require('./routes/warranty'));
 app.use('/api/public', require('./routes/public'));
 app.use('/api/sms', require('./routes/sms'));

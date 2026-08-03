@@ -30,7 +30,7 @@ const CustomerTaxInvoice = ({ invoiceData, sale, title }) => {
   if (!invoiceData) return null;
 
   const isFabricated = title === 'Retail Tax Invoice';
-  const salesItems = (isFabricated ? sale?.invoices?.fabricatedSales?.items : sale?.invoices?.customerSales?.items) || [];
+  const salesItems = (isFabricated ? sale?.invoices?.fabricatedSales?.items : (sale?.invoices?.customerSales?.items || invoiceData.items)) || [];
 
   const invoiceDate = sale?.date ? new Date(sale.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   const invoiceTime = sale?.date ? new Date(sale.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });

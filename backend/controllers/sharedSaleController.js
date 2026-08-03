@@ -1532,6 +1532,7 @@ const deleteSale = asyncHandler(async (req, res) => {
 });
 
 // @desc    Create sales return
+// @desc    Create sales return
 // @route   POST /api/sales/returns
 // @access  Private
 const createSalesReturn = asyncHandler(async (req, res) => {
@@ -1539,43 +1540,63 @@ const createSalesReturn = asyncHandler(async (req, res) => {
 
   try {
     // Validate required fields
-    if (!sale || !items || items.length === 0) {
+    if (!sale || !items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,
-        message: 'Sale ID and items are required'
+        message: 'Sale ID and return items are required'
       });
     }
 
-    // Find the original sale
-    const originalSale = await Sale.findById(sale);
+    // Find original sale
+    const query = { _id: sale };
+    if (req.shopId) query.shop = req.shopId;
+
+    const originalSale = await Sale.findOne(query);
     if (!originalSale) {
       return res.status(404).json({
         success: false,
-        message: 'Original sale not found'
+        message: 'Original sale record not found'
       });
     }
 
     // Calculate total return amount
-    const totalReturnAmount = items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
+    const totalReturnAmount = items.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.unitPrice || 0)), 0);
 
-    // Update inventory for returned items
+    const Product = require('../models/Product');
+    const Customer = require('../models/Customer');
+
+    // Update inventory AND Product stock for returned items
     for (const item of items) {
+      const productId = typeof item.product === 'object' ? item.product._id : item.product;
+      const qty = Number(item.quantity || 0);
+      const unitPrice = Number(item.unitPrice || 0);
+
+      if (!productId || qty <= 0) continue;
+
+      // 1. Log Inventory movement (positive qty increases stock)
       await Inventory.create({
-        product: item.product,
+        product: productId,
         type: 'Sale Return',
-        referenceId: sale,
+        referenceId: originalSale._id,
         referenceModel: 'SaleReturn',
-        quantity: item.quantity, // Positive because it's returning stock
-        unitPrice: item.unitPrice,
+        quantity: qty,
+        unitPrice: unitPrice,
         date: date || new Date(),
-        note: `Sales return: ${note || 'N/A'}`,
-        shop: req.shopId
+        note: `Sales return: ${note || item.reason || 'N/A'}`,
+        shop: req.shopId || originalSale.shop
       });
+
+      // 2. Increment Product stock count directly
+      const productDoc = await Product.findById(productId);
+      if (productDoc) {
+        productDoc.stock = (productDoc.stock || 0) + qty;
+        await productDoc.save();
+      }
     }
 
-    // Save returned items to the original sale document
+    // 3. Save returned items array to original sale document
     const saleReturnItems = items.map(item => ({
-      product: item.product,
+      product: typeof item.product === 'object' ? item.product._id : item.product,
       quantity: Number(item.quantity),
       unitPrice: Number(item.unitPrice),
       returnDate: date || new Date(),
@@ -1583,32 +1604,47 @@ const createSalesReturn = asyncHandler(async (req, res) => {
     }));
 
     originalSale.returnedItems = [...(originalSale.returnedItems || []), ...saleReturnItems];
+
+    // 4. Adjust original sale due amount if applicable
+    if (originalSale.dueAmount && originalSale.dueAmount > 0) {
+      originalSale.dueAmount = Math.max(0, originalSale.dueAmount - totalReturnAmount);
+    }
     await originalSale.save();
 
-    // Find or create an income head for sales returns
-    let incomeHead = await IncomeHead.findOne({ name: 'Sales Return', shop: req.shopId });
+    // 5. Adjust Customer total due balance if customer exists
+    const customerId = customer || originalSale.customer;
+    if (customerId) {
+      const customerDoc = await Customer.findById(customerId);
+      if (customerDoc) {
+        customerDoc.totalDue = Math.max(0, (customerDoc.totalDue || 0) - totalReturnAmount);
+        await customerDoc.save();
+      }
+    }
+
+    // 6. Record financial entry (Income refund)
+    let incomeHead = await IncomeHead.findOne({ name: 'Sales Return', shop: req.shopId || originalSale.shop });
     if (!incomeHead) {
       incomeHead = await IncomeHead.create({
         name: 'Sales Return',
         description: 'Refund for returned sales',
-        shop: req.shopId
+        shop: req.shopId || originalSale.shop
       });
     }
 
-    // Create income record for the return (negative amount as refund)
     const income = await Income.create({
       incomeHead: incomeHead._id,
       name: 'Sales Return Refund',
-      amount: -totalReturnAmount, // Negative as it's a refund
+      amount: -totalReturnAmount, // Negative amount represents refund/cash outflow
       date: date || new Date(),
       paymentMethod: 'Refund',
-      description: note || `Refund for sales return from sale ${originalSale.invoiceNumber}`,
+      description: note || `Refund for sales return from invoice ${originalSale.invoiceNumber}`,
       reference: `Sale: ${originalSale.invoiceNumber}`,
-      shop: req.shopId
+      shop: req.shopId || originalSale.shop
     });
 
     res.status(201).json({
       success: true,
+      message: 'Sales return processed successfully',
       data: {
         sale: originalSale,
         items,
@@ -1617,9 +1653,10 @@ const createSalesReturn = asyncHandler(async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Error in createSalesReturn:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to process sales return'
     });
   }
 });
@@ -1628,11 +1665,21 @@ const createSalesReturn = asyncHandler(async (req, res) => {
 // @route   GET /api/sales/returns
 // @access  Private
 const getSalesReturns = asyncHandler(async (req, res) => {
-  // This would typically fetch from a separate SalesReturn model
-  // For now, we'll return a placeholder response
+  const query = { 'returnedItems.0': { $exists: true } };
+  if (req.shopId) {
+    query.shop = req.shopId;
+  }
+
+  const returns = await Sale.find(query)
+    .populate('customer', 'contactName contactNumber email')
+    .populate('items.product', 'name code sellingPrice')
+    .populate('returnedItems.product', 'name code sellingPrice')
+    .sort({ updatedAt: -1 });
+
   res.status(200).json({
     success: true,
-    data: [] // In a real implementation, you would fetch from a SalesReturn model
+    count: returns.length,
+    data: returns
   });
 });
 

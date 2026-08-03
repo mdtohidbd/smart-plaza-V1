@@ -112,6 +112,7 @@ const Checkout = () => {
       },
       onError: (error) => {
         console.error('Order creation failed:', error);
+        alert(error.response?.data?.message || 'Failed to place order. Please check your network or try again.');
       }
     }
   );
@@ -151,14 +152,20 @@ const Checkout = () => {
 
   const handlePlaceOrder = () => {
     // Validate required fields
-    if (!customerInfo.name || !customerInfo.phone || !customerInfo.email || !customerInfo.address) {
-      alert('Please provide your full name, phone number, email address, and delivery address.');
+    if (!customerInfo.name || !customerInfo.phone || !customerInfo.address) {
+      alert('Please provide your full name, phone number, and delivery address.');
       return;
     }
 
     // Validate BD Phone Number
     if (!/^01[3-9]\d{8}$/.test(customerInfo.phone)) {
-      alert('Please enter a valid 11-digit Bangladeshi phone number (e.g., 017XXXXXXXX).');
+      alert('Please enter a valid 11-digit Bangladeshi phone number (e.g., 01316884689).');
+      return;
+    }
+
+    // Validate Email if provided
+    if (customerInfo.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerInfo.email.trim())) {
+      alert('Please enter a valid email address.');
       return;
     }
 
@@ -346,14 +353,13 @@ const Checkout = () => {
                       <TextField
                         fullWidth
                         size="small"
-                        label="Email Address"
+                        label="Email Address (Optional)"
                         value={customerInfo.email}
                         onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
-                        required
                         type="email"
                         variant="outlined"
                         InputProps={{ sx: { borderRadius: '8px' } }}
-                        helperText="Required to track your order status"
+                        helperText="Optional - Used to track your order status"
                         FormHelperTextProps={{ sx: { fontFamily: 'Inter, sans-serif', color: '#64748B' } }}
                       />
                     </Grid>
@@ -491,10 +497,9 @@ const Checkout = () => {
                     onClick={handlePlaceOrder}
                     disabled={
                       createOrderMutation.isLoading || 
-                      !customerInfo.name || 
-                      !/^01[3-9]\d{8}$/.test(customerInfo.phone) || 
-                      !customerInfo.email || 
-                      !customerInfo.address || 
+                      !customerInfo.name.trim() || 
+                      !customerInfo.phone.trim() || 
+                      !customerInfo.address.trim() || 
                       (paymentMethod === 'emi' && !emiPlan)
                     }
                     sx={{

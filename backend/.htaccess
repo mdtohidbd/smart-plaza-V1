@@ -1,21 +1,25 @@
-# ─── CORS Headers for cPanel/Passenger ───────────────────────────────────────
-# Apache reverse proxy can strip Node.js response headers.
-# These rules ensure CORS headers are always present.
+# ─── CORS & Authorization Headers for cPanel/Passenger/Apache ────────────────────────
+# Apache reverse proxy strips Authorization header and custom headers by default.
+# These rules preserve Authorization headers and ensure CORS is handled properly.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Pass Authorization header to Node.js / Passenger process
+    RewriteCond %{HTTP:Authorization} ^(.*)
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%1]
+    
+    # Handle preflight (OPTIONS) requests
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=200,L]
+</IfModule>
 
 <IfModule mod_headers.c>
-    # Allow specific origins
-    SetEnvIf Origin "https://smartplazabd\.com$" CORS_ORIGIN=$0
-    SetEnvIf Origin "https://admin\.smartplazabd\.com$" CORS_ORIGIN=$0
-    SetEnvIf Origin "http://localhost:(3000|3001|3002|3003|5001|5173|8080)$" CORS_ORIGIN=$0
+    # Allow specific origins dynamically
+    SetEnvIf Origin "https?://.*" CORS_ORIGIN=$0
 
     Header always set Access-Control-Allow-Origin "%{CORS_ORIGIN}e" env=CORS_ORIGIN
     Header always set Access-Control-Allow-Credentials "true" env=CORS_ORIGIN
     Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS, PATCH" env=CORS_ORIGIN
-    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, Accept, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers, x-shop-id" env=CORS_ORIGIN
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, authorization, x-access-token, x-auth-token, token, Accept, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers, x-shop-id, X-Shop-Id, shopid, x-guest-email, X-Guest-Email" env=CORS_ORIGIN
     Header always set Access-Control-Expose-Headers "Content-Range, X-Content-Range" env=CORS_ORIGIN
-
-    # Handle preflight (OPTIONS) requests at the Apache level
-    RewriteEngine On
-    RewriteCond %{REQUEST_METHOD} OPTIONS
-    RewriteRule ^(.*)$ $1 [R=200,L]
 </IfModule>

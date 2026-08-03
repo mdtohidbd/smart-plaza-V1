@@ -113,6 +113,7 @@ const PrintInvoiceModal = ({ open, onClose, saleId, sourceType = 'sale' }) => {
   if (!isLoading && !saleData) return null;
 
   const isEMI = sourceType === 'emi';
+  const isOrder = sourceType === 'order' || saleData?.type === 'online' || (!saleData?.invoices?.customerSales && !isEMI);
   let invoices = saleData?.invoices || {};
   let formattedSaleData = saleData;
 
@@ -164,6 +165,68 @@ const PrintInvoiceModal = ({ open, onClose, saleId, sourceType = 'sale' }) => {
         interestRate: saleData.emiPlan.interestRate || 0,
       } : null,
       paymentMethod: 'EMI',
+      invoices: invoices
+    };
+  } else if (isOrder && saleData && !invoices.customerSales) {
+    const items = (saleData.items || []).map(p => {
+      const prodName = p.product?.name || p.productName || p.name || 'Product';
+      const prodModel = p.product?.model || p.model || '';
+      const qty = Number(p.quantity) || 1;
+      const unitPrice = Number(p.unitPrice || p.price || 0);
+      const disc = Number(p.discount || 0);
+      const itemTotal = (unitPrice - disc) * qty;
+      return {
+        productName: prodName,
+        model: prodModel,
+        quantity: qty,
+        unitPrice: unitPrice,
+        discount: disc,
+        total: itemTotal,
+        warranty: p.product?.warranty || p.warranty || 'N/A',
+        goodsDescription: prodName,
+        salesTaxPercent: 15,
+        grandTotal: itemTotal
+      };
+    });
+
+    const numSubTotal = Number(saleData.subTotal || saleData.subtotal || 0) || items.reduce((sum, item) => sum + item.total, 0);
+    const numDeliveryCharge = Number(saleData.deliveryCharge || 0);
+    const numInstallationCost = Number(saleData.installationCost || 0);
+    const numDiscount = Number(saleData.discount || 0);
+    const numPayable = Number(saleData.total || saleData.payableAmount || 0) || (numSubTotal + numDeliveryCharge + numInstallationCost - numDiscount);
+    const numPaid = Number(saleData.paidAmount || 0);
+    const numDue = Number(saleData.dueAmount ?? (numPayable - numPaid));
+
+    const mappedInvoiceData = {
+      items,
+      subTotal: numSubTotal,
+      deliveryCharge: numDeliveryCharge,
+      installationCost: numInstallationCost,
+      discount: numDiscount,
+      payableAmount: numPayable,
+      paidAmount: numPaid,
+      dueAmount: numDue,
+      grandTotal: numPayable
+    };
+
+    invoices = {
+      customerSales: mappedInvoiceData,
+      customerTax: mappedInvoiceData,
+    };
+
+    formattedSaleData = {
+      ...saleData,
+      date: saleData.date || saleData.createdAt || new Date(),
+      invoiceNumber: saleData.invoiceNumber || saleData.orderNumber || '',
+      customer: {
+        ...(typeof saleData.customer === 'object' ? saleData.customer : {}),
+        contactName: saleData.customer?.contactName || saleData.customerName || saleData.customer?.name || 'Online Customer',
+        contactNumber: saleData.customer?.contactNumber || saleData.customerPhone || saleData.customer?.phone || '',
+        address: saleData.shippingAddress || saleData.customer?.address || saleData.customerAddress || '',
+        email: saleData.customerEmail || saleData.customer?.email || ''
+      },
+      soldBy: saleData.assignedSR || saleData.soldBy || { name: 'Online Store' },
+      paymentMethod: saleData.paymentMethod || 'Cash on Delivery',
       invoices: invoices
     };
   }

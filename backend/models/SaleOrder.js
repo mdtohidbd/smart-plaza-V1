@@ -190,7 +190,7 @@ const saleOrderSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ['Cash', 'Bank', 'Mobile Banking', 'Credit', 'Cash on Delivery', 'MFS', 'Card', 'Split'],
+    enum: ['Cash', 'Bank', 'Mobile Banking', 'Credit', 'Cash on Delivery', 'MFS', 'Card', 'Split', 'EMI', 'Online', 'COD'],
     default: 'Cash'
   },
   // New: structured split payments array

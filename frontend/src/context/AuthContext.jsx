@@ -47,6 +47,16 @@ const authReducer = (state, action) => {
         ...state,
         user: action.payload
       };
+    case 'SET_SHOPS':
+      return {
+        ...state,
+        shops: action.payload
+      };
+    case 'SET_ACTIVE_SHOP':
+      return {
+        ...state,
+        activeShop: action.payload
+      };
     default:
       return state;
   }
@@ -57,6 +67,8 @@ const initialState = {
   loading: true, // Start with loading true to check auth status
   isAuthenticated: false,
   user: null,
+  shops: [],
+  activeShop: null,
   token: localStorage.getItem('token') || null,
   error: null
 };
@@ -300,6 +312,62 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Fetch shops list
+  const fetchShops = async () => {
+    try {
+      const response = await api.get('/api/shops');
+      if (response.data?.success) {
+        const shopList = response.data.data || [];
+        dispatch({ type: 'SET_SHOPS', payload: shopList });
+        
+        // Restore saved shop or pick first available shop
+        const savedShopId = localStorage.getItem('activeShop') || localStorage.getItem('activeShopId');
+        let currentShop = shopList.find(s => s._id === savedShopId || s._id === state.user?.activeShop);
+        if (!currentShop && shopList.length > 0) {
+          currentShop = shopList[0];
+        }
+        if (currentShop) {
+          dispatch({ type: 'SET_ACTIVE_SHOP', payload: currentShop });
+          localStorage.setItem('activeShop', currentShop._id);
+          localStorage.setItem('activeShopId', currentShop._id);
+        }
+        return shopList;
+      }
+    } catch (error) {
+      console.error('Failed to fetch shops:', error);
+    }
+    return [];
+  };
+
+  // Switch active shop
+  const switchShop = async (shopOrId) => {
+    try {
+      const shopId = typeof shopOrId === 'string' ? shopOrId : shopOrId._id;
+      const res = await api.post('/api/shops/switch', { shopId });
+      if (res.data?.success) {
+        const targetShop = res.data.data || (typeof shopOrId === 'object' ? shopOrId : null);
+        if (targetShop) {
+          dispatch({ type: 'SET_ACTIVE_SHOP', payload: targetShop });
+          localStorage.setItem('activeShop', targetShop._id);
+          localStorage.setItem('activeShopId', targetShop._id);
+        }
+        // Refresh shops list
+        fetchShops();
+        return { success: true, shop: targetShop };
+      }
+    } catch (error) {
+      console.error('Failed to switch shop:', error);
+      return { success: false, message: error.response?.data?.message || 'Failed to switch shop' };
+    }
+  };
+
+  // Auto fetch shops on authentication
+  useEffect(() => {
+    if (state.isAuthenticated && state.token) {
+      fetchShops();
+    }
+  }, [state.isAuthenticated, state.token]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -307,7 +375,9 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         updateProfile,
-        syncTokenToAxios
+        syncTokenToAxios,
+        fetchShops,
+        switchShop
       }}
     >
       {children}

@@ -67,75 +67,66 @@ const createEcommerceOrder = asyncHandler(async (req, res) => {
     let customerId;
     let customerDoc;
 
+    const searchCriteria = [];
+    if (customerPhone && customerPhone.trim()) {
+      searchCriteria.push({ contactNumber: customerPhone.trim() });
+    }
     if (!isGuest && req.user) {
-      // Logged-in user - find their customer profile
-      // Try to find customer linked to this user ID, OR matching their email/phone
-      customerDoc = await Customer.findOne({ 
-        $or: [
-          { userId: req.user._id },
-          { email: new RegExp(`^${req.user.email}$`, 'i') },
-          { contactNumber: req.user.phone }
-        ]
-      });
-      
-      // If no customer record exists at all, create one
-      if (!customerDoc) {
-        customerDoc = await Customer.create({
-          contactName: customerName || req.user.name,
-          contactNumber: customerPhone || req.user.phone,
-          email: customerEmail || req.user.email,
-          address: shippingAddress?.address || '',
-          contactType: 'Customer',
-          customerType: 'Online',
-          userId: req.user._id
-        });
-      } else {
-        // Auto-heal: Link user to customer if not linked
-        if (!customerDoc.userId) {
-          customerDoc.userId = req.user._id;
-          await customerDoc.save();
-        }
+      searchCriteria.push({ userId: req.user._id });
+      if (req.user.phone && req.user.phone.trim()) {
+        searchCriteria.push({ contactNumber: req.user.phone.trim() });
+      }
+    }
+    if (customerEmail && customerEmail.trim()) {
+      searchCriteria.push({ email: new RegExp(`^${customerEmail.trim()}$`, 'i') });
+    }
+
+    if (searchCriteria.length > 0) {
+      customerDoc = await Customer.findOne({ $or: searchCriteria });
+    }
+
+    if (customerDoc) {
+      // Link user if logged in and not linked
+      if (!isGuest && req.user && !customerDoc.userId) {
+        customerDoc.userId = req.user._id;
+        await customerDoc.save();
       }
       customerId = customerDoc._id;
     } else {
-      // Guest checkout - find or create customer by email/phone
-      customerDoc = await Customer.findOne({
-        $or: [
-          { email: customerEmail },
-          { contactNumber: customerPhone }
-        ]
-      });
-
-      if (!customerDoc) {
-        // Create new customer for guest
+      // Create new customer, with fallback for duplicate key race/existing number
+      try {
         customerDoc = await Customer.create({
-          contactName: customerName,
-          contactNumber: customerPhone,
-          email: customerEmail,
+          contactName: customerName || (req.user && req.user.name) || 'Online Customer',
+          contactNumber: (customerPhone || (req.user && req.user.phone) || `013${Date.now().toString().slice(-8)}`).trim(),
+          email: customerEmail || (req.user && req.user.email) || '',
           address: shippingAddress?.address || '',
           contactType: 'Customer',
-          customerType: 'Individual'
+          customerType: 'Online',
+          userId: (!isGuest && req.user) ? req.user._id : undefined
         });
+      } catch (custErr) {
+        if (custErr.code === 11000) {
+          customerDoc = await Customer.findOne({ 
+            contactNumber: (customerPhone || (req.user && req.user.phone) || '').trim() 
+          });
+          if (!customerDoc) throw custErr;
+        } else {
+          throw custErr;
+        }
       }
       customerId = customerDoc._id;
     }
 
-    // Find default SR (any active staff/admin in the system)
+    // Find default SR (any active staff/admin/user in the system)
     let assignedSR;
 
     const defaultSR = await User.findOne({
-      role: { $in: ['SR', 'DSR', 'Sales Staff'] },
+      role: { $in: ['SR', 'DSR', 'Sales Staff', 'Admin', 'Super Admin'] },
       isActive: true
-    }).select('_id');
+    }).select('_id') || await User.findOne({ isActive: true }).select('_id') || await User.findOne().select('_id');
 
     if (defaultSR) {
       assignedSR = defaultSR._id;
-    } else {
-      const admin = await User.findOne({
-        role: { $in: ['Admin', 'Super Admin'] },
-        isActive: true
-      }).select('_id');
-      if (admin) assignedSR = admin._id;
     }
 
     if (!assignedSR) {
@@ -155,40 +146,47 @@ const createEcommerceOrder = asyncHandler(async (req, res) => {
     // Prepare items for sale order
     const items = orderItems.map(item => ({
       product: item.product,
-      quantity: item.quantity || 1,
-      unitPrice: item.price || 0,
+      quantity: Number(item.quantity) || 1,
+      unitPrice: Number(item.price) || 0,
       discount: 0,
       tax: 0
     }));
 
     // Calculate tax (if needed)
-    const tax = 0; // Can be calculated based on settings
+    const tax = 0;
+
+    let orderPaymentMethod = 'Cash on Delivery';
+    if (paymentMethod === 'emi') orderPaymentMethod = 'EMI';
+    else if (paymentMethod === 'card') orderPaymentMethod = 'Card';
+    else if (paymentMethod === 'mfs' || paymentMethod === 'bkash' || paymentMethod === 'nagad') orderPaymentMethod = 'MFS';
+    else if (paymentMethod === 'bank') orderPaymentMethod = 'Bank';
+    else if (paymentMethod === 'online') orderPaymentMethod = 'Online';
 
     // Create sale order
     const saleOrderData = {
       shop: shopId,
-      type: 'online', // E-commerce orders are online
+      type: 'online',
       orderNumber,
       invoiceNumber,
       customer: customerId,
       customerEmail: customerEmail || '',
       items,
-      subTotal: subtotal,
-      discount: discount || 0,
+      subTotal: Number(subtotal) || 0,
+      discount: Number(discount) || 0,
       tax,
-      deliveryCharge: deliveryCharge || 0,
-      total,
-      paidAmount: 0, // Will be paid on delivery
-      dueAmount: total,
-      paymentMethod: 'Cash on Delivery', // COD default
+      deliveryCharge: Number(deliveryCharge) || 0,
+      total: Number(total) || 0,
+      paidAmount: 0,
+      dueAmount: Number(total) || 0,
+      paymentMethod: orderPaymentMethod,
       status: 'Pending',
       approvalStatus: 'Pending',
       date: new Date(),
-      shippingAddress: `${shippingAddress?.address || ''}, ${shippingAddress?.city || ''}, ${shippingAddress?.state || ''}`,
+      shippingAddress: [shippingAddress?.address, shippingAddress?.city, shippingAddress?.state].filter(Boolean).join(', ') || 'Online Order',
       assignedSR,
-      note: `E-commerce order - Delivery: ${deliveryArea || 'inside'} Dhaka`,
+      note: `E-commerce order - Delivery: ${deliveryArea || 'inside'} Khulna`,
       qrCode,
-      orderStatus: 'Processing' // E-commerce tracking status
+      orderStatus: 'Processing'
     };
 
     const saleOrder = await SaleOrder.create(saleOrderData);

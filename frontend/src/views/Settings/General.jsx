@@ -167,9 +167,52 @@ const General = () => {
       <Typography variant="h5" sx={{ fontWeight: 600, color: '#1e293b', mb: 1 }}>
         General Settings
       </Typography>
-      <Typography variant="body2" sx={{ color: '#64748b', mb: 4 }}>
+      <Typography variant="body2" sx={{ color: '#64748b', mb: 3 }}>
         Manage your business profile and contact information.
       </Typography>
+
+      {/* Multi-Shop Shortcut Banner */}
+      <Paper
+        sx={{
+          p: 2.5,
+          mb: 4,
+          borderRadius: '12px',
+          background: 'linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(13, 148, 136, 0.03) 100%)',
+          border: '1px solid rgba(20, 184, 166, 0.2)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box sx={{ p: 1.25, borderRadius: '10px', backgroundColor: '#14B8A6', color: '#FFFFFF', display: 'flex' }}>
+            <CloudUploadIcon />
+          </Box>
+          <Box>
+            <Typography variant="subtitle1" fontWeight={700} color="#1E293B">
+              Multi-Shop Management (মাল্টিশপ সেটিংস)
+            </Typography>
+            <Typography variant="body2" color="#64748B">
+              Create and manage multiple shop branches or store locations seamlessly.
+            </Typography>
+          </Box>
+        </Box>
+        <Button
+          variant="contained"
+          onClick={() => window.location.href = '/dashboard/settings/shops'}
+          sx={{
+            backgroundColor: '#14B8A6',
+            textTransform: 'none',
+            borderRadius: '8px',
+            fontWeight: 600,
+            '&:hover': { backgroundColor: '#0D9488' }
+          }}
+        >
+          Manage Shops
+        </Button>
+      </Paper>
 
       <form onSubmit={handleSubmit}>
         <Grid container spacing={3}>

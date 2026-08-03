@@ -46,6 +46,7 @@ const SUPER_ADMIN_PLUS_MENU_PATHS = new Set([
   '/dashboard/offers',
   '/dashboard/settings/banners',
   '/dashboard/settings/general',
+  '/dashboard/settings/shops',
   '/dashboard/quotations',
 ]);
 
@@ -359,6 +360,7 @@ export const useMenu = () => {
         permissionAction: 'read',
         subItems: [
           { text: 'General', path: '/dashboard/settings/general', permissionModule: 'settings', permissionAction: 'read' },
+          { text: 'Shops & Branches', path: '/dashboard/settings/shops', permissionModule: 'settings', permissionAction: 'read' },
           { text: 'SMS Configuration', path: '/dashboard/settings/sms', permissionModule: 'settings', permissionAction: 'update' },
           { text: 'Payment Config', path: '/dashboard/settings/payment-config', permissionModule: 'settings', permissionAction: 'update' },
           { text: 'Banner Management', path: '/dashboard/settings/banners', permissionModule: 'settings', permissionAction: 'read' },

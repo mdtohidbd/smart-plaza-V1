@@ -1,7 +1,7 @@
 
 
 # Project Memory — smart-plaza-V1
-> 76 notes | Score threshold: >40
+> 85 notes | Score threshold: >40
 
 ## Safety — Never Run Destructive Commands
 
@@ -18,13 +18,10 @@
 
 **Stack:** JavaScript · Express + React · DB: MongoDB
 
-## 📝 NOTE: 1 uncommitted file(s) in working tree.\n\n## Active: `backend`
+## 📝 NOTE: 1 uncommitted file(s) in working tree.\n\n## Active: `backend/scripts`
 
-- **🟢 Edited backend/.env (76 changes, 10min) — confirmed 3x**
-- **🟢 Edited backend/.env (41 changes, 15min)**
-- **🟢 Edited backend/.env (104 changes, 13min)**
-- **🟢 Edited backend/.env (158 changes, 16min)**
-- **🟢 Edited backend/.env (350 changes, 43min)**
+- **🟢 Edited backend/scripts/inspect_today_sales.js (8 changes, 2min)**
+- **🟢 Edited backend/scripts/inspect_today_sales.js (10 changes, 190min)**
 
 ## Project Standards
 

@@ -3,12 +3,6 @@ import axios from 'axios';
 // Create an axios instance
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001';
 console.log('Backend URL from environment:', backendUrl);
-console.log('Environment variables available:', {
-  VITE_BACKEND_URL: import.meta.env.VITE_BACKEND_URL,
-  mode: import.meta.env.MODE
-});
-
-console.log('Creating API instance with baseURL:', backendUrl);
 
 const api = axios.create({
   baseURL: backendUrl,
@@ -22,28 +16,33 @@ const api = axios.create({
 const initialToken = localStorage.getItem('token');
 if (initialToken) {
   api.defaults.headers.common['Authorization'] = `Bearer ${initialToken}`;
+  api.defaults.headers.common['x-access-token'] = initialToken;
+  api.defaults.headers.common['x-auth-token'] = initialToken;
 }
 
-// Add a request interceptor to include the token and log requests
+// Add a request interceptor to include token and shop ID reliably
 api.interceptors.request.use(
   (config) => {
-    console.log('API Request Config:', {
-      baseURL: config.baseURL,
-      url: config.url,
-      method: config.method,
-      fullURL: config.baseURL + config.url
-    });
-    
-    // Always check for token in localStorage and add to request
     const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (token && token !== 'null' && token !== 'undefined') {
+      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers['authorization'] = `Bearer ${token}`;
+      config.headers['x-access-token'] = token;
+      config.headers['x-auth-token'] = token;
+      if (typeof config.headers.set === 'function') {
+        config.headers.set('Authorization', `Bearer ${token}`);
+        config.headers.set('x-access-token', token);
+      }
     }
     
     // Add active shop ID if available
-    const activeShop = localStorage.getItem('activeShop');
-    if (activeShop) {
+    const activeShop = localStorage.getItem('activeShop') || localStorage.getItem('activeShopId');
+    if (activeShop && activeShop !== 'null' && activeShop !== 'undefined') {
       config.headers['x-shop-id'] = activeShop;
+      config.headers['X-Shop-Id'] = activeShop;
+      if (typeof config.headers.set === 'function') {
+        config.headers.set('x-shop-id', activeShop);
+      }
     }
     
     return config;
@@ -57,27 +56,14 @@ api.interceptors.request.use(
 // Add a response interceptor to handle errors globally
 api.interceptors.response.use(
   (response) => {
-    console.log('API Response:', response);
     return response;
   },
   (error) => {
     console.error('API Response Error:', error);
-    console.log('Error config URL:', error.config?.url);
-    // Only redirect to login for 401 errors on non-auth endpoints
-    // This prevents logout on profile validation if it's a temporary network issue
     if (error.response?.status === 401) {
       const originalRequest = error.config;
-      // Don't redirect for auth-related requests, let AuthContext handle it
-      if (!originalRequest.url.includes('/api/auth/')) {
-        // Token might be expired, remove token and let AuthContext handle the logout
-        console.log('401 error on non-auth endpoint, removing token');
-        localStorage.removeItem('token');
-        // Remove authorization header
-        delete api.defaults.headers.common['Authorization'];
-        // Instead of direct redirect, let the app handle this via auth context
-        // This will allow proper cleanup and state management
-      } else {
-        console.log('401 error on auth endpoint, letting AuthContext handle it');
+      if (!originalRequest.url?.includes('/api/auth/')) {
+        console.log('401 error on non-auth endpoint');
       }
     }
     return Promise.reject(error);
