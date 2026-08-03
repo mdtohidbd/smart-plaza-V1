@@ -41,6 +41,8 @@ const Layout = () => {
   // Fetch modules to check if retail is enabled
   useEffect(() => {
     const fetchModules = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
       try {
         const response = await api.get('/api/settings/modules');
         setModules(response.data.data);
@@ -50,7 +52,7 @@ const Layout = () => {
     };
 
     fetchModules();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (user) {
