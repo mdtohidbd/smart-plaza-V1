@@ -18,7 +18,7 @@ const Logo = ({
   
   // Dynamic values from Settings
   const logoSrc = settings?.logo || '/website-logo.png';
-  const companyName = settings?.companyName || 'Skybridge Systems';
+  const companyName = settings?.companyName || 'Smart Plaza BD';
 
   return (
     <Box

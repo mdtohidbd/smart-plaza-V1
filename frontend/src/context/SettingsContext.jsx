@@ -17,10 +17,10 @@ const getInitialSettings = () => {
     console.error('Error reading cached settings:', e);
   }
   return {
-    companyName: 'Skybridge Systems',
+    companyName: 'Smart Plaza BD',
     companyAddress: '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
     phone: '01842-144844',
-    email: 'skybridgesystems@gmail.com',
+    email: 'smartplazabd@gmail.com',
     website: '',
     logo: ''
   };

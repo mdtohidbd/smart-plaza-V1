@@ -1239,7 +1239,10 @@ const generateOrderInvoice = asyncHandler(async (req, res) => {
   }
 
   // Get company settings with shop context
-  const settings = await Setting.findOne({ shop: saleOrder.shop });
+  let settings = await Setting.findOne(saleOrder.shop ? { shop: saleOrder.shop } : {}).sort({ updatedAt: -1 });
+  if (!settings) {
+    settings = await Setting.findOne().sort({ updatedAt: -1 });
+  }
   if (!settings) {
     return res.status(404).json({
       success: false,

@@ -22,12 +22,14 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Logo from '../components/Logo';
 import { useAuth } from '../context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 import api from '../utils/api';
 import WhyChooseUs from '../components/WhyChooseUs';
 
 
 
 const Homepage = () => {
+  const { settings } = useSettings();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const { login } = useAuth();
@@ -524,7 +526,7 @@ const Homepage = () => {
         <Container maxWidth="md">
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="body1">
-              © 2024 Smart Plaza BD. All rights reserved.
+              © {new Date().getFullYear()} {settings?.companyName || 'Smart Plaza BD'}. All rights reserved.
             </Typography>
             <Typography variant="body2" sx={{ mt: 1, opacity: 0.8 }}>
               Administrative Portal - Secure Access Only

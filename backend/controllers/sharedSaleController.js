@@ -1838,7 +1838,10 @@ const generateInvoice = asyncHandler(async (req, res) => {
   }
 
   // Get company settings with shop context
-  const settings = await Setting.findOne({ shop: sale.shop });
+  let settings = await Setting.findOne(sale.shop ? { shop: sale.shop } : {}).sort({ updatedAt: -1 });
+  if (!settings) {
+    settings = await Setting.findOne().sort({ updatedAt: -1 });
+  }
   if (!settings) {
     // Return HTML error page instead of JSON
     return res.status(404).send(`
@@ -2018,7 +2021,10 @@ const generateCustomerInvoice = asyncHandler(async (req, res) => {
   }
 
   // Get company settings
-  const settings = await Setting.findOne({ shop: sale.shop });
+  let settings = await Setting.findOne(sale.shop ? { shop: sale.shop } : {}).sort({ updatedAt: -1 });
+  if (!settings) {
+    settings = await Setting.findOne().sort({ updatedAt: -1 });
+  }
   if (!settings) {
     return res.status(404).json({
       success: false,
@@ -2082,7 +2088,10 @@ const generateGovtInvoice = asyncHandler(async (req, res) => {
   }
 
   // Get company settings
-  const settings = await Setting.findOne({ shop: sale.shop });
+  let settings = await Setting.findOne(sale.shop ? { shop: sale.shop } : {}).sort({ updatedAt: -1 });
+  if (!settings) {
+    settings = await Setting.findOne().sort({ updatedAt: -1 });
+  }
   if (!settings) {
     return res.status(404).json({
       success: false,
