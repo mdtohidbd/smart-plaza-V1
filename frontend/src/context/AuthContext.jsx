@@ -351,8 +351,9 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem('activeShop', targetShop._id);
           localStorage.setItem('activeShopId', targetShop._id);
         }
-        // Refresh shops list
-        fetchShops();
+        // Refresh shops list and automatically reload page so all views immediately reflect the new active shop data
+        await fetchShops();
+        window.location.reload();
         return { success: true, shop: targetShop };
       }
     } catch (error) {
