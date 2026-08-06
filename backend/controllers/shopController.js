@@ -6,45 +6,33 @@ const asyncHandler = require('express-async-handler');
 // @desc    Get all shops
 // @route   GET /api/shops
 // @access  Private
+// @desc    Get all shops
+// @route   GET /api/shops
+// @access  Private
 const getShops = asyncHandler(async (req, res) => {
   let shops;
-  // Super Admin or Admin can see all shops, otherwise filter by owner or active shops
   if (['Super Admin', 'Admin'].includes(req.user.role)) {
     shops = await Shop.find().populate('owner', 'name email').sort({ createdAt: -1 });
   } else {
     shops = await Shop.find({ isActive: true }).populate('owner', 'name email').sort({ createdAt: -1 });
   }
 
-  // Ensure default demo shops exist in DB (even if another default shop already exists on live hosting)
-  const systemsShopExists = await Shop.findOne({ name: 'systems' });
-  if (!systemsShopExists) {
+  // If DB is completely empty (no shops exist at all), seed initial shop
+  const totalCount = await Shop.countDocuments();
+  if (totalCount === 0) {
     await Shop.create({
-      name: 'systems',
-      owner: req.user._id,
-      address: 'Mymensingh',
-      phone: '01316884689',
-      email: 'mdtohid222020@gmail.com',
-      isActive: true
-    });
-  }
-
-  const skybridgeShopExists = await Shop.findOne({ name: 'skybridge-systems-demo' });
-  if (!skybridgeShopExists) {
-    await Shop.create({
-      name: 'skybridge-systems-demo',
+      name: 'kybridge Systems Demo',
       owner: req.user._id,
       address: 'Level 4, Multiplan Center, Elephant Road, Dhaka-1205',
       phone: '+8801700000000',
       email: 'info@smartplazabd.com',
       isActive: true
     });
-  }
-
-  // Re-fetch shops list so newly created default shops are included
-  if (['Super Admin', 'Admin'].includes(req.user.role)) {
-    shops = await Shop.find().populate('owner', 'name email').sort({ createdAt: 1 });
-  } else {
-    shops = await Shop.find({ isActive: true }).populate('owner', 'name email').sort({ createdAt: 1 });
+    if (['Super Admin', 'Admin'].includes(req.user.role)) {
+      shops = await Shop.find().populate('owner', 'name email').sort({ createdAt: -1 });
+    } else {
+      shops = await Shop.find({ isActive: true }).populate('owner', 'name email').sort({ createdAt: -1 });
+    }
   }
 
   res.status(200).json({
@@ -115,9 +103,9 @@ const updateShop = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc    Delete or Deactivate shop
+// @desc    Delete shop permanently from database
 // @route   DELETE /api/shops/:id
-// @access  Private (Super Admin)
+// @access  Private (Super Admin / Admin)
 const deleteShop = asyncHandler(async (req, res) => {
   const shop = await Shop.findById(req.params.id);
 
@@ -125,13 +113,21 @@ const deleteShop = asyncHandler(async (req, res) => {
     return res.status(404).json({ success: false, message: 'Shop not found' });
   }
 
-  // Deactivate instead of hard delete to preserve historical integrity
-  shop.isActive = false;
-  await shop.save();
+  // Delete associated settings for this shop
+  await Setting.deleteMany({ shop: shop._id });
+
+  // Delete shop from DB
+  await shop.deleteOne();
+
+  // If this shop was active for current user, reset activeShop to another shop if available
+  if (req.user.activeShop && req.user.activeShop.toString() === shop._id.toString()) {
+    const nextShop = await Shop.findOne({});
+    await User.findByIdAndUpdate(req.user._id, { activeShop: nextShop ? nextShop._id : null });
+  }
 
   res.status(200).json({
     success: true,
-    message: 'Shop deactivated successfully'
+    message: 'Shop deleted successfully from database'
   });
 });
 

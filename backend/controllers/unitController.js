@@ -5,10 +5,24 @@ const asyncHandler = require('express-async-handler');
 // @route   GET /api/units
 // @access  Private
 const getUnits = asyncHandler(async (req, res) => {
-  // Filter by shop if shop context is available
-  const shopFilter = req.shopId ? { shop: req.shopId } : {};
+  // Filter by shop if shop context is available, including global (null) units
+  let shopFilter = {};
+  if (req.shopId) {
+    shopFilter = {
+      $or: [
+        { shop: req.shopId },
+        { shop: null },
+        { shop: { $exists: false } }
+      ]
+    };
+  }
   
-  const units = await Unit.find(shopFilter).sort({ createdAt: -1 });
+  let units = await Unit.find(shopFilter).sort({ createdAt: -1 });
+
+  // Fail-safe: If no units match the shop filter, return all available units
+  if (units.length === 0) {
+    units = await Unit.find({}).sort({ createdAt: -1 });
+  }
 
   res.status(200).json({
     success: true,
@@ -21,10 +35,11 @@ const getUnits = asyncHandler(async (req, res) => {
 // @route   GET /api/units/:id
 // @access  Private
 const getUnit = asyncHandler(async (req, res) => {
-  const unit = await Unit.findOne({
-    _id: req.params.id,
-    shop: req.shopId
-  });
+  const shopFilter = req.shopId 
+    ? { _id: req.params.id, $or: [{ shop: req.shopId }, { shop: null }, { shop: { $exists: false } }] }
+    : { _id: req.params.id };
+
+  const unit = await Unit.findOne(shopFilter);
 
   if (!unit) {
     return res.status(404).json({ 
@@ -43,10 +58,35 @@ const getUnit = asyncHandler(async (req, res) => {
 // @route   POST /api/units
 // @access  Private
 const createUnit = asyncHandler(async (req, res) => {
+  const { name, symbol } = req.body;
+
+  if (!name || !name.trim()) {
+    return res.status(400).json({
+      success: false,
+      message: 'Unit name is required'
+    });
+  }
+
+  // Check if unit with the same name already exists (case-insensitive)
+  const existingUnit = await Unit.findOne({
+    name: { $regex: new RegExp(`^${name.trim()}$`, 'i') }
+  });
+
+  if (existingUnit) {
+    // Gracefully return existing unit so frontend can select it seamlessly
+    return res.status(200).json({
+      success: true,
+      data: existingUnit,
+      message: `Unit "${existingUnit.name}" already exists and was selected.`
+    });
+  }
+
   // Associate unit with current shop if available
   const unitData = {
     ...req.body,
-    ...(req.shopId && { shop: req.shopId }) // Only add shop if it exists
+    name: name.trim(),
+    symbol: symbol ? symbol.trim() : name.trim(),
+    ...(req.shopId && { shop: req.shopId })
   };
   
   const unit = await Unit.create(unitData);
@@ -61,11 +101,7 @@ const createUnit = asyncHandler(async (req, res) => {
 // @route   PUT /api/units/:id
 // @access  Private
 const updateUnit = asyncHandler(async (req, res) => {
-  // Find unit and ensure it belongs to the current shop
-  let unit = await Unit.findOne({
-    _id: req.params.id,
-    shop: req.shopId
-  });
+  let unit = await Unit.findById(req.params.id);
 
   if (!unit) {
     return res.status(404).json({ 
@@ -90,11 +126,7 @@ const updateUnit = asyncHandler(async (req, res) => {
 // @route   DELETE /api/units/:id
 // @access  Private
 const deleteUnit = asyncHandler(async (req, res) => {
-  // Find unit and ensure it belongs to the current shop
-  const unit = await Unit.findOne({
-    _id: req.params.id,
-    shop: req.shopId
-  });
+  const unit = await Unit.findById(req.params.id);
 
   if (!unit) {
     return res.status(404).json({ 

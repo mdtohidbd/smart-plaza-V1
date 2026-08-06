@@ -16,7 +16,7 @@ document.addEventListener('wheel', function (event) {
 });
 
 // Create a client for React Query
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
@@ -26,6 +26,13 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Listen for shop switches to instantly invalidate and refresh data without page reload
+if (typeof window !== 'undefined') {
+  window.addEventListener('shopSwitched', () => {
+    queryClient.invalidateQueries();
+  });
+}
 
 // Theme is now imported from theme.js
 

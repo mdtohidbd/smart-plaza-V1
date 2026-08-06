@@ -36,12 +36,13 @@ api.interceptors.request.use(
     }
     
     // Add active shop ID if available
-    const activeShop = localStorage.getItem('activeShop') || localStorage.getItem('activeShopId');
-    if (activeShop && activeShop !== 'null' && activeShop !== 'undefined') {
-      config.headers['x-shop-id'] = activeShop;
-      config.headers['X-Shop-Id'] = activeShop;
+    const rawActiveShop = localStorage.getItem('activeShop') || localStorage.getItem('activeShopId');
+    const isValidShopId = rawActiveShop && rawActiveShop !== 'null' && rawActiveShop !== 'undefined' && rawActiveShop !== '[object Object]' && /^[0-9a-fA-F]{24}$/.test(rawActiveShop);
+    if (isValidShopId) {
+      config.headers['x-shop-id'] = rawActiveShop;
+      config.headers['X-Shop-Id'] = rawActiveShop;
       if (typeof config.headers.set === 'function') {
-        config.headers.set('x-shop-id', activeShop);
+        config.headers.set('x-shop-id', rawActiveShop);
       }
     }
     

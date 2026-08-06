@@ -19,6 +19,6 @@ router.post('/switch', switchShop);
 
 router.route('/:id')
   .put(authorize('Super Admin', 'Admin'), updateShop)
-  .delete(authorize('Super Admin'), deleteShop);
+  .delete(authorize('Super Admin', 'Admin'), deleteShop);
 
 module.exports = router;

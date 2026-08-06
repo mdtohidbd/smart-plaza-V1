@@ -774,7 +774,7 @@ const ProductRow = ({
 };
 
 const AllProducts = () => {
-  const { user } = useAuth();
+  const { user, activeShop } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [searchTerm, setSearchTerm] = useState('');
@@ -793,7 +793,7 @@ const AllProducts = () => {
   const [rowsPerPage, setRowsPerPage] = useState(50);
 
   const { data: productsData, isLoading, error } = useQuery(
-    ['products', page, rowsPerPage, searchTerm],
+    ['products', page, rowsPerPage, searchTerm, activeShop?._id],
     async () => {
       const response = await api.get('/api/products', {
         params: {

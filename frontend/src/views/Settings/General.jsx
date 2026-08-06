@@ -282,19 +282,22 @@ const General = () => {
 
           <Grid item xs={12}>
             <Box sx={{ p: 2.5, border: '1px dashed #CBD5E1', borderRadius: '12px', bgcolor: '#F8FAFC' }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#334155', mb: 1.5 }}>
-                Logo Image (Website Header & Favicon Icon)
+              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#334155', mb: 0.5 }}>
+                Logo Image (Optional - Website Header & Favicon Icon)
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#64748B', display: 'block', mb: 1.5 }}>
+                Optional. If left blank, your company name text logo will be displayed across the website and header.
               </Typography>
               
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12} sm={8}>
                   <TextField
                     fullWidth
-                    label="Logo Image URL"
+                    label="Logo Image URL (Optional)"
                     name="logo"
                     value={formData.logo}
                     onChange={handleInputChange}
-                    placeholder="Upload image or paste direct image URL (.png, .jpg)"
+                    placeholder="Optional - Upload image or paste direct URL (.png, .jpg)"
                     variant="outlined"
                     sx={inputStyles}
                   />

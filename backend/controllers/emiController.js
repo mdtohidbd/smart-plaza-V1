@@ -659,6 +659,60 @@ const repossessProduct = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Update single instalment status and details (Edit Instalment)
+// @route   PUT /api/emi/invoices/:id/instalment/:instalmentNumber
+// @access  Private (Super Admin, Admin, Manager, SR, DSR)
+const updateInstalmentStatus = asyncHandler(async (req, res) => {
+  const { id, instalmentNumber } = req.params;
+  const { status, paidDate, paidAmount, lateFee, paymentMethod, notes } = req.body;
+
+  const invoice = await EMIInvoice.findById(id);
+  if (!invoice) {
+    return res.status(404).json({ success: false, message: 'EMI Invoice not found' });
+  }
+
+  const targetNum = parseInt(instalmentNumber);
+  const targetInstalment = invoice.instalments.find(inst => inst.instalmentNumber === targetNum);
+
+  if (!targetInstalment) {
+    return res.status(404).json({ success: false, message: `Instalment Month ${instalmentNumber} not found` });
+  }
+
+  // Update target instalment properties
+  if (status) targetInstalment.status = status;
+  if (paidDate !== undefined) targetInstalment.paidDate = paidDate ? new Date(paidDate) : null;
+  if (paidAmount !== undefined) targetInstalment.paidAmount = parseFloat(paidAmount) || 0;
+  if (lateFee !== undefined) targetInstalment.lateFeePaid = parseFloat(lateFee) || 0;
+  if (paymentMethod !== undefined) targetInstalment.paymentMethod = paymentMethod;
+  if (notes !== undefined) targetInstalment.notes = notes || '';
+
+  // Recalculate invoice totals
+  const totalPaidFromInstalments = invoice.instalments.reduce((sum, inst) => sum + (inst.paidAmount || 0), 0);
+  const totalLateFeeFromInstalments = invoice.instalments.reduce((sum, inst) => sum + (inst.lateFeePaid || 0), 0);
+
+  invoice.paidAmount = (invoice.downPayment?.amount || 0) + totalPaidFromInstalments;
+  invoice.totalLateFeePaid = totalLateFeeFromInstalments;
+  
+  const totalPayable = invoice.emiPlan?.totalPayableAmount || invoice.totalAmount || 0;
+  invoice.outstandingBalance = Math.max(0, totalPayable - totalPaidFromInstalments);
+
+  // Update status of overall invoice
+  const allPaidOrWaived = invoice.instalments.every(inst => inst.status === 'paid' || inst.status === 'waived');
+  if (allPaidOrWaived) {
+    invoice.status = 'completed';
+  } else if (totalPaidFromInstalments > 0) {
+    invoice.status = 'active';
+  }
+
+  await invoice.save();
+
+  res.status(200).json({
+    success: true,
+    message: `Instalment Month ${instalmentNumber} updated successfully`,
+    data: invoice
+  });
+});
+
 module.exports = {
   getAllEMIInvoices,
   getEMIInvoiceById,
@@ -667,5 +721,6 @@ module.exports = {
   cancelEMIInvoice,
   markAsDefaulted,
   generateLegalNotice,
-  repossessProduct
+  repossessProduct,
+  updateInstalmentStatus
 };

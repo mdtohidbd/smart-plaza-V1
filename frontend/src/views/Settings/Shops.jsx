@@ -16,11 +16,13 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Alert
+  Alert,
+  Snackbar
 } from '@mui/material';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
@@ -33,7 +35,19 @@ const Shops = () => {
   const { shops, activeShop, switchShop, fetchShops } = useAuth();
   const [loading, setLoading] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
   const [editingShop, setEditingShop] = useState(null);
+
+  const handleSwitchShop = async (shop) => {
+    const res = await switchShop(shop);
+    if (res?.success) {
+      setToast({
+        open: true,
+        message: `Switched active shop to "${shop.name}"`,
+        severity: 'success'
+      });
+    }
+  };
   const [editFormData, setEditFormData] = useState({
     name: '',
     address: '',
@@ -42,6 +56,11 @@ const Shops = () => {
   });
   const [updateError, setUpdateError] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
+
+  // Deletion state
+  const [deletingShop, setDeletingShop] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
 
   useEffect(() => {
     fetchShops();
@@ -82,6 +101,35 @@ const Shops = () => {
       setUpdateError(err.response?.data?.message || 'Failed to update shop');
     } finally {
       setUpdateLoading(false);
+    }
+  };
+
+  const handleOpenDelete = (shop) => {
+    setDeletingShop(shop);
+    setDeleteError(null);
+  };
+
+  const handleCloseDelete = () => {
+    setDeletingShop(null);
+    setDeleteError(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deletingShop) return;
+
+    try {
+      setDeleteLoading(true);
+      setDeleteError(null);
+      const res = await api.delete(`/api/shops/${deletingShop._id}`);
+      if (res.data?.success) {
+        await fetchShops();
+        handleCloseDelete();
+      }
+    } catch (err) {
+      console.error('Failed to delete shop:', err);
+      setDeleteError(err.response?.data?.message || 'Failed to delete shop from database');
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -161,13 +209,20 @@ const Shops = () => {
                             borderRadius: '8px'
                           }}
                         />
-                      ) : (
+                      ) : shop.isActive === false ? (
                         <Chip
-                          label={shop.isActive ? 'Active' : 'Inactive'}
+                          label="Inactive"
                           size="small"
-                          color={shop.isActive ? 'default' : 'error'}
+                          color="error"
                           variant="outlined"
                           sx={{ borderRadius: '8px' }}
+                        />
+                      ) : (
+                        <Chip
+                          label="Branch"
+                          size="small"
+                          variant="outlined"
+                          sx={{ borderRadius: '8px', color: '#64748B', borderColor: '#CBD5E1', fontWeight: 500 }}
                         />
                       )}
                     </Box>
@@ -194,20 +249,35 @@ const Shops = () => {
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pt: 2, borderTop: '1px solid #F1F5F9' }}>
-                      <Button
-                        size="small"
-                        startIcon={<EditIcon />}
-                        onClick={() => handleOpenEdit(shop)}
-                        sx={{ textTransform: 'none', color: '#64748B', borderRadius: '6px' }}
-                      >
-                        Edit Details
-                      </Button>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <Button
+                          size="small"
+                          startIcon={<EditIcon />}
+                          onClick={() => handleOpenEdit(shop)}
+                          sx={{ textTransform: 'none', color: '#64748B', borderRadius: '6px' }}
+                        >
+                          Edit Details
+                        </Button>
+                        <Button
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                          onClick={() => handleOpenDelete(shop)}
+                          sx={{
+                            textTransform: 'none',
+                            color: '#EF4444',
+                            borderRadius: '6px',
+                            '&:hover': { backgroundColor: 'rgba(239, 68, 68, 0.08)' }
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </Box>
 
                       {!isActive && (
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={() => switchShop(shop)}
+                          onClick={() => handleSwitchShop(shop)}
                           sx={{
                             textTransform: 'none',
                             borderRadius: '8px',
@@ -321,6 +391,70 @@ const Shops = () => {
           </DialogActions>
         </form>
       </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={Boolean(deletingShop)}
+        onClose={handleCloseDelete}
+        maxWidth="xs"
+        fullWidth
+        paperProps={{ borderRadius: '12px' }}
+      >
+        <DialogTitle sx={{ fontWeight: 700, color: '#991B1B', borderBottom: '1px solid #E2E8F0', pb: 2 }}>
+          Confirm Delete Shop
+        </DialogTitle>
+        <DialogContent sx={{ py: 2.5 }}>
+          {deleteError && (
+            <Alert severity="error" sx={{ mb: 2, borderRadius: '8px' }}>
+              {deleteError}
+            </Alert>
+          )}
+          <Typography variant="body1" color="#1E293B" fontWeight={500}>
+            Are you sure you want to delete <strong>{deletingShop?.name}</strong>?
+          </Typography>
+          <Typography variant="body2" color="#64748B" sx={{ mt: 1 }}>
+            This action will permanently delete this shop and its settings from the database.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2.5, borderTop: '1px solid #E2E8F0', pt: 2 }}>
+          <Button
+            onClick={handleCloseDelete}
+            variant="outlined"
+            color="inherit"
+            disabled={deleteLoading}
+            sx={{ textTransform: 'none', borderRadius: '8px' }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleConfirmDelete}
+            variant="contained"
+            color="error"
+            disabled={deleteLoading}
+            startIcon={deleteLoading ? <CircularProgress size={18} color="inherit" /> : <DeleteIcon />}
+            sx={{ textTransform: 'none', borderRadius: '8px', fontWeight: 600 }}
+          >
+            {deleteLoading ? 'Deleting...' : 'Delete Shop'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Active Shop Switch Toast Notification */}
+      <Snackbar
+        open={toast.open}
+        autoHideDuration={3500}
+        onClose={() => setToast(prev => ({ ...prev, open: false }))}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={() => setToast(prev => ({ ...prev, open: false }))}
+          severity={toast.severity}
+          variant="filled"
+          sx={{ width: '100%', fontWeight: 600, borderRadius: '10px' }}
+        >
+          {toast.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

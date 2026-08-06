@@ -11,14 +11,17 @@ const Logo = ({
   fontSize = '1.25rem', 
   color = 'inherit', 
   showText = true, 
+  showIcon = true,
   variant = 'default', // 'default' or 'admin'
   sx = {} 
 }) => {
   const { settings } = useSettings();
   
-  // Dynamic values from Settings
-  const logoSrc = settings?.logo || '/website-logo.png';
+  // Dynamic values from Settings (Logo image is optional)
+  const logoSrc = settings?.logo || '';
   const companyName = settings?.companyName || 'Smart Plaza BD';
+
+  const hasLogoImage = showIcon && logoSrc && logoSrc.trim() !== '';
 
   return (
     <Box
@@ -35,21 +38,22 @@ const Logo = ({
         ...sx
       }}
     >
-      <img
-        src={logoSrc}
-        alt={companyName}
-        style={{
-          height: height,
-          width: 'auto',
-          marginRight: 0,
-          objectFit: 'contain',
-          display: 'block'
-        }}
-        onError={(e) => {
-          e.target.onerror = null;
-          e.target.src = '/website-logo.png'; // Fallback
-        }}
-      />
+      {hasLogoImage && (
+        <img
+          src={logoSrc}
+          alt={companyName}
+          style={{
+            height: height,
+            width: 'auto',
+            marginRight: showText ? 6 : 0,
+            objectFit: 'contain',
+            display: 'block'
+          }}
+          onError={(e) => {
+            e.target.style.display = 'none'; // Hide if image fails to load
+          }}
+        />
+      )}
       {showText && (
         <Typography 
           variant="h6" 
@@ -57,7 +61,7 @@ const Logo = ({
             fontWeight: 800, 
             letterSpacing: '-0.02em',
             fontSize: fontSize,
-            ml: 0.4,
+            ml: hasLogoImage ? 0.4 : 0,
             fontFamily: '"Outfit", sans-serif',
             lineHeight: 1,
             display: 'flex',
