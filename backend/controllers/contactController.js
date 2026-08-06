@@ -5,11 +5,24 @@ const asyncHandler = require('express-async-handler');
 // @route   GET /api/contacts
 // @access  Private
 const getContacts = asyncHandler(async (req, res) => {
-  // Filter by shop if shop context is available
-  const shopFilter = req.shopId ? { shop: req.shopId } : {};
+  // Filter by shop if shop context is available, including global (null) customers
+  let shopFilter = {};
+  if (req.shopId) {
+    shopFilter = {
+      $or: [
+        { shop: req.shopId },
+        { shop: null },
+        { shop: { $exists: false } }
+      ]
+    };
+  }
   
-  // Get all customers
-  const customers = await Customer.find(shopFilter).sort({ createdAt: -1 });
+  let customers = await Customer.find(shopFilter).sort({ createdAt: -1 });
+
+  // Fail-safe: If no customers match the shop filter, return all available customers
+  if (customers.length === 0) {
+    customers = await Customer.find({}).sort({ createdAt: -1 });
+  }
 
   res.status(200).json({
     success: true,
@@ -24,10 +37,24 @@ const getContacts = asyncHandler(async (req, res) => {
 // @route   GET /api/contacts/customers
 // @access  Private
 const getCustomers = asyncHandler(async (req, res) => {
-  // Filter by shop if shop context is available
-  const shopFilter = req.shopId ? { shop: req.shopId } : {};
+  // Filter by shop if shop context is available, including global (null) customers
+  let shopFilter = {};
+  if (req.shopId) {
+    shopFilter = {
+      $or: [
+        { shop: req.shopId },
+        { shop: null },
+        { shop: { $exists: false } }
+      ]
+    };
+  }
   
-  const customers = await Customer.find(shopFilter).sort({ createdAt: -1 });
+  let customers = await Customer.find(shopFilter).sort({ createdAt: -1 });
+
+  // Fail-safe: If no customers match the shop filter, return all available customers
+  if (customers.length === 0) {
+    customers = await Customer.find({}).sort({ createdAt: -1 });
+  }
   
   // Calculate current balance for each customer
   const SaleOrder = require('../models/SaleOrder');
@@ -36,7 +63,7 @@ const getCustomers = asyncHandler(async (req, res) => {
   const customersWithBalance = await Promise.all(customers.map(async (customer) => {
     // Get all wholesale sales (SaleOrder) for this customer
     const wholesaleSales = await SaleOrder.aggregate([
-      { $match: { customer: customer._id, shop: customer.shop } },
+      { $match: { customer: customer._id } },
       {
         $group: {
           _id: null,
@@ -48,7 +75,7 @@ const getCustomers = asyncHandler(async (req, res) => {
     
     // Get all retail sales (Sale) for this customer
     const retailSales = await Sale.aggregate([
-      { $match: { customer: customer._id, shop: customer.shop } },
+      { $match: { customer: customer._id } },
       {
         $group: {
           _id: null,
@@ -66,7 +93,7 @@ const getCustomers = asyncHandler(async (req, res) => {
     const totalPayments = wholesaleTotal.totalPaid + retailTotal.totalPaid;
     
     // Current Balance = Opening Balance + Total Sales - Total Payments
-    const currentBalance = customer.openingBalance + totalSales - totalPayments;
+    const currentBalance = (customer.openingBalance || 0) + totalSales - totalPayments;
     
     return {
       ...customer.toObject(),
@@ -87,11 +114,11 @@ const getCustomers = asyncHandler(async (req, res) => {
 // @route   GET /api/contacts/customers/:id
 // @access  Private
 const getCustomer = asyncHandler(async (req, res) => {
-  // Find customer and ensure it belongs to the current shop
-  const customer = await Customer.findOne({
-    _id: req.params.id,
-    shop: req.shopId
-  });
+  const shopFilter = req.shopId 
+    ? { _id: req.params.id, $or: [{ shop: req.shopId }, { shop: null }, { shop: { $exists: false } }] }
+    : { _id: req.params.id };
+
+  const customer = await Customer.findOne(shopFilter);
 
   if (!customer) {
     return res.status(404).json({ 
@@ -115,22 +142,31 @@ const createCustomer = asyncHandler(async (req, res) => {
     req.body.route = null;
   }
   
-  // Associate customer with current shop if available
-  const customerData = {
-    ...req.body,
-    ...(req.shopId && { shop: req.shopId }) // Only add shop if it exists
-  };
+  const phone = req.body.contactNumber ? req.body.contactNumber.trim() : '';
 
-  // Check if contactNumber already exists
-  if (req.body.contactNumber) {
-    const existingCustomer = await Customer.findOne({ contactNumber: req.body.contactNumber });
+  // Check if customer with this contactNumber already exists
+  if (phone) {
+    const existingCustomer = await Customer.findOne({ contactNumber: phone });
     if (existingCustomer) {
-      return res.status(400).json({
-        success: false,
-        message: 'A customer with this phone number already exists.'
+      // If customer exists, associate with current shop if unassigned and return existing customer seamlessly
+      if (req.shopId && !existingCustomer.shop) {
+        existingCustomer.shop = req.shopId;
+        await existingCustomer.save();
+      }
+      return res.status(200).json({
+        success: true,
+        data: existingCustomer,
+        message: 'A customer with this phone number already exists and was selected.'
       });
     }
   }
+
+  // Associate customer with current shop if available
+  const customerData = {
+    ...req.body,
+    contactNumber: phone,
+    ...(req.shopId && { shop: req.shopId })
+  };
 
   const customer = await Customer.create(customerData);
 
@@ -144,33 +180,21 @@ const createCustomer = asyncHandler(async (req, res) => {
 // @route   PUT /api/contacts/customers/:id
 // @access  Private
 const updateCustomer = asyncHandler(async (req, res) => {
-  console.log('=== UPDATE CUSTOMER DEBUG ===');
-  console.log('Customer ID:', req.params.id);
-  console.log('Request Body:', req.body);
-  console.log('Shop ID:', req.shopId);
-  
-  // Find customer and ensure it belongs to the current shop
-  let customer = await Customer.findOne({
-    _id: req.params.id,
-    shop: req.shopId
-  });
+  let customer = await Customer.findById(req.params.id);
 
   if (!customer) {
-    console.error('Customer not found with id:', req.params.id, 'and shop:', req.shopId);
     return res.status(404).json({ 
       success: false,
       message: `Customer not found with id ${req.params.id}` 
     });
   }
 
-  console.log('Customer found:', customer.contactName, customer.contactNumber);
-
   // Handle empty string route values by converting to null
   if (req.body.route && req.body.route === '') {
     req.body.route = null;
   }
   
-  // Also handle empty strings for other optional fields to prevent CastError
+  // Clean optional fields to prevent CastError
   if (req.body.businessName === '') req.body.businessName = undefined;
   if (req.body.businessNumber === '') req.body.businessNumber = undefined;
   if (req.body.address === '') req.body.address = undefined;
@@ -178,10 +202,12 @@ const updateCustomer = asyncHandler(async (req, res) => {
   if (req.body.contactPersonName === '') req.body.contactPersonName = undefined;
   if (req.body.businessRegistrationNumber === '') req.body.businessRegistrationNumber = undefined;
 
+  const phone = req.body.contactNumber ? req.body.contactNumber.trim() : '';
+
   // Check if contactNumber already exists for a different customer
-  if (req.body.contactNumber) {
+  if (phone) {
     const existingCustomer = await Customer.findOne({
-      contactNumber: req.body.contactNumber,
+      contactNumber: phone,
       _id: { $ne: req.params.id }
     });
     if (existingCustomer) {
@@ -192,15 +218,15 @@ const updateCustomer = asyncHandler(async (req, res) => {
     }
   }
 
-  console.log('Updating with cleaned data:', req.body);
+  if (phone) {
+    req.body.contactNumber = phone;
+  }
   
   // Update customer
   customer = await Customer.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
   });
-  
-  console.log('Customer updated successfully:', customer.contactName, customer.contactNumber);
 
   res.status(200).json({
     success: true,
@@ -212,11 +238,7 @@ const updateCustomer = asyncHandler(async (req, res) => {
 // @route   DELETE /api/contacts/customers/:id
 // @access  Private
 const deleteCustomer = asyncHandler(async (req, res) => {
-  // Find customer and ensure it belongs to the current shop
-  const customer = await Customer.findOne({
-    _id: req.params.id,
-    shop: req.shopId
-  });
+  const customer = await Customer.findById(req.params.id);
 
   if (!customer) {
     return res.status(404).json({ 

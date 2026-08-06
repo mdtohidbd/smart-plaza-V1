@@ -14,7 +14,8 @@ const {
   cancelEMIInvoice,
   markAsDefaulted,
   generateLegalNotice,
-  repossessProduct
+  repossessProduct,
+  updateInstalmentStatus
 } = require('../controllers/emiController');
 
 const {
@@ -70,6 +71,7 @@ router.put('/invoices/:id/cancel',    protect, checkPermission('emi', 'update'),
 router.put('/invoices/:id/default',   protect, checkPermission('emi', 'update'), markAsDefaulted);
 router.get('/invoices/:id/legal-notice', protect, checkPermission('emi', 'read'), generateLegalNotice);
 router.post('/invoices/:id/repossess',protect, checkPermission('emi', 'update'), repossessProduct);
+router.put('/invoices/:id/instalment/:instalmentNumber', protect, checkPermission('emi', 'update'), updateInstalmentStatus);
 
 // Trigger route for Vercel Serverless Cron Jobs
 const { checkOverdueEMIs, sendEMIReminders } = require('../jobs/emiJobs');

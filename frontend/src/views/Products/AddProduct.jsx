@@ -787,8 +787,15 @@ const AddProduct = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Filter out features that have no title and description
-    const validFeatures = features.filter(f => f.title.trim() || f.description.trim());
+    // Filter and clean features payload (strip file object and preview base64 URL strings)
+    const validFeatures = features
+      .filter(f => (f.title && f.title.trim()) || (f.description && f.description.trim()))
+      .map(f => ({
+        title: f.title || '',
+        description: f.description || '',
+        image: (f.image && !f.image.startsWith('data:')) ? f.image : '',
+        layout: f.layout || 'left'
+      }));
     
     const colorString = productColors.map(c => c.name).join(', ');
     const colorsPayload = productColors.map(c => ({ name: c.name, code: c.code }));

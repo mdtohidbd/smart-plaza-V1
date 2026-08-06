@@ -62,13 +62,30 @@ const authReducer = (state, action) => {
   }
 };
 
+// Helper function to synchronously load cached active shop on initial load
+const getInitialActiveShop = () => {
+  try {
+    const cachedObj = localStorage.getItem('activeShopObject');
+    if (cachedObj) {
+      const parsed = JSON.parse(cachedObj);
+      if (parsed && parsed._id && parsed.name) return parsed;
+    }
+    const savedId = localStorage.getItem('activeShop') || localStorage.getItem('activeShopId');
+    const savedName = localStorage.getItem('activeShopName');
+    if (savedId && /^[0-9a-fA-F]{24}$/.test(savedId)) {
+      return { _id: savedId, name: savedName || 'Shop' };
+    }
+  } catch (e) {}
+  return null;
+};
+
 // Initial State
 const initialState = {
   loading: true, // Start with loading true to check auth status
   isAuthenticated: false,
   user: null,
   shops: [],
-  activeShop: null,
+  activeShop: getInitialActiveShop(),
   token: localStorage.getItem('token') || null,
   error: null
 };
@@ -322,7 +339,10 @@ export const AuthProvider = ({ children }) => {
         
         // Restore saved shop or pick first available shop
         const savedShopId = localStorage.getItem('activeShop') || localStorage.getItem('activeShopId');
-        let currentShop = shopList.find(s => s._id === savedShopId || s._id === state.user?.activeShop);
+        const userShopId = typeof state.user?.activeShop === 'object' ? state.user?.activeShop?._id : state.user?.activeShop;
+        const targetId = (savedShopId && /^[0-9a-fA-F]{24}$/.test(savedShopId)) ? savedShopId : userShopId;
+
+        let currentShop = shopList.find(s => s._id === targetId);
         if (!currentShop && shopList.length > 0) {
           currentShop = shopList[0];
         }
@@ -330,6 +350,9 @@ export const AuthProvider = ({ children }) => {
           dispatch({ type: 'SET_ACTIVE_SHOP', payload: currentShop });
           localStorage.setItem('activeShop', currentShop._id);
           localStorage.setItem('activeShopId', currentShop._id);
+          localStorage.setItem('activeShopName', currentShop.name);
+          localStorage.setItem('activeShopObject', JSON.stringify(currentShop));
+          api.defaults.headers.common['x-shop-id'] = currentShop._id;
         }
         return shopList;
       }
@@ -342,19 +365,40 @@ export const AuthProvider = ({ children }) => {
   // Switch active shop
   const switchShop = async (shopOrId) => {
     try {
-      const shopId = typeof shopOrId === 'string' ? shopOrId : shopOrId._id;
+      const shopId = typeof shopOrId === 'string' ? shopOrId : shopOrId?._id;
+      if (!shopId) return { success: false, message: 'Invalid shop ID' };
+
+      const targetShop = typeof shopOrId === 'object' 
+        ? shopOrId 
+        : (state.shops || []).find(s => s._id === shopId);
+
+      // Instantly update active shop state & localStorage with 0ms delay!
+      if (targetShop && targetShop._id) {
+        dispatch({ type: 'SET_ACTIVE_SHOP', payload: targetShop });
+        localStorage.setItem('activeShop', targetShop._id);
+        localStorage.setItem('activeShopId', targetShop._id);
+        localStorage.setItem('activeShopName', targetShop.name);
+        localStorage.setItem('activeShopObject', JSON.stringify(targetShop));
+        api.defaults.headers.common['x-shop-id'] = targetShop._id;
+      }
+
+      // Notify queries to refresh in background without reloading the page or showing Loading Workspace screen
+      window.dispatchEvent(new CustomEvent('shopSwitched', { detail: { shopId } }));
+
       const res = await api.post('/api/shops/switch', { shopId });
       if (res.data?.success) {
-        const targetShop = res.data.data || (typeof shopOrId === 'object' ? shopOrId : null);
-        if (targetShop) {
-          dispatch({ type: 'SET_ACTIVE_SHOP', payload: targetShop });
-          localStorage.setItem('activeShop', targetShop._id);
-          localStorage.setItem('activeShopId', targetShop._id);
+        const backendShop = res.data.data || targetShop;
+        if (backendShop && backendShop._id) {
+          dispatch({ type: 'SET_ACTIVE_SHOP', payload: backendShop });
+          localStorage.setItem('activeShop', backendShop._id);
+          localStorage.setItem('activeShopId', backendShop._id);
+          localStorage.setItem('activeShopName', backendShop.name);
+          localStorage.setItem('activeShopObject', JSON.stringify(backendShop));
+          api.defaults.headers.common['x-shop-id'] = backendShop._id;
         }
-        // Refresh shops list and automatically reload page so all views immediately reflect the new active shop data
         await fetchShops();
-        window.location.reload();
-        return { success: true, shop: targetShop };
+        window.dispatchEvent(new CustomEvent('shopSwitched', { detail: { shopId } }));
+        return { success: true, shop: backendShop };
       }
     } catch (error) {
       console.error('Failed to switch shop:', error);

@@ -13,6 +13,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CheckIcon from '@mui/icons-material/Check';
 import AddIcon from '@mui/icons-material/Add';
+import SettingsIcon from '@mui/icons-material/Settings';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
@@ -46,12 +47,18 @@ const AppBar = styled(MuiAppBar, {
   },
 }));
 
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+
 const TopBar = ({ open, setOpen }) => {
   const navigate = useNavigate();
   const { user, shops, activeShop, switchShop, fetchShops } = useAuth();
 
   const [anchorElShop, setAnchorElShop] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+
+  // Toast notification state for shop switch feedback
+  const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
 
   const handleOpenShopMenu = (event) => {
     setAnchorElShop(event.currentTarget);
@@ -64,13 +71,25 @@ const TopBar = ({ open, setOpen }) => {
   const handleSelectShop = async (shop) => {
     handleCloseShopMenu();
     if (activeShop?._id !== shop._id) {
-      await switchShop(shop);
+      const res = await switchShop(shop);
+      if (res?.success) {
+        setToast({
+          open: true,
+          message: `Switched active shop to "${shop.name}"`,
+          severity: 'success'
+        });
+      }
     }
   };
 
   const handleOpenCreateModal = () => {
     handleCloseShopMenu();
     setOpenCreateModal(true);
+  };
+
+  const handleManageShops = () => {
+    handleCloseShopMenu();
+    navigate('/dashboard/settings/shops');
   };
 
   return (
@@ -185,69 +204,81 @@ const TopBar = ({ open, setOpen }) => {
                 <MenuItem
                   onClick={handleOpenCreateModal}
                   sx={{
-                    py: 1,
-                    px: 2,
-                    mx: 0.5,
-                    borderRadius: '8px',
-                    color: '#14B8A6',
+                    py: 0.75,
+                    px: 1.5,
+                    mx: 1,
+                    my: 0.5,
+                    borderRadius: '50px',
+                    color: '#0D9488',
                     fontWeight: 600,
+                    border: '1px solid #CCFBF1',
+                    backgroundColor: '#F0FDFA',
                     '&:hover': {
-                      backgroundColor: 'rgba(20, 184, 166, 0.08)'
+                      backgroundColor: '#CCFBF1',
+                      borderColor: '#99F6E4'
                     }
                   }}
                 >
-                  <ListItemIcon sx={{ minWidth: 32, color: '#14B8A6' }}>
-                    <AddIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Create New Shop" primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 600 }} />
+                  <Box
+                    sx={{
+                      width: 26,
+                      height: 26,
+                      borderRadius: '50%',
+                      bgcolor: '#14B8A6',
+                      color: '#FFFFFF',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mr: 1.25,
+                      flexShrink: 0
+                    }}
+                  >
+                    <AddIcon sx={{ fontSize: 16 }} />
+                  </Box>
+                  <ListItemText primary="Create New Shop" primaryTypographyProps={{ fontSize: '0.85rem', fontWeight: 700 }} />
+                </MenuItem>
+
+                <MenuItem
+                  onClick={handleManageShops}
+                  sx={{
+                    py: 0.75,
+                    px: 1.5,
+                    mx: 1,
+                    my: 0.5,
+                    borderRadius: '50px',
+                    color: '#4338CA',
+                    fontWeight: 600,
+                    border: '1px solid #E0E7FF',
+                    backgroundColor: '#EEF2FF',
+                    '&:hover': {
+                      backgroundColor: '#E0E7FF',
+                      borderColor: '#C7D2FE'
+                    }
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 26,
+                      height: 26,
+                      borderRadius: '50%',
+                      bgcolor: '#4F46E5',
+                      color: '#FFFFFF',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mr: 1.25,
+                      flexShrink: 0
+                    }}
+                  >
+                    <SettingsIcon sx={{ fontSize: 15 }} />
+                  </Box>
+                  <ListItemText primary="Manage Shops" primaryTypographyProps={{ fontSize: '0.85rem', fontWeight: 700 }} />
                 </MenuItem>
               </Menu>
             </Box>
           )}
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 }, ml: 'auto' }}>
-            {!isInvestor(user) && (
-              <>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<ShoppingCartIcon />}
-                  onClick={() => navigate('/shop/products')}
-                  sx={{
-                    borderRadius: '8px',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    fontSize: '0.85rem',
-                    borderColor: '#14B8A6',
-                    color: '#14B8A6',
-                    px: 2,
-                    py: 0.5,
-                    '&:hover': {
-                      borderColor: '#0D9488',
-                      backgroundColor: 'rgba(20, 184, 166, 0.04)',
-                    },
-                    display: { xs: 'none', md: 'inline-flex' }
-                  }}
-                >
-                  Go Back to E-commerce
-                </Button>
-                <Tooltip title="Go Back to E-commerce">
-                  <IconButton
-                    color="primary"
-                    onClick={() => navigate('/shop/products')}
-                    sx={{
-                      color: '#14B8A6',
-                      display: { xs: 'inline-flex', md: 'none' },
-                      border: '1px solid rgba(20, 184, 166, 0.5)',
-                      borderRadius: '8px',
-                      p: 1
-                    }}
-                  >
-                    <ShoppingCartIcon sx={{ fontSize: '1.2rem' }} />
-                  </IconButton>
-                </Tooltip>
-              </>
-            )}
             {user && !isSalesStaff(user) && <NotificationsBell />}
             <UserMenu user={user} />
           </Box>
@@ -265,6 +296,23 @@ const TopBar = ({ open, setOpen }) => {
           }
         }}
       />
+
+      {/* Active Shop Switch Toast Notification */}
+      <Snackbar
+        open={toast.open}
+        autoHideDuration={3500}
+        onClose={() => setToast(prev => ({ ...prev, open: false }))}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={() => setToast(prev => ({ ...prev, open: false }))}
+          severity={toast.severity}
+          variant="filled"
+          sx={{ width: '100%', fontWeight: 600, borderRadius: '10px' }}
+        >
+          {toast.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

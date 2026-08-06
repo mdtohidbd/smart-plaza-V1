@@ -41,12 +41,15 @@ import {
   ArrowBack as ArrowBackIcon,
   Payment as PaymentIcon,
   ErrorOutline as ErrorIcon,
-  CheckCircleOutline as CheckIcon
+  CheckCircleOutline as CheckIcon,
+  Edit as EditIcon,
+  CreditCard as CreditCardIcon
 } from '@mui/icons-material';
 import PrintInvoiceModal from '../../components/invoices/PrintInvoiceModal';
 import InvoiceShareButtons from '../../components/InvoiceShareButtons';
 import SalePaymentUpdate from '../../components/SalePaymentUpdate';
 import EMICollectionModal from './EMICollectionModal';
+import EditInstalmentModal from './EditInstalmentModal';
 
 const EMISaleDetail = () => {
   const { id } = useParams();
@@ -77,6 +80,13 @@ const EMISaleDetail = () => {
   const [companyInfo, setCompanyInfo] = useState({});
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const [selectedInstallment, setSelectedInstallment] = useState(null);
+  const [editInstalmentModalOpen, setEditInstalmentModalOpen] = useState(false);
+  const [selectedInstalmentToEdit, setSelectedInstalmentToEdit] = useState(null);
+
+  const handleOpenEditModal = (item) => {
+    setSelectedInstalmentToEdit(item);
+    setEditInstalmentModalOpen(true);
+  };
 
   const handleCollectClick = (item) => {
     const today = new Date();
@@ -457,63 +467,119 @@ const EMISaleDetail = () => {
               height: '100%'
             }}
           >
-            <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Avatar sx={{ bgcolor: 'rgba(15,118,110,0.1)', color: '#0F766E', width: 32, height: 32 }}>
-                <CalendarIcon sx={{ fontSize: 16 }} />
+            <Box sx={{ px: 2.5, py: 2, borderBottom: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Avatar sx={{ bgcolor: '#ECFDF5', color: '#0F766E', width: 36, height: 36 }}>
+                <CalendarIcon sx={{ fontSize: 20 }} />
               </Avatar>
-              <Typography variant="subtitle2" fontWeight={700} sx={{ color: '#0F172A', fontFamily: 'Outfit, sans-serif' }}>
+              <Typography variant="subtitle1" fontWeight={800} sx={{ color: '#0F172A', fontFamily: 'Outfit, sans-serif', fontSize: '1.05rem' }}>
                 Instalment Schedule
               </Typography>
             </Box>
-            <TableContainer sx={{ maxHeight: 280 }}>
+            <TableContainer sx={{ maxHeight: 380 }}>
               <Table size="small" stickyHeader>
                 <TableHead sx={{ bgcolor: '#F8FAFC' }}>
                   <TableRow>
-                    <TableCell sx={{ color: '#475569', fontWeight: 700, fontSize: '0.75rem', py: 1 }}>Instalment</TableCell>
-                    <TableCell sx={{ color: '#475569', fontWeight: 700, fontSize: '0.75rem', py: 1 }}>Due Date</TableCell>
-                    <TableCell align="right" sx={{ color: '#475569', fontWeight: 700, fontSize: '0.75rem', py: 1 }}>Amount</TableCell>
-                    <TableCell align="center" sx={{ color: '#475569', fontWeight: 700, fontSize: '0.75rem', py: 1 }}>Status</TableCell>
-                    <TableCell align="right" sx={{ color: '#475569', fontWeight: 700, fontSize: '0.75rem', py: 1 }}>Paid</TableCell>
-                    <TableCell align="center" sx={{ color: '#475569', fontWeight: 700, fontSize: '0.75rem', py: 1 }}></TableCell>
+                    <TableCell sx={{ color: '#475569', fontWeight: 800, fontSize: '0.75rem', py: 1.2, letterSpacing: 0.5 }}>INSTALMENT</TableCell>
+                    <TableCell sx={{ color: '#475569', fontWeight: 800, fontSize: '0.75rem', py: 1.2, letterSpacing: 0.5 }}>DUE DATE</TableCell>
+                    <TableCell align="right" sx={{ color: '#475569', fontWeight: 800, fontSize: '0.75rem', py: 1.2, letterSpacing: 0.5 }}>AMOUNT</TableCell>
+                    <TableCell align="center" sx={{ color: '#475569', fontWeight: 800, fontSize: '0.75rem', py: 1.2, letterSpacing: 0.5 }}>STATUS</TableCell>
+                    <TableCell align="center" sx={{ color: '#475569', fontWeight: 800, fontSize: '0.75rem', py: 1.2, letterSpacing: 0.5 }}>PAID DATE</TableCell>
+                    <TableCell align="right" sx={{ color: '#475569', fontWeight: 800, fontSize: '0.75rem', py: 1.2, letterSpacing: 0.5 }}>PAID</TableCell>
+                    <TableCell align="center" sx={{ color: '#475569', fontWeight: 800, fontSize: '0.75rem', py: 1.2 }}></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {invoice.instalments?.map((item, index) => {
-                    const isPaid = item.status === 'paid';
-                    const isOverdue = item.status === 'overdue';
+                    const statusKey = (item.status || 'pending').toLowerCase();
+                    
+                    const statusConfig = {
+                      paid: { label: 'PAID', bgcolor: '#DCFCE7', color: '#15803D', border: '#BBF7D0' },
+                      pending: { label: 'PENDING', bgcolor: '#F8FAFC', color: '#64748B', border: '#E2E8F0' },
+                      partial: { label: 'PARTIAL', bgcolor: '#DBEAFE', color: '#1D4ED8', border: '#BFDBFE' },
+                      overdue: { label: 'OVERDUE', bgcolor: '#FEE2E2', color: '#B91C1C', border: '#FECACA' },
+                      waived: { label: 'WAIVED', bgcolor: '#F3E8FF', color: '#6B21A8', border: '#E9D5FF' }
+                    };
+
+                    const cfg = statusConfig[statusKey] || statusConfig.pending;
+
                     return (
                       <TableRow key={index} sx={{ '&:hover': { bgcolor: '#F8FAFC' } }}>
-                        <TableCell sx={{ color: '#334155', fontWeight: 600, fontSize: '0.8rem', py: 0.75 }}>Month {item.instalmentNumber}</TableCell>
-                        <TableCell sx={{ color: '#64748B', fontWeight: 500, fontSize: '0.78rem', py: 0.75 }}>
-                          {format(new Date(item.dueDate), 'dd MMM yyyy')}
+                        <TableCell sx={{ color: '#0F172A', fontWeight: 800, fontSize: '0.85rem', py: 1, fontFamily: 'Outfit, sans-serif' }}>
+                          Month {item.instalmentNumber}
                         </TableCell>
-                        <TableCell align="right" sx={{ color: '#0F172A', fontWeight: 700, py: 0.75 }}>৳{(item.amount || 0).toLocaleString()}</TableCell>
-                        <TableCell align="center" sx={{ py: 0.75 }}>
+                        <TableCell sx={{ color: '#64748B', fontWeight: 500, fontSize: '0.82rem', py: 1 }}>
+                          {item.dueDate ? format(new Date(item.dueDate), 'dd MMM yyyy') : '—'}
+                        </TableCell>
+                        <TableCell align="right" sx={{ color: '#0F172A', fontWeight: 800, fontSize: '0.85rem', py: 1, fontFamily: 'Outfit, sans-serif' }}>
+                          ৳{(item.amount || 0).toLocaleString()}
+                        </TableCell>
+                        <TableCell align="center" sx={{ py: 1 }}>
                           <Chip 
-                            label={item.status.toUpperCase()} 
+                            label={cfg.label} 
                             size="small" 
                             sx={{ 
-                              height: '18px', 
-                              fontSize: '0.625rem', 
-                              fontWeight: 700,
-                              borderRadius: '4px',
-                              bgcolor: isPaid ? '#D1FAE5' : isOverdue ? '#FEE2E2' : '#F1F5F9',
-                              color: isPaid ? '#059669' : isOverdue ? '#DC2626' : '#64748B',
-                              border: `1px solid ${isPaid ? '#A7F3D0' : isOverdue ? '#FECACA' : '#E2E8F0'}`
+                              height: '22px', 
+                              fontSize: '0.65rem', 
+                              fontWeight: 800,
+                              borderRadius: '6px',
+                              bgcolor: cfg.bgcolor,
+                              color: cfg.color,
+                              border: `1px solid ${cfg.border}`,
+                              px: 0.5,
+                              letterSpacing: 0.5
                             }}
                           />
                         </TableCell>
-                        <TableCell align="right" sx={{ color: isPaid ? '#059669' : '#94A3B8', fontWeight: 700, py: 0.75 }}>
-                          ৳{(item.paidAmount || 0).toLocaleString()}
+                        <TableCell align="center" sx={{ color: '#64748B', fontWeight: 500, fontSize: '0.82rem', py: 1 }}>
+                          {item.paidDate ? format(new Date(item.paidDate), 'dd MMM yyyy') : '—'}
                         </TableCell>
-                        <TableCell align="center" sx={{ py: 0.75 }}>
-                          {!isPaid && (
-                            <Tooltip title="Collect Payment">
-                              <IconButton size="small" onClick={() => handleCollectClick(item)} color="success" sx={{ p: 0.5, bgcolor: '#f0fdf4', '&:hover': { bgcolor: '#dcfce7' } }}>
-                                <PaymentIcon sx={{ fontSize: 14 }} />
+                        <TableCell align="right" sx={{ py: 1 }}>
+                          {item.paidAmount > 0 ? (
+                            <Typography sx={{ color: '#059669', fontWeight: 800, fontSize: '0.85rem', fontFamily: 'Outfit, sans-serif' }}>
+                              ৳{(item.paidAmount || 0).toLocaleString()}
+                            </Typography>
+                          ) : (
+                            <Typography sx={{ color: '#94A3B8', fontWeight: 600, fontSize: '0.82rem', fontFamily: 'Outfit, sans-serif' }}>
+                              ৳0
+                            </Typography>
+                          )}
+                        </TableCell>
+                        <TableCell align="center" sx={{ py: 1 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.75 }}>
+                            <Tooltip title="Collect / Quick Pay">
+                              <IconButton 
+                                size="small" 
+                                onClick={() => handleCollectClick(item)} 
+                                sx={{ 
+                                  color: '#16A34A', 
+                                  bgcolor: '#F0FDF4', 
+                                  border: '1px solid #DCFCE7', 
+                                  '&:hover': { bgcolor: '#DCFCE7' }, 
+                                  p: 0.6,
+                                  borderRadius: '8px'
+                                }}
+                              >
+                                <CreditCardIcon sx={{ fontSize: 16 }} />
                               </IconButton>
                             </Tooltip>
-                          )}
+
+                            <Tooltip title="Edit Instalment">
+                              <IconButton 
+                                size="small" 
+                                onClick={() => handleOpenEditModal(item)} 
+                                sx={{ 
+                                  color: '#0284C7', 
+                                  bgcolor: '#F0F9FF', 
+                                  border: '1px solid #BAE6FD', 
+                                  '&:hover': { bgcolor: '#E0F2FE' }, 
+                                  p: 0.6,
+                                  borderRadius: '8px'
+                                }}
+                              >
+                                <EditIcon sx={{ fontSize: 16 }} />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
                         </TableCell>
                       </TableRow>
                     );
@@ -635,6 +701,18 @@ const EMISaleDetail = () => {
           onClose={() => setCollectionModalOpen(false)}
           installment={selectedInstallment}
           onSuccess={() => { queryClient.invalidateQueries(['emi-invoice', id]); setCollectionModalOpen(false); }}
+        />
+      )}
+      {editInstalmentModalOpen && selectedInstalmentToEdit && (
+        <EditInstalmentModal
+          open={editInstalmentModalOpen}
+          onClose={() => setEditInstalmentModalOpen(false)}
+          invoice={invoice}
+          instalment={selectedInstalmentToEdit}
+          onSuccess={() => {
+            queryClient.invalidateQueries(['emi-invoice', id]);
+            setEditInstalmentModalOpen(false);
+          }}
         />
       )}
     </Box>

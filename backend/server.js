@@ -97,8 +97,8 @@ app.use(session({
 
 // Middleware
 app.use(compression());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Log all requests with response time
 app.use((req, res, next) => {

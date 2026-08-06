@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const User = require('../models/User');
 
 const protect = async (req, res, next) => {
@@ -48,13 +49,20 @@ const protect = async (req, res, next) => {
     }
 
     // Populate shop ID from header, query, or user profile
+    const isValidShopId = (id) => {
+      return id && id !== 'undefined' && id !== 'null' && id !== '[object Object]' && mongoose.Types.ObjectId.isValid(id);
+    };
+
     const shopHeader = req.headers['x-shop-id'] || req.headers['X-Shop-Id'] || req.headers.shopid;
-    if (shopHeader && shopHeader !== 'undefined' && shopHeader !== 'null') {
-      req.shopId = shopHeader;
-    } else if (req.query.shopId && req.query.shopId !== 'undefined' && req.query.shopId !== 'null') {
-      req.shopId = req.query.shopId;
+    if (isValidShopId(shopHeader)) {
+      req.shopId = shopHeader.toString();
+    } else if (isValidShopId(req.query.shopId)) {
+      req.shopId = req.query.shopId.toString();
     } else if (req.user && req.user.activeShop) {
-      req.shopId = req.user.activeShop.toString();
+      const userShopId = typeof req.user.activeShop === 'object' ? req.user.activeShop._id : req.user.activeShop;
+      if (isValidShopId(userShopId)) {
+        req.shopId = userShopId.toString();
+      }
     }
 
     next();
@@ -90,13 +98,19 @@ const optionalProtect = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
       req.user = await User.findById(decoded.id).select('-password');
       if (req.user) {
+        const isValidShopId = (id) => {
+          return id && id !== 'undefined' && id !== 'null' && id !== '[object Object]' && mongoose.Types.ObjectId.isValid(id);
+        };
         const shopHeader = req.headers['x-shop-id'] || req.headers['X-Shop-Id'] || req.headers.shopid;
-        if (shopHeader && shopHeader !== 'undefined' && shopHeader !== 'null') {
-          req.shopId = shopHeader;
-        } else if (req.query.shopId && req.query.shopId !== 'undefined' && req.query.shopId !== 'null') {
-          req.shopId = req.query.shopId;
+        if (isValidShopId(shopHeader)) {
+          req.shopId = shopHeader.toString();
+        } else if (isValidShopId(req.query.shopId)) {
+          req.shopId = req.query.shopId.toString();
         } else if (req.user.activeShop) {
-          req.shopId = req.user.activeShop.toString();
+          const userShopId = typeof req.user.activeShop === 'object' ? req.user.activeShop._id : req.user.activeShop;
+          if (isValidShopId(userShopId)) {
+            req.shopId = userShopId.toString();
+          }
         }
       }
     } catch (error) {

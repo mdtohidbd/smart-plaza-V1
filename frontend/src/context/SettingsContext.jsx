@@ -46,14 +46,18 @@ export const SettingsProvider = ({ children }) => {
             data = authRes.data.data;
           }
         } catch (authErr) {
-          console.log('Fallback to public settings fetch');
+          // Suppress connection refused logs when backend is restarting or offline
         }
       }
 
       if (!data) {
-        const res = await axios.get(`${publicBase}/settings`);
-        if (res.data && res.data.success && res.data.data) {
-          data = res.data.data;
+        try {
+          const res = await axios.get(`${publicBase}/settings`);
+          if (res.data && res.data.success && res.data.data) {
+            data = res.data.data;
+          }
+        } catch (pubErr) {
+          // Suppress connection refused logs
         }
       }
 
@@ -82,7 +86,7 @@ export const SettingsProvider = ({ children }) => {
         }
       }
     } catch (err) {
-      console.error('Failed to fetch shop settings:', err);
+      // General error fallback
     } finally {
       setLoading(false);
     }
@@ -90,6 +94,19 @@ export const SettingsProvider = ({ children }) => {
 
   useEffect(() => {
     fetchSettings();
+
+    const handleShopSwitched = () => {
+      fetchSettings();
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('shopSwitched', handleShopSwitched);
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('shopSwitched', handleShopSwitched);
+      }
+    };
   }, []);
 
   return (

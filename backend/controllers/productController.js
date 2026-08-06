@@ -10,17 +10,27 @@ const getProducts = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const limit = parseInt(req.query.limit, 10) || 0;
   
-  // Filter by shop if shop context is available
-  const query = req.shopId ? { shop: req.shopId } : {};
+  // Filter by shop if shop context is available (include assigned or unassigned/global products)
+  const query = req.shopId
+    ? { $or: [{ shop: req.shopId }, { shop: null }, { shop: { $exists: false } }] }
+    : {};
 
   // Search parameter
   if (req.query.search) {
     const searchRegex = new RegExp(req.query.search, 'i');
-    query.$or = [
-      { name: searchRegex },
-      { sku: searchRegex },
-      { genericName: searchRegex }
-    ];
+    const searchCondition = {
+      $or: [
+        { name: searchRegex },
+        { sku: searchRegex },
+        { genericName: searchRegex }
+      ]
+    };
+    if (query.$or) {
+      query.$and = [{ $or: query.$or }, searchCondition];
+      delete query.$or;
+    } else {
+      query.$or = searchCondition.$or;
+    }
   }
   
   let dbQuery = Product.find(query)
@@ -77,11 +87,12 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route   GET /api/products/:id
 // @access  Private
 const getProduct = asyncHandler(async (req, res) => {
-  // Find product and ensure it belongs to the current shop
-  const product = await Product.findOne({
-    _id: req.params.id,
-    shop: req.shopId
-  })
+  const query = { _id: req.params.id };
+  if (req.shopId) {
+    query.$or = [{ shop: req.shopId }, { shop: null }, { shop: { $exists: false } }];
+  }
+
+  const product = await Product.findOne(query)
     // .populate('shop', 'name')
     .populate('supplier', 'name companyName contactNumber')
     .populate('brand', 'name logo')
@@ -127,11 +138,16 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private
 const updateProduct = asyncHandler(async (req, res) => {
-  // Find product and ensure it belongs to the current shop
-  let product = await Product.findOne({
-    _id: req.params.id,
-    shop: req.shopId
-  });
+  // Find product and ensure it belongs to the current shop or is global/unassigned
+  const filter = { _id: req.params.id };
+  if (req.shopId) {
+    filter.$or = [
+      { shop: req.shopId },
+      { shop: null },
+      { shop: { $exists: false } }
+    ];
+  }
+  let product = await Product.findOne(filter) || await Product.findById(req.params.id);
 
   if (!product) {
     return res.status(404).json({ 
@@ -145,7 +161,6 @@ const updateProduct = asyncHandler(async (req, res) => {
     new: true,
     runValidators: true
   })
-  // .populate('shop', 'name')
   .populate('supplier', 'name companyName contactNumber')
   .populate('brand', 'name logo')
   .populate('category', 'name')
@@ -161,11 +176,15 @@ const updateProduct = asyncHandler(async (req, res) => {
 // @route   DELETE /api/products/:id
 // @access  Private
 const deleteProduct = asyncHandler(async (req, res) => {
-  // Find product and ensure it belongs to the current shop
-  const product = await Product.findOne({
-    _id: req.params.id,
-    shop: req.shopId
-  });
+  const filter = { _id: req.params.id };
+  if (req.shopId) {
+    filter.$or = [
+      { shop: req.shopId },
+      { shop: null },
+      { shop: { $exists: false } }
+    ];
+  }
+  const product = await Product.findOne(filter) || await Product.findById(req.params.id);
 
   if (!product) {
     return res.status(404).json({ 
