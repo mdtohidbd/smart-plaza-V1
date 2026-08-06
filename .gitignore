@@ -42,3 +42,10 @@ CLAUDE.md
 .gemini/
 .cline/
 
+# Additional AI agent/IDE states
+.mcp.json
+.mcp.json.bak
+.vscode/mcp.json
+.agents/
+.brainsync/
+.cursor/
