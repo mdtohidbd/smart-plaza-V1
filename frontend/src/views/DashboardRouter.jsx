@@ -2,11 +2,13 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { isSuperAdminPlus } from '../utils/roleUtils';
+// trigger vite rebuild
 
 // Import Role-Specific Dashboards
 import OwnerDashboard from './dashboards/OwnerDashboard';
 import StaffDashboard from './dashboards/StaffDashboard';
 import InvestorDashboard from './Investors/InvestorDashboard';
+import SRDashboard from './dashboards/SRDashboard';
 
 const DashboardRouter = () => {
   const { user } = useAuth();
@@ -24,6 +26,10 @@ const DashboardRouter = () => {
     return <Navigate to="/dashboard/inventory/list" replace />;
   }
 
+  if (user.role === 'SR' || user.role === 'DSR') {
+    return <SRDashboard />;
+  }
+
   if (user.role === 'Investor') {
     return <InvestorDashboard />;
   }
@@ -33,3 +39,4 @@ const DashboardRouter = () => {
 };
 
 export default DashboardRouter;
+

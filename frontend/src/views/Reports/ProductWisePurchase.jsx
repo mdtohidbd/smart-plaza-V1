@@ -728,7 +728,7 @@ const ProductWisePurchase = () => {
                 <Box sx={{ p: 1.5, border: '1px solid #ccc', borderRadius: 1, backgroundColor: '#f5f5f5' }}>
                   <Typography variant="subtitle2" gutterBottom color="primary">PDF Printable Preview Layout</Typography>
                   <Paper elevation={2} sx={{ p: 3, mb: 2, bgcolor: '#fff', borderRadius: '8px' }}>
-                    <Typography variant="h5" align="center" sx={{ fontFamily: '"Outfit", sans-serif', fontWeight: 700 }} gutterBottom>Smart Plaza BD</Typography>
+                    <Typography variant="h5" align="center" sx={{ fontFamily: '"Outfit", sans-serif', fontWeight: 700 }} gutterBottom>Demo Electronics ERP</Typography>
                     <Typography variant="subtitle1" align="center" sx={{ fontFamily: '"Outfit", sans-serif', fontWeight: 600 }} gutterBottom>Product Wise Purchase Report</Typography>
                     <Typography variant="body2" align="center" sx={{ mb: 3 }}>Generated on: {new Date().toLocaleDateString()}</Typography>
                     

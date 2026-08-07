@@ -146,7 +146,7 @@ const ExportButtons = ({ data = [], columns = [], filename = 'export', title = '
               <div class="title">${title}</div>
               <div class="meta">Generated: ${new Date().toLocaleString()} | Total Items: ${data.length}</div>
             </div>
-            <div class="logo">Smart Plaza</div>
+            <div class="logo">Demo ERP</div>
           </div>
           <table>
             <thead>
@@ -172,7 +172,7 @@ const ExportButtons = ({ data = [], columns = [], filename = 'export', title = '
             </tbody>
           </table>
           <div class="footer">
-            Smart Plaza Business ERP - Confidential Report
+            Demo ERP Business ERP - Confidential Report
           </div>
           <script>
             window.onload = function() {

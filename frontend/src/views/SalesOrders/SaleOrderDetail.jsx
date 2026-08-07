@@ -589,6 +589,11 @@ const SaleOrderDetail = () => {
                       <TableRow key={index} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                         <TableCell sx={{ fontWeight: 500, color: '#1e293b' }}>
                           {item.product?.name || 'N/A'}
+                          {item.color && (
+                            <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary', fontSize: '0.75rem' }}>
+                              Color: {item.color}
+                            </Typography>
+                          )}
                           {item.serialNumbers && item.serialNumbers.length > 0 && item.serialNumbers.some(sn => sn) && (
                             <Box sx={{ mt: 0.5, display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
                               {item.serialNumbers.filter(sn => sn).map((sn, i) => (
@@ -750,7 +755,7 @@ const SaleOrderDetail = () => {
                 {order.items?.map((item, idx) => (
                   <Box key={item._id || idx} sx={{ pl: 1 }}>
                     <Typography variant="body2" fontWeight="700" color="#334155" mb={1}>
-                      {item.quantity} x {item.product?.name}
+                      {item.quantity} x {item.product?.name} {item.color && <span style={{ color: '#64748b', fontWeight: 600, fontSize: '0.75rem' }}>(Color: {item.color})</span>}
                     </Typography>
                     <Grid container spacing={1}>
                       {Array.from({ length: item.quantity }).map((_, i) => {

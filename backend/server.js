@@ -22,12 +22,12 @@ const corsOptions = {
     
     // Allowed origins for development and production
     const allowedOrigins = [
-      'https://admin.smartplazabd.com',
-      'https://smartplazabd.com',
-      'https://www.smartplazabd.com',
-      'https://www.admin.smartplazabd.com',
-      'http://smartplazabd.com',
-      'http://www.smartplazabd.com',
+      'https://admin.yourskybridge.com',
+      'https://yourskybridge.com',
+      'https://www.yourskybridge.com',
+      'https://www.admin.yourskybridge.com',
+      'http://yourskybridge.com',
+      'http://www.yourskybridge.com',
       'http://localhost:3000',
       'http://localhost:5173', 
       'http://localhost:3001',
@@ -157,6 +157,7 @@ app.use('/api/roles', require('./routes/roles'));
 app.use('/api/messages', require('./routes/messages'));
 app.use('/api/settings', require('./routes/settings'));
 app.use('/api/shops', require('./routes/shops'));
+app.use('/api/routes', require('./routes/routes'));
 app.use('/api/warranty', require('./routes/warranty'));
 app.use('/api/public', require('./routes/public'));
 app.use('/api/sms', require('./routes/sms'));
@@ -180,7 +181,7 @@ app.use('/api/mfs-providers', require('./routes/mfsProviders'));
 
 // Root API check endpoint
 app.get(['/api', '/api/'], (req, res) => {
-  res.json({ success: true, message: 'Smart Plaza API is running', environment: process.env.NODE_ENV || 'development' });
+  res.json({ success: true, message: 'Demo ERP API is running', environment: process.env.NODE_ENV || 'development' });
 });
 
 // Serve index.html for any routes that don't match API routes

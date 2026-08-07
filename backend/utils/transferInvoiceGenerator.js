@@ -119,7 +119,7 @@ const generateTransferInvoicePDF = async (transfer, companyInfo) => {
             {
               columns: [
                 { text: `Phone: ${companyInfo?.phone || '01842-144844'}`, color: '#ffffff', fontSize: 10, margin: [40, 22, 0, 0], width: 'auto' },
-                { text: `Email: ${companyInfo?.email || 'smartplazabd@gmail.com'}`, color: '#ffffff', fontSize: 10, margin: [20, 22, 0, 0], width: 'auto' },
+                { text: `Email: ${companyInfo?.email || 'admin@yourskybridge.com'}`, color: '#ffffff', fontSize: 10, margin: [20, 22, 0, 0], width: 'auto' },
                 { text: `Address: ${companyInfo?.companyAddress || '1, KDA Avenue, Khulna'}`, color: '#ffffff', fontSize: 10, margin: [0, 22, 40, 0], width: '*', alignment: 'right' }
               ]
             }
@@ -274,7 +274,7 @@ const generateTransferInvoicePDF = async (transfer, companyInfo) => {
               stack: [
                 { text: 'Thanks for doing business with us!', color: primaryColor, bold: true, fontSize: 12, margin: [0, 0, 0, 5] },
                 { text: 'Best regards,', fontSize: 10 },
-                { text: transfer.createdBy?.name || 'Smart Plaza Team', fontSize: 10, bold: true, margin: [0, 2, 0, 0] }
+                { text: transfer.createdBy?.name || 'Demo ERP Team', fontSize: 10, bold: true, margin: [0, 2, 0, 0] }
               ],
               width: '*'
             },

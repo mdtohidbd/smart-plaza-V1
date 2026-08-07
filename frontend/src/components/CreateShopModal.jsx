@@ -98,7 +98,7 @@ const CreateShopModal = ({ open, onClose, onSuccess }) => {
               <TextField
                 name="name"
                 label="Shop / Branch Name"
-                placeholder="e.g. Smart Plaza Main Branch"
+                placeholder="e.g. Demo ERP Main Branch"
                 value={formData.name}
                 onChange={handleChange}
                 fullWidth
@@ -123,7 +123,7 @@ const CreateShopModal = ({ open, onClose, onSuccess }) => {
               <TextField
                 name="email"
                 label="Email Address"
-                placeholder="e.g. shop@smartplazabd.com"
+                placeholder="e.g. shop@yourskybridge.com"
                 value={formData.email}
                 onChange={handleChange}
                 fullWidth

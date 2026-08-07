@@ -61,7 +61,7 @@ const generateInvoicePDF = async (saleOrOrder, companyInfo) => {
               stack: [
                 logoBase64 ? { image: logoBase64, width: 60 } : {},
                 { 
-                  text: companyInfo.companyName || 'Smart Plaza BD', 
+                  text: companyInfo.companyName || 'Demo Electronics ERP', 
                   fontSize: 14, 
                   bold: true, 
                   margin: [0, 3, 0, 0] 
@@ -78,7 +78,7 @@ const generateInvoicePDF = async (saleOrOrder, companyInfo) => {
                   margin: [0, 2, 0, 0] 
                 },
                 { 
-                  text: `Email: ${companyInfo.email || 'smartplazabd@gmail.com'}`, 
+                  text: `Email: ${companyInfo.email || 'admin@yourskybridge.com'}`, 
                   fontSize: 8,
                   margin: [0, 1, 0, 0]
                 }
@@ -332,10 +332,10 @@ const buildInvoiceHTML = (saleOrOrder, companyInfo, autoPrint = false) => {
     govtTotal = originalTotal + extraFee;
   }
 
-  const companyName = companyInfo.companyName || 'Smart Plaza BD';
+  const companyName = companyInfo.companyName || 'Demo Electronics ERP';
   const companyAddress = companyInfo.companyAddress || '1 KDA Avenue, Shibbari, Khulna, Bangladesh, 9100';
   const companyPhone = companyInfo.phone || companyInfo.contactNumber || '01842-144844';
-  const companyEmail = companyInfo.email || 'smartplazabd@gmail.com';
+  const companyEmail = companyInfo.email || 'admin@yourskybridge.com';
 
   const customerName = saleOrOrder.customer?.contactName || 'N/A';
   const customerPhone = saleOrOrder.customer?.contactNumber || '';

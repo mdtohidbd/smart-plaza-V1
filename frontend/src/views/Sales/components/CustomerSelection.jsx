@@ -21,7 +21,9 @@ const CustomerSelection = ({
   setOpenCustomerDialog,
   newCustomer,
   setNewCustomer,
-  handleCreateCustomer
+  handleCreateCustomer,
+  isBusiness = false,
+  isIndividual = false
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -61,7 +63,7 @@ const CustomerSelection = ({
             renderInput={(params) => (
               <TextField 
                 {...params} 
-                label="Customer *" 
+                label={isBusiness ? "Business Customer *" : (isIndividual ? "Individual Customer *" : "Customer *")} 
                 required
                 InputProps={{
                   ...params.InputProps,
@@ -100,13 +102,26 @@ const CustomerSelection = ({
           fontWeight: 700,
           borderBottom: '1px solid #E2E8F0',
           pb: 1.5
-        }}>Add New Customer</DialogTitle>
+        }}>{isBusiness ? 'Add New Business Customer' : (isIndividual ? 'Add New Individual Customer' : 'Add New Customer')}</DialogTitle>
         <DialogContent sx={{ minWidth: '420px', bgcolor: '#FFFFFF', mt: 1.5 }}>
           <Grid container spacing={1.5}>
+            {isBusiness && (
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Business Name *"
+                  value={newCustomer.businessName || ''}
+                  onChange={(e) => setNewCustomer({ ...newCustomer, businessName: e.target.value })}
+                  size="small" 
+                  disabled={isSubmitting}
+                  InputProps={{ sx: { borderRadius: '8px' } }}
+                />
+              </Grid>
+            )}
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Customer Name"
+                label={isBusiness ? "Contact Name *" : "Customer Name *"}
                 value={newCustomer.contactName}
                 onChange={(e) => setNewCustomer({ ...newCustomer, contactName: e.target.value })}
                 size="small" 
@@ -175,7 +190,7 @@ const CustomerSelection = ({
               '&:hover': { backgroundColor: '#4F46E5' }
             }}
           >
-            {isSubmitting ? 'Adding...' : 'Add Customer'}
+            {isSubmitting ? 'Adding...' : (isBusiness ? 'Add Business' : (isIndividual ? 'Add Individual' : 'Add Customer'))}
           </Button>
         </DialogActions>
       </Dialog>

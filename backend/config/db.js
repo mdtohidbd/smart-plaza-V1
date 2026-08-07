@@ -154,7 +154,7 @@ const connectDB = async () => {
   }
 
   try {
-    const conn = await mongoose.connect(uri || 'mongodb://localhost:27017/smartplaza', {
+    const conn = await mongoose.connect(uri || 'mongodb://localhost:27017/DemoERP', {
       serverSelectionTimeoutMS: 30000,
     });
     console.log(`✅ MongoDB Connected Successfully: ${conn.connection.host}`);
@@ -186,7 +186,7 @@ const connectDB = async () => {
       if (!process.env.VERCEL) {
         console.log('🔄 Attempting fallback connection to local MongoDB database...');
         try {
-          const localConn = await mongoose.connect('mongodb://127.0.0.1:27017/smartplaza');
+          const localConn = await mongoose.connect('mongodb://127.0.0.1:27017/DemoERP');
           console.log(`✅ Success! MongoDB Connected to Local Fallback: ${localConn.connection.host}`);
           await initializePermanentRoles();
           await fixLegacyIndexes();

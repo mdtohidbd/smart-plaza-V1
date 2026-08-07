@@ -58,7 +58,7 @@ const inputSx = {
 const DEMO_ROLES = [
   {
     role: 'Super Admin',
-    email: 'admin@smartplazabd.com',
+    email: 'admin@yourskybridge.com',
     password: 'admin123',
     badge: 'Full Access',
     color: '#10B981',
@@ -68,7 +68,7 @@ const DEMO_ROLES = [
   },
   {
     role: 'Manager',
-    email: 'manager@smartplazabd.com',
+    email: 'manager@yourskybridge.com',
     password: 'manager123',
     badge: 'Management',
     color: '#3B82F6',
@@ -78,7 +78,7 @@ const DEMO_ROLES = [
   },
   {
     role: 'Sales Staff',
-    email: 'sales@smartplazabd.com',
+    email: 'sales@yourskybridge.com',
     password: 'sales123',
     badge: 'POS & Counter',
     color: '#F59E0B',
@@ -88,7 +88,7 @@ const DEMO_ROLES = [
   },
   {
     role: 'Investor',
-    email: 'investor@smartplazabd.com',
+    email: 'investor@yourskybridge.com',
     password: 'investor123',
     badge: 'Investor Portal',
     color: '#8B5CF6',
@@ -98,7 +98,7 @@ const DEMO_ROLES = [
   },
   {
     role: 'Super Admin Plus',
-    email: 'adminplus@smartplazabd.com',
+    email: 'adminplus@yourskybridge.com',
     password: 'adminplus123',
     badge: 'Master Role',
     color: '#06B6D4',
@@ -108,7 +108,7 @@ const DEMO_ROLES = [
   },
   {
     role: 'Customer',
-    email: 'customer@smartplazabd.com',
+    email: 'customer@yourskybridge.com',
     password: 'customer123',
     badge: 'E-Commerce',
     color: '#14B8A6',
@@ -119,7 +119,7 @@ const DEMO_ROLES = [
 ];
 
 const Login = ({ isEcommerce = false }) => {
-  const [email, setEmail] = useState(isEcommerce ? 'customer@smartplazabd.com' : 'admin@smartplazabd.com');
+  const [email, setEmail] = useState(isEcommerce ? 'customer@yourskybridge.com' : 'admin@yourskybridge.com');
   const [password, setPassword] = useState('admin123');
   const [showPassword, setShowPassword] = useState(true);
   const [error, setError] = useState('');
@@ -315,7 +315,7 @@ const Login = ({ isEcommerce = false }) => {
           color: '#64748B',
           position: 'relative', zIndex: 1
         }}>
-          © {new Date().getFullYear()} {settings?.companyName || 'Smart Plaza BD'}. All rights reserved.
+          © {new Date().getFullYear()} {settings?.companyName || 'Demo Electronics ERP'}. All rights reserved.
         </Typography>
       </Box>
 
@@ -512,7 +512,7 @@ const Login = ({ isEcommerce = false }) => {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="admin@smartplazabd.com"
+                placeholder="admin@yourskybridge.com"
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

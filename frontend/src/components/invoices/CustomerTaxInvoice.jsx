@@ -25,7 +25,7 @@ const numberToWords = (num) => {
 
 const CustomerTaxInvoice = ({ invoiceData, sale, title }) => {
   const { settings } = useSettings();
-  const companyName = settings?.companyName || 'Smart Plaza';
+  const companyName = settings?.companyName || 'Demo ERP';
   const address = settings?.companyAddress || '1, KDA Avenue, Khulna';
   if (!invoiceData) return null;
 
@@ -183,7 +183,7 @@ const CustomerTaxInvoice = ({ invoiceData, sale, title }) => {
         <Box sx={{ mt: 1 }}>
           <Typography variant="body2" sx={{ fontSize: '11px', mb: 2 }}><strong>Signature:</strong></Typography>
           <Box sx={{ borderTop: '1px solid #000', width: '200px', pt: 0.5 }}>
-            <Typography variant="caption" sx={{ color: '#1976d2', display: 'block', lineHeight: 1.2 }}>Smart Plaza</Typography>
+            <Typography variant="caption" sx={{ color: '#1976d2', display: 'block', lineHeight: 1.2 }}>Demo ERP</Typography>
             <Typography variant="caption" sx={{ color: '#1976d2', display: 'block', lineHeight: 1.2 }}>Authorized Signature</Typography>
           </Box>
         </Box>

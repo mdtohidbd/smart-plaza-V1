@@ -75,9 +75,9 @@ const EditQuotation = () => {
     otherCharges: [],
     subject: 'Price Quotation for Products.',
     vatAitInfo: 'excluding VAT and AIT',
-    paymentMethod: 'Payment must be done before/after delivery of the product by cash/cheque in favor of\n(Smart Plaza) Acc Number: 206914 3880001, BRAC Bank, Branch: Khulna\nRouting number: 060471545',
+    paymentMethod: 'Payment must be done before/after delivery of the product by cash/cheque in favor of\n(Demo ERP) Acc Number: 206914 3880001, BRAC Bank, Branch: Khulna\nRouting number: 060471545',
     relatedInformation: 'The package contains 1 indoor and 1 outdoor unit with 10 feet copper pipe, connection cable and remote.\nAdditional charge 590 Taka per feet will be applicable if extra copper pipe and connection cable required.',
-    quoteGivenByName: 'Md. Reajul Hasan Raj',
+    quoteGivenByName: 'Demo Admin',
     quoteGivenByDesignation: 'Branch Manager'
   });
 
@@ -158,9 +158,9 @@ const EditQuotation = () => {
         otherCharges: q.otherCharges || [],
         subject: q.subject || 'Price Quotation for Products.',
         vatAitInfo: q.vatAitInfo || 'excluding VAT and AIT',
-        paymentMethod: q.paymentMethod || 'Payment must be done before/after delivery of the product by cash/cheque in favor of\n(Smart Plaza) Acc Number: 206914 3880001, BRAC Bank, Branch: Khulna\nRouting number: 060471545',
+        paymentMethod: q.paymentMethod || 'Payment must be done before/after delivery of the product by cash/cheque in favor of\n(Demo ERP) Acc Number: 206914 3880001, BRAC Bank, Branch: Khulna\nRouting number: 060471545',
         relatedInformation: q.relatedInformation || 'The package contains 1 indoor and 1 outdoor unit with 10 feet copper pipe, connection cable and remote.\nAdditional charge 590 Taka per feet will be applicable if extra copper pipe and connection cable required.',
-        quoteGivenByName: q.quoteGivenByName || 'Md. Reajul Hasan Raj',
+        quoteGivenByName: q.quoteGivenByName || 'Demo Admin',
         quoteGivenByDesignation: q.quoteGivenByDesignation || 'Branch Manager'
       });
     }

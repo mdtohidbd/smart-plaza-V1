@@ -25,7 +25,7 @@ const getShops = asyncHandler(async (req, res) => {
       owner: req.user._id,
       address: 'Level 4, Multiplan Center, Elephant Road, Dhaka-1205',
       phone: '+8801700000000',
-      email: 'info@smartplazabd.com',
+      email: 'info@yourskybridge.com',
       isActive: true
     });
     if (['Super Admin', 'Admin'].includes(req.user.role)) {
@@ -70,7 +70,7 @@ const createShop = asyncHandler(async (req, res) => {
     companyName: name,
     companyAddress: address || '1 KDA Avenue, Shibbari, Khulna',
     phone: phone || '01842-144844',
-    email: email || 'smartplazabd@gmail.com',
+    email: email || 'admin@yourskybridge.com',
     shop: shop._id
   });
 

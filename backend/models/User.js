@@ -242,6 +242,32 @@ userSchema.pre('save', async function() {
             };
             break;
           }
+          case 'SR':
+          case 'DSR': {
+            const createOnly = { read: true, create: true, update: false, delete: false };
+            const fullContact = { read: true, create: true, update: true, delete: false };
+            const ro   = { read: true, create: false, update: false, delete: false };
+            const no   = { read: false, create: false, update: false, delete: false };
+            this.permissions = {
+              dashboard: ro, 
+              sales: createOnly, 
+              retail: no, 
+              products: ro, 
+              contacts: fullContact,
+              inventory: ro, 
+              reports: ro, 
+              warranty: createOnly, 
+              emi: no,
+              purchase: no, 
+              accounts: no, 
+              users: no, 
+              messages: no, 
+              settings: no,
+              investors: no, 
+              ecommerce: no
+            };
+            break;
+          }
           case 'Investor': {
             const ro = { read: true, create: false, update: false, delete: false };
             const no = { read: false, create: false, update: false, delete: false };

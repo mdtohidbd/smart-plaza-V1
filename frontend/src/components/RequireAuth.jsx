@@ -30,7 +30,7 @@ const RequireAuth = ({ children }) => {
             size={45}
             thickness={4}
             sx={{
-              color: 'rgb(29, 29, 28)', // Smart Plaza BD logo color
+              color: 'rgb(29, 29, 28)', // Demo Electronics ERP logo color
               mb: 3,
               animationDuration: '600ms',
             }}

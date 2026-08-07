@@ -55,7 +55,7 @@ export const cloudImg = (url, opts = {}) => {
 };
 
 /**
- * Convenience wrappers for common sizes used in SmartPlaza.
+ * Convenience wrappers for common sizes used in DemoERP.
  */
 export const cloudThumb = (url) => cloudImg(url, { width: 80, height: 80, crop: 'fill' });
 export const cloudCard  = (url) => cloudImg(url, { width: 400 });

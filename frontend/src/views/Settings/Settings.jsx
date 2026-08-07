@@ -7,6 +7,7 @@ import SmsConfiguration from './SmsConfiguration';
 import Banners from './Banners';
 import PaymentConfig from './PaymentConfig';
 import Shops from './Shops';
+import RouteSettings from './RouteSettings';
 
 const Settings = () => {
   return (
@@ -42,6 +43,17 @@ const Settings = () => {
               action="read"
             >
               <Shops />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="routes"
+          element={
+            <RequirePermission
+              module="settings"
+              action="read"
+            >
+              <RouteSettings />
             </RequirePermission>
           }
         />

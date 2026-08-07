@@ -108,7 +108,11 @@ const ProductCard = ({
           {product.image ? (
             <img
               src={cloudThumb(product.image)}
-              alt={product.name}
+              alt="Img"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="background-color: %23f1f5f9; border-radius: 8px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>';
+              }}
               style={{
                 width: '65px',
                 height: '65px',
@@ -504,20 +508,25 @@ const ProductRow = ({
           },
           '& .MuiTableCell-root': {
             whiteSpace: 'nowrap',
-            padding: '4px 8px',
+            padding: '2px 8px',
             color: '#1E293B',
-            fontSize: '0.8125rem'
+            fontSize: '0.75rem',
+            borderBottom: '1px solid #f1f5f9'
           }
         }}
       >
-        <TableCell>
+        <TableCell sx={{ width: 45, minWidth: 45, maxWidth: 45, padding: '2px 4px !important' }}>
           {product.image ? (
             <img
               src={cloudThumb(product.image)}
-              alt={product.name}
+              alt="Img"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="background-color: %23f1f5f9; border-radius: 6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>';
+              }}
               style={{
-                width: '40px',
-                height: '40px',
+                width: '36px',
+                height: '36px',
                 objectFit: 'cover',
                 borderRadius: '6px'
               }}
@@ -525,21 +534,22 @@ const ProductRow = ({
           ) : (
             <Box
               sx={{
-                width: 40,
-                height: 40,
-                backgroundColor: '#f0f0f0',
+                width: 36,
+                height: 36,
+                backgroundColor: '#f1f5f9',
                 borderRadius: '6px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                border: '1px solid #e2e8f0'
               }}
             >
-              <ImageIcon fontSize="small" color="disabled" />
+              <ImageIcon fontSize="small" sx={{ color: '#94a3b8' }} />
             </Box>
           )}
         </TableCell>
         
-        <TableCell sx={{ color: '#1E293B', fontWeight: 500, whiteSpace: 'normal', minWidth: '150px' }}>{product.name}</TableCell>
+        <TableCell sx={{ color: '#1E293B', fontWeight: 600, whiteSpace: 'normal', minWidth: '160px', lineHeight: 1.2 }}>{product.name}</TableCell>
         <TableCell sx={{ color: '#94A3B8', display: { xs: 'none', lg: 'table-cell' } }}>{product.model || 'N/A'}</TableCell>
         <TableCell sx={{ color: '#94A3B8', display: { xs: 'none', lg: 'table-cell' } }}>{product.category?.name || 'N/A'}</TableCell>
         <TableCell sx={{ color: '#94A3B8', display: { xs: 'none', xl: 'table-cell' } }}>{product.unit?.name || 'N/A'}</TableCell>
@@ -1064,17 +1074,17 @@ const AllProducts = () => {
                         backgroundColor: '#F8FAFC',
                           '& .MuiTableCell-head': {
                             color: '#475569',
-                            fontWeight: 600,
-                            fontSize: '0.7rem',
+                            fontWeight: 700,
+                            fontSize: '0.65rem',
                             fontFamily: '"Outfit", sans-serif',
                             textTransform: 'uppercase',
                             letterSpacing: '0.05em',
-                            borderBottom: '1px solid #eaeef3',
-                            padding: '8px 12px',
+                            borderBottom: '2px solid #eaeef3',
+                            padding: '6px 8px',
                           }
                       }}
                     >
-                      <TableCell>Image</TableCell>
+                      <TableCell sx={{ width: 45, minWidth: 45, px: '4px !important', textAlign: 'center' }}>Img</TableCell>
                       <TableCell>Product Name</TableCell>
                       <TableCell sx={{ display: { xs: 'none', lg: 'table-cell' } }}>Model</TableCell>
                       <TableCell sx={{ display: { xs: 'none', lg: 'table-cell' } }}>Category</TableCell>

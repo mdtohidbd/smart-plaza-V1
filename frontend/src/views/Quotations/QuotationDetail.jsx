@@ -19,11 +19,11 @@ const QuotationDetail = () => {
   const [isDownloading, setIsDownloading] = React.useState(false);
   
   const logo = settings?.logo || '/logo-final.jpeg';
-  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const companyName = settings?.companyName || 'Demo Electronics ERP';
   const phone = settings?.phone || '01842-144844';
-  const email = settings?.email || 'smartplazabd@gmail.com';
+  const email = settings?.email || 'admin@yourskybridge.com';
   const address = settings?.companyAddress || '1, KDA Avenue, Khulna';
-  const website = settings?.website || 'www.smartplazabd.com';
+  const website = settings?.website || 'www.yourskybridge.com';
 
   const isAdmin = user?.role === 'Admin' || user?.role === 'Super Admin';
   const canUpdateStatus = isAdmin || user?.permissions?.sales?.update;
@@ -319,7 +319,7 @@ const QuotationDetail = () => {
           <Typography variant="body2"><strong>NB:</strong> Above price is {quotation.vatAitInfo || 'excluding VAT and AIT'}</Typography>
           
           <Typography variant="body2" sx={{ fontWeight: 'bold', mt: 1 }}>Payment method</Typography>
-          <Typography variant="body2" sx={{ whiteSpace: 'pre-line', color: '#334155' }}>{quotation.paymentMethod || 'Payment must be done before/after delivery of the product by cash/cheque in favor of\n(Smart Plaza) Acc Number: 206914 3880001, BRAC Bank, Branch: Khulna\nRouting number: 060471545'}</Typography>
+          <Typography variant="body2" sx={{ whiteSpace: 'pre-line', color: '#334155' }}>{quotation.paymentMethod || 'Payment must be done before/after delivery of the product by cash/cheque in favor of\n(Demo ERP) Acc Number: 206914 3880001, BRAC Bank, Branch: Khulna\nRouting number: 060471545'}</Typography>
 
           <Typography variant="body2" sx={{ fontWeight: 'bold', mt: 1 }}>Related information</Typography>
           <Typography variant="body2" sx={{ whiteSpace: 'pre-line', color: '#334155' }}>{quotation.relatedInformation || 'The package contains 1 indoor and 1 outdoor unit with 10 feet copper pipe, connection cable and remote.\nAdditional charge 590 Taka per feet will be applicable if extra copper pipe and connection cable required.'}</Typography>

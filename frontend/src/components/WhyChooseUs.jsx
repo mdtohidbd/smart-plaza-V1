@@ -43,7 +43,7 @@ const features = [
 
 const WhyChooseUs = () => {
   const { settings } = useSettings();
-  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const companyName = settings?.companyName || 'Demo Electronics ERP';
 
   return (
     <Box 
@@ -61,7 +61,7 @@ const WhyChooseUs = () => {
             component="h2" 
             gutterBottom 
             sx={{ 
-              color: 'rgb(29, 29, 28)', // Smart Plaza BD logo color
+              color: 'rgb(29, 29, 28)', // Demo Electronics ERP logo color
               fontWeight: 800, 
               mb: 2,
               fontSize: { xs: '1.75rem', md: '2.25rem' }

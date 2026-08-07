@@ -13,7 +13,7 @@ import { useSettings } from '../../context/SettingsContext';
 const Contact = () => {
   console.log('Contact component rendering');
   const { settings } = useSettings();
-  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const companyName = settings?.companyName || 'Demo Electronics ERP';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -62,7 +62,7 @@ const Contact = () => {
     {
       icon: <EmailIcon />,
       title: 'Email Us',
-      details: [settings?.email || 'smartplazabd@gmail.com'],
+      details: [settings?.email || 'admin@yourskybridge.com'],
       action: 'Send email'
     },
     {

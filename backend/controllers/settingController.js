@@ -15,10 +15,10 @@ const getSettings = asyncHandler(async (req, res) => {
   if (!settings) {
     // If no settings exist, create default settings with required fields
     settings = await Setting.create({
-      companyName: 'Smart Plaza BD',
+      companyName: 'Demo Electronics ERP',
       companyAddress: '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
       phone: '01842-144844',
-      email: 'smartplazabd@gmail.com',
+      email: 'admin@yourskybridge.com',
       shop: req.shopId || undefined
     });
   }
@@ -42,10 +42,10 @@ const updateSettings = asyncHandler(async (req, res) => {
   if (!settings) {
     // If no settings exist, create them with default values for required fields
     const settingsData = {
-      companyName: req.body.companyName || 'Smart Plaza BD',
+      companyName: req.body.companyName || 'Demo Electronics ERP',
       companyAddress: req.body.companyAddress || '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
       phone: req.body.phone || '01842-144844',
-      email: req.body.email || 'smartplazabd@gmail.com',
+      email: req.body.email || 'admin@yourskybridge.com',
       shop: req.shopId || undefined
     };
     
@@ -66,10 +66,10 @@ const updateSettings = asyncHandler(async (req, res) => {
     });
     
     // Ensure required fields are present
-    if (!settings.companyName) settings.companyName = 'Smart Plaza BD';
+    if (!settings.companyName) settings.companyName = 'Demo Electronics ERP';
     if (!settings.companyAddress) settings.companyAddress = '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100';
     if (!settings.phone) settings.phone = '01842-144844';
-    if (!settings.email) settings.email = 'smartplazabd@gmail.com';
+    if (!settings.email) settings.email = 'admin@yourskybridge.com';
     
     // Update all setting documents so there's never any mismatch across different shops or public endpoints
     await Setting.updateMany({}, { $set: req.body });
@@ -98,10 +98,10 @@ const getModules = asyncHandler(async (req, res) => {
 
   if (!settings) {
     settings = await Setting.create({
-      companyName: 'Smart Plaza BD',
+      companyName: 'Demo Electronics ERP',
       companyAddress: '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
       phone: '01842-144844',
-      email: 'smartplazabd@gmail.com',
+      email: 'admin@yourskybridge.com',
       shop: req.shopId
     });
   }
@@ -127,10 +127,10 @@ const updateModules = asyncHandler(async (req, res) => {
 
   if (!settings) {
     settings = new Setting({
-      companyName: 'Smart Plaza BD',
+      companyName: 'Demo Electronics ERP',
       companyAddress: '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
       phone: '01842-144844',
-      email: 'smartplazabd@gmail.com',
+      email: 'admin@yourskybridge.com',
       shop: req.shopId
     });
   }

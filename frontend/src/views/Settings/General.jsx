@@ -28,6 +28,7 @@ const General = () => {
     email: '',
     website: '',
     logo: '',
+    favicon: '',
     enableMultipleWarehouse: false,
     enableWholesale: true,
     enableRetail: false,
@@ -39,6 +40,7 @@ const General = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [uploadingFavicon, setUploadingFavicon] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -59,6 +61,7 @@ const General = () => {
           email: data.email || '',
           website: data.website || '',
           logo: data.logo || '',
+          favicon: data.favicon || '',
           enableMultipleWarehouse: data.enableMultipleWarehouse || false,
           enableWholesale: data.enableWholesale !== undefined ? data.enableWholesale : true,
           enableRetail: data.enableRetail !== undefined ? data.enableRetail : false,
@@ -128,6 +131,30 @@ const General = () => {
       alert('Failed to upload logo image: ' + (error.response?.data?.message || error.message));
     } finally {
       setUploadingLogo(false);
+    }
+  };
+
+  const handleFaviconUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fd = new FormData();
+    fd.append('image', file);
+
+    setUploadingFavicon(true);
+    try {
+      const response = await api.post('/api/upload', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (response.data && response.data.url) {
+        setFormData(prev => ({ ...prev, favicon: response.data.url }));
+        alert('Favicon image uploaded successfully!');
+      }
+    } catch (error) {
+      console.error('Favicon upload error:', error);
+      alert('Failed to upload favicon image: ' + (error.response?.data?.message || error.message));
+    } finally {
+      setUploadingFavicon(false);
     }
   };
 
@@ -281,9 +308,9 @@ const General = () => {
           </Grid>
 
           <Grid item xs={12}>
-            <Box sx={{ p: 2.5, border: '1px dashed #CBD5E1', borderRadius: '12px', bgcolor: '#F8FAFC' }}>
+            <Box sx={{ p: 2.5, mb: 3, border: '1px dashed #CBD5E1', borderRadius: '12px', bgcolor: '#F8FAFC' }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#334155', mb: 0.5 }}>
-                Logo Image (Optional - Website Header & Favicon Icon)
+                Logo Image (Optional - Website Header)
               </Typography>
               <Typography variant="caption" sx={{ color: '#64748B', display: 'block', mb: 1.5 }}>
                 Optional. If left blank, your company name text logo will be displayed across the website and header.
@@ -357,6 +384,89 @@ const General = () => {
                     startIcon={<DeleteIcon />}
                     sx={{ ml: 'auto', textTransform: 'none' }}
                     onClick={() => setFormData(prev => ({ ...prev, logo: '' }))}
+                  >
+                    Remove
+                  </Button>
+                </Box>
+              )}
+            </Box>
+
+            <Box sx={{ p: 2.5, border: '1px dashed #CBD5E1', borderRadius: '12px', bgcolor: '#F8FAFC' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#334155', mb: 0.5 }}>
+                Favicon Image (Optional - Website Favicon Icon)
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#64748B', display: 'block', mb: 1.5 }}>
+                Optional. It's recommended to upload a square image (e.g., 32x32 or 64x64 pixels, .ico or .png).
+              </Typography>
+              
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} sm={8}>
+                  <TextField
+                    fullWidth
+                    label="Favicon URL (Optional)"
+                    name="favicon"
+                    value={formData.favicon}
+                    onChange={handleInputChange}
+                    placeholder="Optional - Upload image or paste direct URL"
+                    variant="outlined"
+                    sx={inputStyles}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    fullWidth
+                    disabled={uploadingFavicon}
+                    startIcon={!uploadingFavicon && <CloudUploadIcon />}
+                    sx={{
+                      height: '54px',
+                      borderRadius: '10px',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      bgcolor: '#0EA5E9',
+                      '&:hover': { bgcolor: '#0284C7' },
+                      boxShadow: '0 4px 12px rgba(14, 165, 233, 0.25)'
+                    }}
+                  >
+                    {uploadingFavicon ? (
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <CircularProgress size={20} color="inherit" />
+                        <span>Uploading...</span>
+                      </Box>
+                    ) : (
+                      'Upload Favicon'
+                    )}
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*,.ico"
+                      onChange={handleFaviconUpload}
+                    />
+                  </Button>
+                </Grid>
+              </Grid>
+
+              {formData.favicon && !formData.favicon.includes('google.com/imgres') && (
+                <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', gap: 2, p: 1.5, bgcolor: '#FFFFFF', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                  <Box
+                    component="img"
+                    src={formData.favicon}
+                    alt="Favicon Preview"
+                    sx={{ height: 40, width: 'auto', objectFit: 'contain', maxHeight: 40 }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                  <Typography variant="body2" sx={{ color: '#64748B', fontSize: '0.85rem' }}>
+                    Preview of selected favicon
+                  </Typography>
+                  <Button
+                    size="small"
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    sx={{ ml: 'auto', textTransform: 'none' }}
+                    onClick={() => setFormData(prev => ({ ...prev, favicon: '' }))}
                   >
                     Remove
                   </Button>

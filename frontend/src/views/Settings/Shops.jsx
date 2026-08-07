@@ -61,6 +61,7 @@ const Shops = () => {
   const [deletingShop, setDeletingShop] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
+  const [deletePhrase, setDeletePhrase] = useState('');
 
   useEffect(() => {
     fetchShops();
@@ -107,11 +108,13 @@ const Shops = () => {
   const handleOpenDelete = (shop) => {
     setDeletingShop(shop);
     setDeleteError(null);
+    setDeletePhrase('');
   };
 
   const handleCloseDelete = () => {
     setDeletingShop(null);
     setDeleteError(null);
+    setDeletePhrase('');
   };
 
   const handleConfirmDelete = async () => {
@@ -412,9 +415,20 @@ const Shops = () => {
           <Typography variant="body1" color="#1E293B" fontWeight={500}>
             Are you sure you want to delete <strong>{deletingShop?.name}</strong>?
           </Typography>
-          <Typography variant="body2" color="#64748B" sx={{ mt: 1 }}>
-            This action will permanently delete this shop and its settings from the database.
+          <Alert severity="warning" sx={{ mt: 2, mb: 2, borderRadius: '8px' }}>
+            This action will permanently delete this shop, its settings, and all associated data from the database. This cannot be undone.
+          </Alert>
+          <Typography variant="body2" color="#64748B" sx={{ mb: 1 }}>
+            Please type <strong>DELETE SHOP</strong> to confirm:
           </Typography>
+          <TextField
+            fullWidth
+            size="small"
+            value={deletePhrase}
+            onChange={(e) => setDeletePhrase(e.target.value)}
+            placeholder="DELETE SHOP"
+            error={deletePhrase.length > 0 && deletePhrase !== 'DELETE SHOP'}
+          />
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2.5, borderTop: '1px solid #E2E8F0', pt: 2 }}>
           <Button
@@ -430,7 +444,7 @@ const Shops = () => {
             onClick={handleConfirmDelete}
             variant="contained"
             color="error"
-            disabled={deleteLoading}
+            disabled={deleteLoading || deletePhrase !== 'DELETE SHOP'}
             startIcon={deleteLoading ? <CircularProgress size={18} color="inherit" /> : <DeleteIcon />}
             sx={{ textTransform: 'none', borderRadius: '8px', fontWeight: 600 }}
           >

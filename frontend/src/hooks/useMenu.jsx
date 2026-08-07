@@ -323,9 +323,10 @@ export const useMenu = () => {
         subItems: [
           { text: 'Add User', path: '/dashboard/users/add', permissionModule: 'users', permissionAction: 'create' },
           { text: 'All Users', path: '/dashboard/users/all', permissionModule: 'users', permissionAction: 'read' },
+          { text: 'SR List', path: '/dashboard/users/sr-list', permissionModule: 'users', permissionAction: 'read' },
+          { text: 'DSR List', path: '/dashboard/users/dsr-list', permissionModule: 'users', permissionAction: 'read' },
           { text: 'User Approval', path: '/dashboard/users/approval', permissionModule: 'users', permissionAction: 'update' },
           { text: 'Roles', path: '/dashboard/users/roles', permissionModule: 'users', permissionAction: 'read' },
-          // { text: 'Custom Role List', path: '/dashboard/users/custom-roles', permissionModule: 'users', permissionAction: 'read' },
         ]
       },
       {
@@ -361,6 +362,7 @@ export const useMenu = () => {
         subItems: [
           { text: 'General', path: '/dashboard/settings/general', permissionModule: 'settings', permissionAction: 'read' },
           { text: 'Shops & Branches', path: '/dashboard/settings/shops', permissionModule: 'settings', permissionAction: 'read' },
+          { text: 'Route/Beat Mgmt', path: '/dashboard/settings/routes', permissionModule: 'settings', permissionAction: 'read' },
           { text: 'SMS Configuration', path: '/dashboard/settings/sms', permissionModule: 'settings', permissionAction: 'update' },
           { text: 'Payment Config', path: '/dashboard/settings/payment-config', permissionModule: 'settings', permissionAction: 'update' },
           { text: 'Banner Management', path: '/dashboard/settings/banners', permissionModule: 'settings', permissionAction: 'read' },

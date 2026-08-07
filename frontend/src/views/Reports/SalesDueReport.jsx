@@ -399,7 +399,7 @@ const SalesDueReport = () => {
         <body>
           <h2>Outstanding Sales Due Report</h2>
           <div class="meta">
-            Shop: <strong>${activeShop?.name || 'Smart Plaza'}</strong> | 
+            Shop: <strong>${activeShop?.name || 'Demo ERP'}</strong> | 
             Generated: <strong>${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong> |
             Records: <strong>${activeSummary.totalOrders} invoices</strong>
           </div>

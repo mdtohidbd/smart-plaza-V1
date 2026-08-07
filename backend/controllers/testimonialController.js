@@ -264,7 +264,7 @@ const uploadTestimonialImage = asyncHandler(async (req, res) => {
   
   // Upload to cloudinary
   const result = await cloudinary.uploader.upload(file.tempFilePath, {
-    folder: 'smartplaza/testimonials',
+    folder: 'DemoERP/testimonials',
     transformation: [
       { width: 400, height: 400, crop: 'fill', gravity: 'face' },
       { quality: 'auto:good' }

@@ -4,7 +4,7 @@ const User = require('../models/User');
 
 const checkPassword = async () => {
   await mongoose.connect(process.env.MONGODB_URI);
-  const user = await User.findOne({ email: 'admin@smartplazabd.com' }).select('+password');
+  const user = await User.findOne({ email: 'admin@yourskybridge.com' }).select('+password');
   if (user) {
     console.log('User found:', user.email, 'Role:', user.role);
     const isMatch = await user.matchPassword('admin123');

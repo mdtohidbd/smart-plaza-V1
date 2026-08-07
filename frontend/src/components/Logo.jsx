@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
 
 /**
- * Smart Plaza Centralized Dynamic Logo Component
+ * Demo ERP Centralized Dynamic Logo Component
  */
 const Logo = ({ 
   height = 45, 
@@ -19,7 +19,7 @@ const Logo = ({
   
   // Dynamic values from Settings (Logo image is optional)
   const logoSrc = settings?.logo || '';
-  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const companyName = settings?.companyName || 'Demo Electronics ERP';
 
   const hasLogoImage = showIcon && logoSrc && logoSrc.trim() !== '';
 

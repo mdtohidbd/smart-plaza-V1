@@ -53,7 +53,7 @@ const EcommerceFooter = () => {
             Phone: {settings?.phone || '+880-1842-144844'}
           </Typography>
           <Typography variant="body2" sx={{ color: '#3c4a41', fontSize: { xs: '0.8rem', md: '0.9rem' } }}>
-            Email: {settings?.email || 'smartplazabd@gmail.com'}
+            Email: {settings?.email || 'admin@yourskybridge.com'}
           </Typography>
         </Stack>
       )
@@ -61,10 +61,10 @@ const EcommerceFooter = () => {
     social: {
       title: 'Follow Us',
       links: [
-        { name: 'Facebook', icon: <Facebook fontSize="small" />, url: 'https://facebook.com/smartplazabd' },
-        { name: 'Instagram', icon: <Instagram fontSize="small" />, url: 'https://instagram.com/smartplazabd' },
-        { name: 'YouTube', icon: <YouTube fontSize="small" />, url: 'https://youtube.com/smartplazabd' },
-        { name: 'LinkedIn', icon: <LinkedIn fontSize="small" />, url: 'https://linkedin.com/company/smartplazabd' }
+        { name: 'Facebook', icon: <Facebook fontSize="small" />, url: 'https://facebook.com/DemoERPbd' },
+        { name: 'Instagram', icon: <Instagram fontSize="small" />, url: 'https://instagram.com/DemoERPbd' },
+        { name: 'YouTube', icon: <YouTube fontSize="small" />, url: 'https://youtube.com/DemoERPbd' },
+        { name: 'LinkedIn', icon: <LinkedIn fontSize="small" />, url: 'https://linkedin.com/company/DemoERPbd' }
       ]
     }
   };
@@ -185,7 +185,7 @@ const EcommerceFooter = () => {
           gap: { xs: 2.5, md: 2 }
         }}>
           <Typography variant="body2" sx={{ color: '#3c4a41', fontWeight: 500, fontSize: { xs: '0.8rem', md: '0.9rem' }, textAlign: 'center' }}>
-            © {new Date().getFullYear()} {settings?.companyName || 'Smart Plaza BD'}. All rights reserved.
+            © {new Date().getFullYear()} {settings?.companyName || 'Demo Electronics ERP'}. All rights reserved.
           </Typography>
           
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>

@@ -13,7 +13,10 @@ import {
   IconButton,
   Divider,
   Autocomplete,
-  TextField
+  TextField,
+  FormControl,
+  Select,
+  MenuItem
 } from '@mui/material';
 import {
   Remove as RemoveIcon,
@@ -29,6 +32,7 @@ const CartTable = ({
   toggleWarranty,
   updateCartSerialAtIndex,
   updateDiscount,
+  updateCartColor,
   warrantyTemplates
 }) => {
   if (isMobile) {
@@ -92,14 +96,31 @@ const CartTable = ({
                       {item.product.name}
                     </Typography>
                     {(() => {
-                      const colorsList = item.product.colors?.length > 0
-                        ? item.product.colors.map(c => c.name).join(', ')
-                        : item.product.color;
-                      return colorsList ? (
-                        <Typography variant="caption" sx={{ color: '#475569', fontSize: '10.5px', fontWeight: 600, display: 'block' }}>
-                          Color: {colorsList}
-                        </Typography>
-                      ) : null;
+                      const hasMultipleColors = item.product.colors?.length > 1;
+                      const singleColor = item.product.colors?.length === 1 ? item.product.colors[0].name : item.product.color;
+                      
+                      if (hasMultipleColors) {
+                        return (
+                          <FormControl size="small" sx={{ mt: 0.5, mb: 0.5, minWidth: 120 }}>
+                            <Select
+                              value={item.selectedColor || item.product.colors[0].name}
+                              onChange={(e) => updateCartColor(item.product._id, e.target.value)}
+                              sx={{ height: 24, fontSize: '11px' }}
+                            >
+                              {item.product.colors.map((c, i) => (
+                                <MenuItem key={i} value={c.name} sx={{ fontSize: '11px' }}>{c.name}</MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        );
+                      } else if (singleColor) {
+                        return (
+                          <Typography variant="caption" sx={{ color: '#475569', fontSize: '10.5px', fontWeight: 600, display: 'block' }}>
+                            Color: {singleColor}
+                          </Typography>
+                        );
+                      }
+                      return null;
                     })()}
                     {item.offer && (
                       <Box sx={{ display: 'inline-flex', mt: 0.25 }}>
@@ -380,25 +401,52 @@ const CartTable = ({
                         {item.batches?.length > 0 && ` | Batches: ${item.batches.map(b => b.batchNumber).join(', ')}`}
                       </Typography>
                       {(() => {
-                        const colorsList = item.product.colors?.length > 0
-                          ? item.product.colors.map(c => c.name).join(', ')
-                          : item.product.color;
-                        return colorsList ? (
-                          <Box sx={{ display: 'inline-flex', mb: 0.5, mr: 0.5 }}>
-                            <Chip
-                              label={`🎨 Color: ${colorsList}`}
-                              size="small"
-                              sx={{
-                                height: '20px',
-                                fontSize: '10px',
-                                fontWeight: 700,
-                                backgroundColor: '#EEF2FF',
-                                color: '#4F46E5',
-                                border: '1px solid #C7D2FE'
-                              }}
-                            />
-                          </Box>
-                        ) : null;
+                        const hasMultipleColors = item.product.colors?.length > 1;
+                        const singleColor = item.product.colors?.length === 1 ? item.product.colors[0].name : item.product.color;
+                        
+                        if (hasMultipleColors) {
+                          return (
+                            <Box sx={{ display: 'inline-flex', mb: 0.5, mr: 0.5 }}>
+                              <FormControl size="small" sx={{ minWidth: 100 }}>
+                                <Select
+                                  value={item.selectedColor || item.product.colors[0].name}
+                                  onChange={(e) => updateCartColor(item.product._id, e.target.value)}
+                                  sx={{ 
+                                    height: '24px', 
+                                    fontSize: '11px',
+                                    bgcolor: '#EEF2FF',
+                                    color: '#4F46E5',
+                                    '& .MuiOutlinedInput-notchedOutline': {
+                                      borderColor: '#C7D2FE',
+                                    }
+                                  }}
+                                >
+                                  {item.product.colors.map((c, i) => (
+                                    <MenuItem key={i} value={c.name} sx={{ fontSize: '11px' }}>🎨 Color: {c.name}</MenuItem>
+                                  ))}
+                                </Select>
+                              </FormControl>
+                            </Box>
+                          );
+                        } else if (singleColor) {
+                          return (
+                            <Box sx={{ display: 'inline-flex', mb: 0.5, mr: 0.5 }}>
+                              <Chip
+                                label={`🎨 Color: ${singleColor}`}
+                                size="small"
+                                sx={{
+                                  height: '20px',
+                                  fontSize: '10px',
+                                  fontWeight: 700,
+                                  backgroundColor: '#EEF2FF',
+                                  color: '#4F46E5',
+                                  border: '1px solid #C7D2FE'
+                                }}
+                              />
+                            </Box>
+                          );
+                        }
+                        return null;
                       })()}
                       {item.offer && (
                         <Box sx={{ display: 'inline-flex', mb: 0.5 }}>

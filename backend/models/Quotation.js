@@ -142,7 +142,7 @@ const quotationSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    default: 'Payment must be done before/after delivery of the product by cash/cheque in favor of\n(Smart Plaza) Acc Number: 206914 3880001, BRAC Bank, Branch: Khulna\nRouting number: 060471545'
+    default: 'Payment must be done before/after delivery of the product by cash/cheque in favor of\n(Demo ERP) Acc Number: 206914 3880001, BRAC Bank, Branch: Khulna\nRouting number: 060471545'
   },
   relatedInformation: {
     type: String,
@@ -150,7 +150,7 @@ const quotationSchema = new mongoose.Schema({
   },
   quoteGivenByName: {
     type: String,
-    default: 'Md. Reajul Hasan Raj'
+    default: 'Demo Admin'
   },
   quoteGivenByDesignation: {
     type: String,

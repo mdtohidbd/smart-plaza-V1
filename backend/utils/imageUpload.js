@@ -29,7 +29,7 @@ const IMGBB_API_URL = 'https://api.imgbb.com/1/upload';
  * @param {string} folder - The destination folder on Cloudinary
  * @returns {Promise<{url: string, display_url: string, thumb_url: string, delete_hash: string}>}
  */
-const uploadImage = async (fileBuffer, fileName, mimeType = 'image/jpeg', folder = 'smartplaza') => {
+const uploadImage = async (fileBuffer, fileName, mimeType = 'image/jpeg', folder = 'DemoERP') => {
   if (isCloudinaryConfigured) {
     try {
       const base64Data = fileBuffer.toString('base64');

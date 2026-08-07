@@ -32,10 +32,10 @@ const InvoicePrint = forwardRef(({ sale, companyInfo: customCompanyInfo }, ref) 
 
   // Dynamic company information fallback
   const companyInfo = customCompanyInfo || {
-    companyName: settings?.companyName || 'Smart Plaza BD',
+    companyName: settings?.companyName || 'Demo Electronics ERP',
     companyAddress: settings?.companyAddress || '1 KDA Avenue, Shibbari, Khulna, Bangladesh, 9100',
     phone: settings?.phone || '01842-144844',
-    email: settings?.email || 'smartplazabd@gmail.com',
+    email: settings?.email || 'admin@yourskybridge.com',
     logo: settings?.logo || logo
   };
 

@@ -36,7 +36,7 @@ const CashFlowPrint = React.forwardRef(({ cfData, filterType, dateRange }, ref) 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 0, borderBottom: `2px solid ${BRAND.border}`, position: 'relative', height: '90px' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, zIndex: 1, pl: 4 }}>
             <Box sx={{ width: 80, height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src={logo} alt="Smart Plaza Logo" style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
+              <img src={logo} alt="Demo ERP Logo" style={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
             </Box>
             <Box>
               <Typography variant="h3" fontWeight="900" sx={{ m: 0, lineHeight: 1, letterSpacing: '-1px' }}>
@@ -183,7 +183,7 @@ const CashFlowPrint = React.forwardRef(({ cfData, filterType, dateRange }, ref) 
                <Box sx={{ bgcolor: 'black', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                  <MailIcon size={11} />
                </Box>
-               www.smartplazabd.com
+               www.yourskybridge.com
              </Typography>
           </Box>
         </Box>

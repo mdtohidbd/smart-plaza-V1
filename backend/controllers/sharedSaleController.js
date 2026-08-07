@@ -1674,6 +1674,8 @@ const getSalesReturns = asyncHandler(async (req, res) => {
     .populate('customer', 'contactName contactNumber email')
     .populate('items.product', 'name code sellingPrice')
     .populate('returnedItems.product', 'name code sellingPrice')
+    .populate('assignedSR', 'name')
+    .populate('route', 'name')
     .sort({ updatedAt: -1 });
 
   res.status(200).json({

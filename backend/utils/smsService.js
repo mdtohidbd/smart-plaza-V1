@@ -196,7 +196,7 @@ Paid: ৳${paidAmount}
 Due: ৳${dueAmount}
 
 Thank you for your purchase!
-- Smart Plaza BD`.trim();
+- Demo Electronics ERP`.trim();
     
     return await sendSMS(phoneNumber, message);
     

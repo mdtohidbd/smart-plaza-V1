@@ -17,7 +17,7 @@ const uploadSingleImage = asyncHandler(async (req, res) => {
       req.file.buffer,
       req.file.originalname,
       req.file.mimetype,
-      'smartplaza/general'
+      'DemoERP/general'
     );
     
     res.status(200).json({

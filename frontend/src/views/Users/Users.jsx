@@ -4,10 +4,12 @@ import RequirePermission from '../../components/RequirePermission';
 import AddUser from './AddUser';
 import AllUsers from './AllUsers';
 import Roles from './Roles';
-// import SRList from './SRList';
+import SRList from './SRList';
+import DSRList from './DSRList';
 import CustomRoleList from './CustomRoleList';
 import UserApproval from './UserApproval';
 
+// trigger vite rebuild
 const Users = () => {
   return (
     <div>
@@ -45,7 +47,6 @@ const Users = () => {
             </RequirePermission>
           }
         />
-        {/*
         <Route
           path="sr-list"
           element={
@@ -57,8 +58,6 @@ const Users = () => {
             </RequirePermission>
           }
         />
-        */}
-        {/*
         <Route
           path="dsr-list"
           element={
@@ -70,7 +69,6 @@ const Users = () => {
             </RequirePermission>
           }
         />
-        */}
         {/*
         <Route
           path="custom-roles"
@@ -111,4 +109,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Users;

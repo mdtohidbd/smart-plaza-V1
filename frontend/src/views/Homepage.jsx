@@ -290,7 +290,7 @@ const Homepage = () => {
                     sx={{ 
                       mt: 1.5, 
                       mb: 1.5,
-                      backgroundColor: 'rgb(29, 29, 28)', // Smart Plaza BD logo color
+                      backgroundColor: 'rgb(29, 29, 28)', // Demo Electronics ERP logo color
                       '&:hover': {
                         backgroundColor: 'rgb(50, 50, 49)', // Slightly lighter shade
                       }
@@ -494,7 +494,7 @@ const Homepage = () => {
                     sx={{ 
                       mt: 1.5, 
                       mb: 1.5,
-                      backgroundColor: 'rgb(29, 29, 28)', // Smart Plaza BD logo color
+                      backgroundColor: 'rgb(29, 29, 28)', // Demo Electronics ERP logo color
                       '&:hover': {
                         backgroundColor: 'rgb(50, 50, 49)', // Slightly lighter shade
                       }
@@ -526,7 +526,7 @@ const Homepage = () => {
         <Container maxWidth="md">
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="body1">
-              © {new Date().getFullYear()} {settings?.companyName || 'Smart Plaza BD'}. All rights reserved.
+              © {new Date().getFullYear()} {settings?.companyName || 'Demo Electronics ERP'}. All rights reserved.
             </Typography>
             <Typography variant="body2" sx={{ mt: 1, opacity: 0.8 }}>
               Administrative Portal - Secure Access Only

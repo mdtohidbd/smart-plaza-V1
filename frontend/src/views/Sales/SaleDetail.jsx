@@ -485,7 +485,14 @@ const SaleDetail = () => {
                           }
                         }}
                       >
-                        <TableCell sx={{ color: '#333', fontWeight: 500 }}>{item.product?.name || 'N/A'}</TableCell>
+                        <TableCell sx={{ color: '#333', fontWeight: 500 }}>
+                          {item.product?.name || 'N/A'}
+                          {item.color && (
+                            <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary', fontSize: '0.75rem' }}>
+                              Color: {item.color}
+                            </Typography>
+                          )}
+                        </TableCell>
                         <TableCell sx={{ color: '#333' }}>{item.quantity}</TableCell>
                         <TableCell align="right" sx={{ color: '#1D5F99', fontWeight: '500' }}>৳{item.unitPrice?.toFixed(2)}</TableCell>
                         <TableCell align="right" sx={{ color: '#E57141', fontWeight: '500' }}>৳{item.discount?.toFixed(2)}</TableCell>
@@ -636,10 +643,10 @@ const SaleDetail = () => {
           ref={invoicePrintRef}
           sale={sale}
           companyInfo={companyInfo?.companyName ? companyInfo : {
-            companyName: 'Smart Plaza BD',
+            companyName: 'Demo Electronics ERP',
             companyAddress: '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
             phone: '01842-144844',
-            email: 'smartplazabd@gmail.com'
+            email: 'admin@yourskybridge.com'
           }}
         />
       )}

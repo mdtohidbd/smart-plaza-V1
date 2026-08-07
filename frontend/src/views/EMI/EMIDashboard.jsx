@@ -13,6 +13,7 @@ import {
 } from '@mui/icons-material';
 import axios from 'axios';
 import { calcEMI, fmt } from '../../utils/emiCalculations';
+import { useSettings } from '../../context/SettingsContext';
 
 const API_URL = import.meta.env.VITE_BACKEND_URL ? `${import.meta.env.VITE_BACKEND_URL}/api` : 'http://localhost:5001/api';
 
@@ -56,6 +57,7 @@ const statusColor = (status) => {
 };
 
 const EMIDashboard = () => {
+  const { settings } = useSettings();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
@@ -138,7 +140,7 @@ const EMIDashboard = () => {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 1.5, position: 'relative' }}>
           <Box>
             <Typography variant="overline" sx={{ opacity: 0.7, letterSpacing: 2, fontSize: '0.7rem' }}>
-              SMART PLAZA — EMI MODULE
+              {(settings?.companyName || 'Demo ERP').toUpperCase()} — EMI MODULE
             </Typography>
             <Typography variant="h5" fontWeight={700} sx={{ fontFamily: '"Outfit", sans-serif', lineHeight: 1.2 }}>
               EMI Management Dashboard

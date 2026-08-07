@@ -37,7 +37,7 @@ const uploadProductImages = asyncHandler(async (req, res) => {
   try {
     // Upload each image
     const uploadPromises = req.files.map(file => 
-      uploadImage(file.buffer, file.originalname, file.mimetype, 'smartplaza/products')
+      uploadImage(file.buffer, file.originalname, file.mimetype, 'DemoERP/products')
     );
     const uploadResults = await Promise.all(uploadPromises);
     

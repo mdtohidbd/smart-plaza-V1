@@ -5,9 +5,9 @@ import { useSettings } from '../../context/SettingsContext';
 const EMIInvoice = ({ emiInvoice, sale, title }) => {
   const { settings } = useSettings();
   const logo = settings?.logo || '/logo-final.jpeg';
-  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const companyName = settings?.companyName || 'Demo Electronics ERP';
   const phone = settings?.phone || '01842-144844';
-  const email = settings?.email || 'smartplazabd@gmail.com';
+  const email = settings?.email || 'admin@yourskybridge.com';
   const address = settings?.companyAddress || '1 KDA Avenue, Shibbari, Khulna, Bangladesh, 9100';
   // Use emiInvoice if available, fallback to sale if somehow emiInvoice is missing but it's an EMI sale
   if (!emiInvoice && !sale) return null;
@@ -225,7 +225,7 @@ const EMIInvoice = ({ emiInvoice, sale, title }) => {
           Terms & Conditions
         </Typography>
         <Typography sx={{ fontSize: '0.68rem', color: '#64748b', display: 'block', lineHeight: 1.4 }}>
-          1. Product remains SmartPlaza property until full EMI is paid.<br/>
+          1. Product remains DemoERP property until full EMI is paid.<br/>
           2. Late payment may incur penalty charges as per policy.<br/>
           3. Warranty void if EMI payments are defaulted.<br/>
           4. Customer agrees to payment schedule by signing.

@@ -56,7 +56,7 @@ const PRESET_COLORS = [
 
 const getInitialColors = () => {
   try {
-    const saved = localStorage.getItem('smartplaza_custom_colors');
+    const saved = localStorage.getItem('DemoERP_custom_colors');
     if (saved) {
       const parsed = JSON.parse(saved);
       const combined = [...PRESET_COLORS];
@@ -149,7 +149,7 @@ const EditProduct = () => {
       });
       try {
         const customOnly = updated.filter(u => !PRESET_COLORS.some(p => p.name.toLowerCase() === u.name.toLowerCase()));
-        localStorage.setItem('smartplaza_custom_colors', JSON.stringify(customOnly));
+        localStorage.setItem('DemoERP_custom_colors', JSON.stringify(customOnly));
       } catch (e) {}
       return updated;
     });
@@ -226,7 +226,7 @@ const EditProduct = () => {
             });
             try {
               const customOnly = updated.filter(u => !PRESET_COLORS.some(p => p.name.toLowerCase() === u.name.toLowerCase()));
-              localStorage.setItem('smartplaza_custom_colors', JSON.stringify(customOnly));
+              localStorage.setItem('DemoERP_custom_colors', JSON.stringify(customOnly));
             } catch (e) {}
             return updated;
           });

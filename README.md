@@ -1,7 +1,7 @@
-# SmartPlaza — Business Management System & E-Commerce Platform
+# DemoERP — Business Management System & E-Commerce Platform
 
 > **Lightning-Fast Cloud-based ERP + Custom-coded E-Commerce for Electronics Retail**
-> Developed by Skybridge systems for **SmartPlaza**, Khulna, Bangladesh.
+> Developed by Skybridge systems for **DemoERP**, Khulna, Bangladesh.
 
 ---
 
@@ -27,7 +27,7 @@ Both the E-Commerce storefront and the ERP system are hyper-optimized to ensure 
 
 ## 🏢 Overview
 
-SmartPlaza is a comprehensive, cloud-based Business Management System and custom-coded E-Commerce website built for an electronics retailer. It gives the owner **full real-time visibility and control** over inventory, sales, finance, and online operations — all from a single platform.
+DemoERP is a comprehensive, cloud-based Business Management System and custom-coded E-Commerce website built for an electronics retailer. It gives the owner **full real-time visibility and control** over inventory, sales, finance, and online operations — all from a single platform.
 
 **Core Objectives:**
 - ⚡ **Lightning Fast Performance** — Zero-latency loading across the ERP and E-Commerce.
@@ -148,7 +148,7 @@ Auto-detects high-risk customers via mobile number lookup across courier APIs (P
 ## 📁 Project Structure
 
 ```text
-SmartPlaza/
+DemoERP/
 ├── frontend/               # React (Vite) frontend (Extremely Fast Load)
 │   ├── src/
 │   │   ├── assets/         # Images, fonts
@@ -191,8 +191,8 @@ SmartPlaza/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/smartplaza.git
-cd smartplaza
+git clone https://github.com/YOUR_USERNAME/DemoERP.git
+cd DemoERP
 
 # 2. Install backend dependencies
 cd backend
@@ -232,7 +232,7 @@ Create a `.env` file in the `backend/` directory:
 ```env
 NODE_ENV=development
 PORT=5001
-MONGODB_URI=mongodb://localhost:27017/smartplaza
+MONGODB_URI=mongodb://localhost:27017/DemoERP
 JWT_SECRET=your-super-secret-jwt-key
 FRONTEND_URL=http://localhost:5173
 ```
@@ -276,10 +276,10 @@ NODE_ENV=production npm start
 
 **Proprietary Software — All Rights Reserved**
 
-Upon full payment, SmartPlaza owns all rights to this system, its content, and all associated documented services.
+Upon full payment, DemoERP owns all rights to this system, its content, and all associated documented services.
 
 Developed by **SoftEngineLab** · January 2026
-Contact: [smartplazabd@gmail.com](mailto:smartplazabd@gmail.com)
+Contact: [admin@yourskybridge.com](mailto:admin@yourskybridge.com)
 Address: 2 KDA Ave, Khulna, Bangladesh
 
 ---

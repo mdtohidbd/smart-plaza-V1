@@ -1,7 +1,7 @@
 {
   "name": "smart-plaza",
   "version": "1.0.0",
-  "description": "Smart Plaza - ERP and Ecommerce Integrated Platform",
+  "description": "Demo ERP - ERP and Ecommerce Integrated Platform",
   "scripts": {
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",

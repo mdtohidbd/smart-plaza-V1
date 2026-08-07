@@ -112,7 +112,7 @@ const EMIOverdue = () => {
   };
 
   const sendReminder = (customer) => {
-    const msg = `Dear ${customer.customerName}, your EMI payment of ৳${customer.amount} is ${customer.daysOverdue} days overdue. Please pay at your earliest convenience. - Smart Plaza BD`;
+    const msg = `Dear ${customer.customerName}, your EMI payment of ৳${customer.amount} is ${customer.daysOverdue} days overdue. Please pay at your earliest convenience. - Demo Electronics ERP`;
     window.open(`https://wa.me/${customer.customerPhone?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 

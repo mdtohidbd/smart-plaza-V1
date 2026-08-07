@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Vite configuration for SmartPlaza
+// Vite configuration for DemoERP
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {

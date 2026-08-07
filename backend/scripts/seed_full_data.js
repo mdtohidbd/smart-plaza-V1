@@ -90,8 +90,8 @@ const run = async () => {
   let admin = await User.findOne({ role: 'Super Admin' }).select('+password');
   if (!admin) {
     admin = await User.create({
-      name: 'MD Reajul Hasan Raaz',
-      email: 'admin@smartplazabd.com',
+      name: 'Demo Admin',
+      email: 'admin@yourskybridge.com',
       password: 'admin123',
       phone: '01700000000',
       role: 'Super Admin',
@@ -106,11 +106,11 @@ const run = async () => {
   let shop = await Shop.findOne({});
   if (!shop) {
     shop = await Shop.create({
-      name: 'Smart Plaza Head Office',
+      name: 'Demo ERP Head Office',
       owner: admin._id,
       address: 'Level 4, Multiplan Center, Elephant Road, Dhaka-1205',
       phone: '01700000000',
-      email: 'info@smartplazabd.com',
+      email: 'info@yourskybridge.com',
       isActive: true,
     });
     console.log('✅ Shop created.');
@@ -609,7 +609,7 @@ const run = async () => {
   console.log('💼 Seeding Investors...');
   await Investor.insertMany([
     {
-      name: 'MD Reajul Hasan Raaz', email: 'raaz@smartplazabd.com', phone: '01700000010',
+      name: 'Demo Admin', email: 'investor1@yourskybridge.com', phone: '01700000010',
       imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
       nid: '1234567890123', investmentAmount: 5000000, profitSharePercentage: 40,
       totalProfitEarned: 450000, totalWithdrawn: 200000,
@@ -617,7 +617,7 @@ const run = async () => {
       address: { street: 'House 25, Road 12', city: 'Dhaka', district: 'Dhaka', zipCode: '1205' },
       bankAccount: { accountNumber: '20501234567', bankName: 'Islami Bank PLC', branchName: 'Motijheel' },
       nomineeName: 'Fatema Begum', nomineeRelation: 'Spouse', nomineePhone: '01700000020',
-      notes: 'Founding investor and CEO of Smart Plaza BD',
+      notes: 'Founding investor and CEO of Demo Electronics ERP',
     },
     {
       name: 'Kamal Hossain', email: 'kamal@gmail.com', phone: '01800001111',
@@ -690,7 +690,7 @@ const run = async () => {
   await EMIInvoice.create({
     customer: customers[5]._id, customerName: 'Sharmin Akter',
     customerPhone: '01666666666', customerAddress: 'House 3, Road 7, Mirpur-10, Dhaka',
-    showroom: 'Smart Plaza Head Office', invoiceNumber: 'EMI-2026-001',
+    showroom: 'Demo ERP Head Office', invoiceNumber: 'EMI-2026-001',
     invoiceDate: emiStartDate,
     products: [{ product: createdProducts[0]._id, name: createdProducts[0].name, quantity: 1, unitPrice: 144990, total: 144990 }],
     subtotal: 144990, totalAmount: 159000,
@@ -750,9 +750,9 @@ const run = async () => {
   // ── STEP 20: Testimonials ─────────────────────────────────────────────────
   console.log('💬 Seeding Testimonials...');
   await Testimonial.insertMany([
-    { name: 'Tanvir Ahmed', email: 'tanvir@gmail.com', rating: 5, message: 'Bought a MacBook Air M3 and Apple Watch Series 9 from Smart Plaza. Genuine products, amazing service, and super fast delivery. Highly recommend!', imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80', designation: 'Software Engineer', company: 'Dhaka Tech Solutions', location: 'Dhaka', product: 'MacBook Air M3', verified: true, recommend: true, status: 'approved' },
+    { name: 'Tanvir Ahmed', email: 'tanvir@gmail.com', rating: 5, message: 'Bought a MacBook Air M3 and Apple Watch Series 9 from Demo ERP. Genuine products, amazing service, and super fast delivery. Highly recommend!', imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80', designation: 'Software Engineer', company: 'Dhaka Tech Solutions', location: 'Dhaka', product: 'MacBook Air M3', verified: true, recommend: true, status: 'approved' },
     { name: 'Nusrat Jahan', email: 'nusrat2@gmail.com', rating: 5, message: 'Ordered Samsung Galaxy S24 Ultra online. Delivered next day with authentic box and all accessories. Best gadget shop in Dhaka!', imageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80', designation: 'UI/UX Designer', company: 'Creative Studio BD', location: 'Chittagong', product: 'Samsung Galaxy S24 Ultra', verified: true, recommend: true, status: 'approved' },
-    { name: 'Rahim Chowdhury', email: 'rahimtelecom2@gmail.com', rating: 5, message: 'I buy electronics in bulk from Smart Plaza for my shop. Always get original products with proper warranty. Trusted supplier for 2+ years!', imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80', designation: 'Electronics Retailer', company: 'Rahim Telecom Ltd', location: 'Dhaka', product: 'Wholesale Electronics', verified: true, recommend: true, status: 'approved' },
+    { name: 'Rahim Chowdhury', email: 'rahimtelecom2@gmail.com', rating: 5, message: 'I buy electronics in bulk from Demo ERP for my shop. Always get original products with proper warranty. Trusted supplier for 2+ years!', imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80', designation: 'Electronics Retailer', company: 'Rahim Telecom Ltd', location: 'Dhaka', product: 'Wholesale Electronics', verified: true, recommend: true, status: 'approved' },
     { name: 'Sharmin Akter', email: 'sharmin2@gmail.com', rating: 4, message: 'Bought iPhone 15 Pro Max on EMI. Very smooth process and the staff explained everything clearly. Monthly installment is very affordable.', imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80', designation: 'School Teacher', company: 'Dhaka Govt. School', location: 'Dhaka', product: 'iPhone 15 Pro Max', verified: true, recommend: true, status: 'approved' },
   ]);
   console.log('  ✅ 4 Testimonials');
@@ -781,7 +781,7 @@ const run = async () => {
   console.log('  ✅ 3 Investors | 3 Warranty Records | 3 Offers');
   console.log('  ✅ 5 Banners | 4 Testimonials');
   console.log('\n🔑 Admin Login:');
-  console.log('   Email   : admin@smartplazabd.com');
+  console.log('   Email   : admin@yourskybridge.com');
   console.log('   Password: admin123');
   console.log('   URL     : http://localhost:5173/admin/login\n');
 };

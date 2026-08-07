@@ -52,7 +52,7 @@ const StockReports = () => {
     printWindow.document.write(`
       <html>
         <head>
-          <title>Stock Report - Smart Plaza BD</title>
+          <title>Stock Report - Demo Electronics ERP</title>
           <style>
             body { font-family: 'Outfit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; color: #1e293b; }
             h1 { color: #1d5f99; margin-bottom: 5px; }
@@ -68,7 +68,7 @@ const StockReports = () => {
           </style>
         </head>
         <body>
-          <h1>Smart Plaza BD</h1>
+          <h1>Demo Electronics ERP</h1>
           <div class="header-info">Stock Report | Generated on ${today}</div>
           
           <div class="summary-box">
@@ -565,7 +565,7 @@ const StockReports = () => {
                   <Box sx={{ p: 1.5, border: '1px solid #ccc', borderRadius: 1, backgroundColor: '#f5f5f5' }}>
                     <Typography variant="h6" gutterBottom>PDF Preview Content</Typography>
                     <Paper elevation={2} sx={{ p: 1.5, mb: 2 }}>
-                      <Typography variant="h5" align="center" gutterBottom>Smart Plaza BD</Typography>
+                      <Typography variant="h5" align="center" gutterBottom>Demo Electronics ERP</Typography>
                       <Typography variant="subtitle1" align="center" gutterBottom>Stock Report</Typography>
                       <Typography variant="body2" align="center" sx={{ mb: 2 }}>Generated on: {new Date().toLocaleDateString()}</Typography>
                       

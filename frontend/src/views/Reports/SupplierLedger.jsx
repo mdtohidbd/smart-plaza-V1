@@ -364,7 +364,7 @@ const SupplierLedger = () => {
         <body>
           <h2>Supplier Ledger Summary Report</h2>
           <div class="meta">
-            Shop: <strong>${activeShop?.name || 'Smart Plaza'}</strong> | 
+            Shop: <strong>${activeShop?.name || 'Demo ERP'}</strong> | 
             Generated: <strong>${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong> |
             Records: <strong>${metrics.activeCount} suppliers</strong>
           </div>
@@ -415,7 +415,7 @@ const SupplierLedger = () => {
         </head>
         <body>
           <h2>Supplier Ledger Statement</h2>
-          <div class="sub-title">Shop: ${activeShop?.name || 'Smart Plaza'}</div>
+          <div class="sub-title">Shop: ${activeShop?.name || 'Demo ERP'}</div>
           
           <div class="meta-box">
             <div style="font-size: 16px; font-weight: bold; color: #0f172a; margin-bottom: 5px;">

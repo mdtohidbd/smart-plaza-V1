@@ -280,8 +280,8 @@ const updateProfile = asyncHandler(async (req, res) => {
 const DEMO_ACCOUNTS_DEF = [
   {
     role: 'Super Admin',
-    name: 'MD Reajul Hasan (Super Admin)',
-    email: 'admin@smartplazabd.com',
+    name: 'Demo Admin (Super Admin)',
+    email: 'admin@yourskybridge.com',
     password: 'admin123',
     phone: '01700000000',
     description: 'Full system control, financial analytics, settings & permissions management.',
@@ -291,7 +291,7 @@ const DEMO_ACCOUNTS_DEF = [
   {
     role: 'Manager',
     name: 'Tanvir Ahmed (Manager)',
-    email: 'manager@smartplazabd.com',
+    email: 'manager@yourskybridge.com',
     password: 'manager123',
     phone: '01711111111',
     description: 'Inventory management, purchases, sales oversight & daily reporting.',
@@ -301,7 +301,7 @@ const DEMO_ACCOUNTS_DEF = [
   {
     role: 'Sales Staff',
     name: 'Rahim Uddin (Sales Executive)',
-    email: 'sales@smartplazabd.com',
+    email: 'sales@yourskybridge.com',
     password: 'sales123',
     phone: '01722222222',
     description: 'Retail POS checkout, customer management & warranty claims.',
@@ -309,9 +309,29 @@ const DEMO_ACCOUNTS_DEF = [
     color: '#F59E0B'
   },
   {
+    role: 'SR',
+    name: 'Karim (Sales Representative)',
+    email: 'sr@yourskybridge.com',
+    password: 'sr12345',
+    phone: '01788888888',
+    description: 'Wholesale field sales, order pad entry, route visits.',
+    badge: 'Field Sales',
+    color: '#2563EB'
+  },
+  {
+    role: 'DSR',
+    name: 'Jamal (Distributor SR)',
+    email: 'dsr@yourskybridge.com',
+    password: 'dsr12345',
+    phone: '01799999999',
+    description: 'Distributor level sales and tracking.',
+    badge: 'Distributor',
+    color: '#0284C7'
+  },
+  {
     role: 'Investor',
     name: 'Kazi Tariqul Islam (Investor)',
-    email: 'investor@smartplazabd.com',
+    email: 'investor@yourskybridge.com',
     password: 'investor123',
     phone: '01733333333',
     description: 'Investment capital tracker, monthly profit distributions & withdrawals.',
@@ -320,8 +340,8 @@ const DEMO_ACCOUNTS_DEF = [
   },
   {
     role: 'E-Commerce Admin',
-    name: 'Smart Plaza Admin (E-Commerce)',
-    email: 'ecommerce@smartplazabd.com',
+    name: 'Demo ERP Admin (E-Commerce)',
+    email: 'ecommerce@yourskybridge.com',
     password: 'ecommerce123',
     phone: '01744444444',
     description: 'E-commerce store management, catalog & customer order fulfillment.',
@@ -331,7 +351,7 @@ const DEMO_ACCOUNTS_DEF = [
   {
     role: 'Customer',
     name: 'Anwar Hossain (Customer)',
-    email: 'customer@smartplazabd.com',
+    email: 'customer@yourskybridge.com',
     password: 'customer123',
     phone: '01755555555',
     description: 'Online store customer profile, order history & EMI payments.',
@@ -341,7 +361,7 @@ const DEMO_ACCOUNTS_DEF = [
   {
     role: 'Super Admin Plus',
     name: 'Rasel Khan (Super Admin Plus)',
-    email: 'adminplus@smartplazabd.com',
+    email: 'adminplus@yourskybridge.com',
     password: 'adminplus123',
     phone: '01766666666',
     description: 'System configuration, extended access & master role override.',
@@ -354,27 +374,21 @@ const DEMO_ACCOUNTS_DEF = [
 const ensureDemoAccounts = async () => {
   try {
     const Shop = require('../models/Shop');
-    let systemsShop = await Shop.findOne({ name: 'systems' });
-    if (!systemsShop) {
-      systemsShop = await Shop.create({
-        name: 'systems',
-        address: 'Mymensingh',
-        phone: '01316884689',
-        email: 'mdtohid222020@gmail.com',
-        isActive: true
-      });
-    }
-    let skybridgeShop = await Shop.findOne({ name: 'skybridge-systems-demo' });
-    if (!skybridgeShop) {
-      skybridgeShop = await Shop.create({
-        name: 'skybridge-systems-demo',
+    const adminUser = await require('../models/User').findOne({ role: 'Super Admin' });
+    
+    let mainShop = await Shop.findOne({});
+    
+    if (!mainShop) {
+      mainShop = await Shop.create({
+        name: 'Demo ERP Head Office',
         address: 'Level 4, Multiplan Center, Elephant Road, Dhaka-1205',
-        phone: '+8801700000000',
-        email: 'info@smartplazabd.com',
+        phone: '01700000000',
+        email: 'info@yourskybridge.com',
+        owner: adminUser ? adminUser._id : null,
         isActive: true
       });
     }
-    const mainShop = systemsShop || (await Shop.findOne({}));
+
     const shopId = mainShop ? mainShop._id : null;
 
     for (const item of DEMO_ACCOUNTS_DEF) {

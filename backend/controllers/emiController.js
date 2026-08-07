@@ -363,7 +363,7 @@ const generateLegalNotice = asyncHandler(async (req, res) => {
     content: [
       // Official Legal Header
       {
-        text: 'SMART PLAZA BD',
+        text: 'Demo Electronics ERP',
         fontSize: 20,
         bold: true,
         alignment: 'center',
@@ -439,7 +439,7 @@ const generateLegalNotice = asyncHandler(async (req, res) => {
           { text: invoice.invoiceNumber, bold: true },
           ` dated `,
           { text: new Date(invoice.invoiceDate).toLocaleDateString(), bold: true },
-          `, you purchased and took possession of the following electronic equipment/assets from Smart Plaza BD:\n`
+          `, you purchased and took possession of the following electronic equipment/assets from Demo Electronics ERP:\n`
         ],
         fontSize: 9.5,
         lineHeight: 1.4,
@@ -536,11 +536,11 @@ const generateLegalNotice = asyncHandler(async (req, res) => {
           { text: 'a) Immediate Surrender/Repossession: ', bold: true },
           `You are hereby commanded to either settle the total delinquent outstanding of `,
           { text: `BDT ${(totalOverduePrincipal + totalLateFee).toFixed(2)}`, bold: true, color: '#991b1b' },
-          ` OR immediately surrender the hired assets (listed under Section 1 above) to any authorized agent of Smart Plaza BD within `,
+          ` OR immediately surrender the hired assets (listed under Section 1 above) to any authorized agent of Demo Electronics ERP within `,
           { text: 'seven (7) business days ', bold: true, color: '#991b1b' },
           `from the date of issuance of this notice.\n`,
           { text: 'b) Criminal Prosecution under Section 406/420: ', bold: true },
-          `Failure to return the assets or settle the outstanding dues will be treated as dishonest misappropriation and conversion of property. Smart Plaza BD shall immediately lodge a criminal complaint/case under `,
+          `Failure to return the assets or settle the outstanding dues will be treated as dishonest misappropriation and conversion of property. Demo Electronics ERP shall immediately lodge a criminal complaint/case under `,
           { text: 'Section 406 (Criminal Breach of Trust) and Section 420 (Cheating/Dishonesty) of the Penal Code of Bangladesh ', bold: true, color: '#991b1b' },
           `against you and your guarantor(s), which may result in arrest and prosecution. Additionally, civil proceedings for recovery of debt will be filed to recover all legal costs, court fees, and interest.`
         ],
@@ -556,7 +556,7 @@ const generateLegalNotice = asyncHandler(async (req, res) => {
               { text: 'Issued by:', fontSize: 8.5, color: '#475569' },
               { text: '\n\n\n________________________', color: '#cbd5e1' },
               { text: 'Accounts & Credit Audit Dept.', bold: true, fontSize: 9, color: '#1e293b' },
-              { text: 'Smart Plaza BD', fontSize: 8.5, color: '#475569' }
+              { text: 'Demo Electronics ERP', fontSize: 8.5, color: '#475569' }
             ]
           },
           {
@@ -564,7 +564,7 @@ const generateLegalNotice = asyncHandler(async (req, res) => {
               { text: 'Approved & Signed by:', fontSize: 8.5, color: '#475569', alignment: 'right' },
               { text: '\n\n\n________________________', color: '#cbd5e1', alignment: 'right' },
               { text: 'Head of Legal & Compliance', bold: true, fontSize: 9, color: '#1e293b', alignment: 'right' },
-              { text: 'Smart Plaza BD', fontSize: 8.5, color: '#475569', alignment: 'right' }
+              { text: 'Demo Electronics ERP', fontSize: 8.5, color: '#475569', alignment: 'right' }
             ]
           }
         ],

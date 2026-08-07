@@ -216,6 +216,11 @@ const OrderDetails = () => {
                       <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                         Quantity: {item.quantity}
                       </Typography>
+                      {item.color && (
+                        <Typography variant="body2" color="text.secondary">
+                          Color: {item.color}
+                        </Typography>
+                      )}
                       <Typography variant="body2" color="text.secondary">
                         Price: {formatCurrency(item.unitPrice || item.price)}
                       </Typography>

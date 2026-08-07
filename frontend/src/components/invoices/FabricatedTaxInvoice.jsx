@@ -7,7 +7,7 @@ const FabricatedTaxInvoice = ({ invoiceData, sale }) => {
   return (
     <Box sx={{ p: 4, bgcolor: 'white', color: 'black', width: '100%', maxWidth: '800px', mx: 'auto' }} className="print-container">
       <Box sx={{ textAlign: 'center', mb: 3 }}>
-        <Typography variant="h4" fontWeight="bold">SmartPlaza</Typography>
+        <Typography variant="h4" fontWeight="bold">DemoERP</Typography>
         <Typography variant="subtitle1">Tax Invoice (VAT) - Gov Copy</Typography>
       </Box>
 

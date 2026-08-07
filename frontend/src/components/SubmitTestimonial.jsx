@@ -298,7 +298,7 @@ const SubmitTestimonial = ({ open, onClose }) => {
                   rows={4}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="Tell us about your experience with Smart Plaza BD..."
+                  placeholder="Tell us about your experience with Demo Electronics ERP..."
                   required
                 />
               </Grid>

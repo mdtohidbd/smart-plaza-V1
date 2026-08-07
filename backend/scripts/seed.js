@@ -38,14 +38,14 @@ const connectDB = async () => {
   const uri = process.env.MONGODB_URI;
   if (uri.includes('ac-hatgiff-shard')) {
     console.log('🔍 Fetching shop ID from production DB...');
-    const prodUri = uri.replace('/smartplaza-stress?', '/smartplaza?');
+    const prodUri = uri.replace('/DemoERP-stress?', '/DemoERP?');
     await mongoose.connect(prodUri);
-    const adminUser = await User.findOne({ email: 'admin@smartplazabd.com' }).select('activeShop _id').lean();
+    const adminUser = await User.findOne({ email: 'admin@yourskybridge.com' }).select('activeShop _id').lean();
     SHOP_ID = adminUser?.activeShop?.toString();
     ADMIN_ID = adminUser?._id?.toString();
     await mongoose.disconnect();
 
-    console.log("⚠️ Switching to 'smartplaza-stress' DB for cleanup...");
+    console.log("⚠️ Switching to 'DemoERP-stress' DB for cleanup...");
     await mongoose.connect(uri);
   } else {
     await mongoose.connect(uri);

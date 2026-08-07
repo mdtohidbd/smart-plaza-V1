@@ -118,167 +118,153 @@ const TopBar = ({ open, setOpen }) => {
             sx={{ mr: 2 }}
           />
 
-          {/* TopBar Multi-Shop Switcher Dropdown */}
-          {!isInvestor(user) && (
-            <Box sx={{ ml: 1, display: { xs: 'none', sm: 'block' } }}>
-              <Button
-                onClick={handleOpenShopMenu}
-                startIcon={<StorefrontIcon sx={{ color: '#14B8A6' }} />}
-                endIcon={<KeyboardArrowDownIcon sx={{ color: '#64748B' }} />}
-                sx={{
-                  backgroundColor: '#F8FAFC',
-                  border: '1px solid #E2E8F0',
-                  borderRadius: '10px',
-                  px: 2,
-                  py: 0.75,
-                  textTransform: 'none',
-                  color: '#1E293B',
-                  fontWeight: 600,
-                  fontSize: '0.875rem',
-                  '&:hover': {
-                    backgroundColor: '#F1F5F9',
-                    borderColor: '#CBD5E1'
-                  }
-                }}
-              >
-                {activeShop ? activeShop.name : 'Select Shop'}
-              </Button>
-
-              <Menu
-                anchorEl={anchorElShop}
-                open={Boolean(anchorElShop)}
-                onClose={handleCloseShopMenu}
-                PaperProps={{
-                  elevation: 3,
-                  sx: {
-                    mt: 1,
-                    minWidth: 220,
-                    borderRadius: '12px',
-                    border: '1px solid #E2E8F0',
-                    py: 0.5
-                  }
-                }}
-              >
-                <Box sx={{ px: 2, py: 1 }}>
-                  <Typography variant="caption" fontWeight={700} color="#94A3B8" sx={{ textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                    Select Active Shop
-                  </Typography>
-                </Box>
-
-                {shops && shops.length > 0 ? (
-                  shops.map((shop) => {
-                    const isSelected = activeShop?._id === shop._id;
-                    return (
-                      <MenuItem
-                        key={shop._id}
-                        onClick={() => handleSelectShop(shop)}
-                        selected={isSelected}
-                        sx={{
-                          py: 1,
-                          px: 2,
-                          mx: 0.5,
-                          borderRadius: '8px',
-                          '&.Mui-selected': {
-                            backgroundColor: 'rgba(20, 184, 166, 0.08)',
-                            color: '#14B8A6',
-                            fontWeight: 600
-                          }
-                        }}
-                      >
-                        <ListItemIcon sx={{ minWidth: 32, color: isSelected ? '#14B8A6' : '#64748B' }}>
-                          <StorefrontIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText primary={shop.name} primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: isSelected ? 600 : 500 }} />
-                        {isSelected && <CheckIcon fontSize="small" sx={{ color: '#14B8A6', ml: 1 }} />}
-                      </MenuItem>
-                    );
-                  })
-                ) : (
-                  <MenuItem disabled>
-                    <ListItemText primary="No shops available" />
-                  </MenuItem>
-                )}
-
-                <Divider sx={{ my: 1 }} />
-
-                <MenuItem
-                  onClick={handleOpenCreateModal}
-                  sx={{
-                    py: 0.75,
-                    px: 1.5,
-                    mx: 1,
-                    my: 0.5,
-                    borderRadius: '50px',
-                    color: '#0D9488',
-                    fontWeight: 600,
-                    border: '1px solid #CCFBF1',
-                    backgroundColor: '#F0FDFA',
-                    '&:hover': {
-                      backgroundColor: '#CCFBF1',
-                      borderColor: '#99F6E4'
-                    }
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 26,
-                      height: 26,
-                      borderRadius: '50%',
-                      bgcolor: '#14B8A6',
-                      color: '#FFFFFF',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      mr: 1.25,
-                      flexShrink: 0
-                    }}
-                  >
-                    <AddIcon sx={{ fontSize: 16 }} />
-                  </Box>
-                  <ListItemText primary="Create New Shop" primaryTypographyProps={{ fontSize: '0.85rem', fontWeight: 700 }} />
-                </MenuItem>
-
-                <MenuItem
-                  onClick={handleManageShops}
-                  sx={{
-                    py: 0.75,
-                    px: 1.5,
-                    mx: 1,
-                    my: 0.5,
-                    borderRadius: '50px',
-                    color: '#4338CA',
-                    fontWeight: 600,
-                    border: '1px solid #E0E7FF',
-                    backgroundColor: '#EEF2FF',
-                    '&:hover': {
-                      backgroundColor: '#E0E7FF',
-                      borderColor: '#C7D2FE'
-                    }
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 26,
-                      height: 26,
-                      borderRadius: '50%',
-                      bgcolor: '#4F46E5',
-                      color: '#FFFFFF',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      mr: 1.25,
-                      flexShrink: 0
-                    }}
-                  >
-                    <SettingsIcon sx={{ fontSize: 15 }} />
-                  </Box>
-                  <ListItemText primary="Manage Shops" primaryTypographyProps={{ fontSize: '0.85rem', fontWeight: 700 }} />
-                </MenuItem>
-              </Menu>
-            </Box>
-          )}
-
           <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 }, ml: 'auto' }}>
+            {/* TopBar Multi-Shop Switcher Dropdown */}
+            {!isInvestor(user) && (
+              <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <Button
+                  onClick={handleOpenShopMenu}
+                  startIcon={<StorefrontIcon sx={{ color: '#0F766E' }} />}
+                  endIcon={<KeyboardArrowDownIcon sx={{ color: '#64748B', transition: 'transform 0.3s ease', transform: Boolean(anchorElShop) ? 'rotate(180deg)' : 'rotate(0deg)' }} />}
+                  sx={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '12px',
+                    px: 2.5,
+                    py: 1,
+                    textTransform: 'none',
+                    color: '#1E293B',
+                    fontWeight: 600,
+                    fontSize: '0.875rem',
+                    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      backgroundColor: '#F8FAFC',
+                      borderColor: '#CBD5E1',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                      transform: 'translateY(-1px)'
+                    }
+                  }}
+                >
+                  {activeShop ? activeShop.name : 'Select Branch'}
+                </Button>
+
+                <Menu
+                  anchorEl={anchorElShop}
+                  open={Boolean(anchorElShop)}
+                  onClose={handleCloseShopMenu}
+                  PaperProps={{
+                    elevation: 0,
+                    sx: {
+                      mt: 2,
+                      minWidth: 280,
+                      borderRadius: '20px',
+                      border: '1px solid rgba(226, 232, 240, 0.8)',
+                      py: 0,
+                      overflow: 'hidden',
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      backdropFilter: 'blur(12px)',
+                      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    }
+                  }}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <Box sx={{ px: 2.5, py: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(241, 245, 249, 0.8)' }}>
+                    <Typography variant="caption" fontWeight={700} color="#64748B" sx={{ textTransform: 'uppercase', letterSpacing: 1.2, fontSize: '0.7rem' }}>
+                      Select a branch
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <Tooltip title="Create New Branch" placement="top" arrow>
+                        <IconButton
+                          onClick={handleOpenCreateModal}
+                          size="small"
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            bgcolor: '#F0FDFA',
+                            color: '#0D9488',
+                            transition: 'all 0.2s ease-in-out',
+                            '&:hover': { bgcolor: '#CCFBF1', transform: 'scale(1.1)' }
+                          }}
+                        >
+                          <AddIcon sx={{ fontSize: 18 }} />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Manage Branches" placement="top" arrow>
+                        <IconButton
+                          onClick={handleManageShops}
+                          size="small"
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            bgcolor: '#EEF2FF',
+                            color: '#4338CA',
+                            transition: 'all 0.2s ease-in-out',
+                            '&:hover': { bgcolor: '#E0E7FF', transform: 'scale(1.1)' }
+                          }}
+                        >
+                          <SettingsIcon sx={{ fontSize: 18 }} />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </Box>
+                  
+                  <Box sx={{ p: 1, maxHeight: 300, overflowY: 'auto' }}>
+                    {shops && shops.length > 0 ? (
+                      shops.map((shop) => {
+                        const isSelected = activeShop?._id === shop._id;
+                        return (
+                          <MenuItem
+                            key={shop._id}
+                            onClick={() => handleSelectShop(shop)}
+                            selected={isSelected}
+                            sx={{
+                              py: 1.5,
+                              px: 2,
+                              mb: 0.5,
+                              borderRadius: '12px',
+                              transition: 'all 0.2s ease-in-out',
+                              '&.Mui-selected': {
+                                backgroundColor: '#F0FDFA',
+                                '&:hover': {
+                                  backgroundColor: '#CCFBF1',
+                                }
+                              },
+                              '&:hover': {
+                                backgroundColor: '#F8FAFC',
+                                transform: 'translateX(4px)'
+                              },
+                              '&:last-child': {
+                                mb: 0
+                              }
+                            }}
+                          >
+                            <ListItemIcon sx={{ minWidth: 40, color: isSelected ? '#0D9488' : '#94A3B8' }}>
+                              <StorefrontIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText 
+                              primary={shop.name} 
+                              primaryTypographyProps={{ 
+                                fontSize: '0.875rem', 
+                                fontWeight: isSelected ? 600 : 500,
+                                color: isSelected ? '#0F766E' : '#334155' 
+                              }} 
+                            />
+                            {isSelected && <CheckIcon fontSize="small" sx={{ color: '#0D9488', ml: 1 }} />}
+                          </MenuItem>
+                        );
+                      })
+                    ) : (
+                      <MenuItem disabled sx={{ py: 2, justifyContent: 'center' }}>
+                        <ListItemText primary="No branches available" primaryTypographyProps={{ textAlign: 'center', color: '#94A3B8', fontSize: '0.875rem' }} />
+                      </MenuItem>
+                    )}
+                  </Box>
+                </Menu>
+              </Box>
+            )}
+
             {user && !isSalesStaff(user) && <NotificationsBell />}
             <UserMenu user={user} />
           </Box>

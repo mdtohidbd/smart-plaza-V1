@@ -242,7 +242,7 @@ const PageHeader = () => (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
             <Percent sx={{ fontSize: '1rem', color: BRAND }} />
             <Typography variant="overline" sx={{ color: BRAND, fontWeight: 800, letterSpacing: '0.12em', lineHeight: 1 }}>
-              SMART PLAZA EXCLUSIVE
+             EXCLUSIVE OFFERS
             </Typography>
           </Box>
           <Typography

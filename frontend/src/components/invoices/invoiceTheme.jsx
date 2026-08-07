@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Smart Plaza brand palette — sampled from logo-alternate.png + approved invoice reference
+// Demo ERP brand palette — sampled from logo-alternate.png + approved invoice reference
 export const BRAND = {
   orange: '#E67E22',      // "Smart" in logo
   orangeLight: '#F39C12',

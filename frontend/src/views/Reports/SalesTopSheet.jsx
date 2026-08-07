@@ -324,7 +324,7 @@ const SalesTopSheet = () => {
                   <Box sx={{ p: 1.5, border: '1px solid #ccc', borderRadius: 1, backgroundColor: '#f5f5f5' }}>
                     <Typography variant="h6" gutterBottom>PDF Preview Content</Typography>
                     <Paper elevation={2} sx={{ p: 1.5, mb: 2 }}>
-                      <Typography variant="h5" align="center" gutterBottom>Smart Plaza BD</Typography>
+                      <Typography variant="h5" align="center" gutterBottom>Demo Electronics ERP</Typography>
                       <Typography variant="subtitle1" align="center" gutterBottom>Sales Top Sheet Report</Typography>
                       <Typography variant="body2" align="center" sx={{ mb: 2 }}>Generated on: {new Date().toLocaleDateString()}</Typography>
                       

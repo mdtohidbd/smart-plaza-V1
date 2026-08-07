@@ -8,9 +8,9 @@ const money = (n) => (typeof n === 'number' ? n.toLocaleString() : '0');
 const FabricatedSalesInvoice = ({ invoiceData, sale }) => {
   const { settings } = useSettings();
   const logo = settings?.logo || '/logo-final.jpeg';
-  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const companyName = settings?.companyName || 'Demo Electronics ERP';
   const phone = settings?.phone || '01842-144844';
-  const email = settings?.email || 'smartplazabd@gmail.com';
+  const email = settings?.email || 'admin@yourskybridge.com';
   const address = settings?.companyAddress || '1, KDA Avenue, Khulna';
   const website = settings?.website || email;
   if (!invoiceData) return null;
@@ -144,7 +144,7 @@ const FabricatedSalesInvoice = ({ invoiceData, sale }) => {
             </Box>
             {invoiceData.discount > 0 && (
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.6 }}>
-                <Typography sx={{ fontSize: 12.5, fontWeight: 700, color: BRAND.orange }}>Smart Plaza Discount</Typography>
+                <Typography sx={{ fontSize: 12.5, fontWeight: 700, color: BRAND.orange }}>Demo ERP Discount</Typography>
                 <Typography sx={{ fontSize: 12.5, fontWeight: 700, color: BRAND.orange }}>- ৳{money(invoiceData.discount)}</Typography>
               </Box>
             )}

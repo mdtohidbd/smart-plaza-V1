@@ -5,7 +5,7 @@ import { useSettings } from '../../context/SettingsContext';
 
 const About = () => {
   const { settings } = useSettings();
-  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const companyName = settings?.companyName || 'Demo Electronics ERP';
 
   const team = [
     {
@@ -274,7 +274,7 @@ const About = () => {
             📍 {settings?.companyAddress || '1 KDA Avenue, Shibbari, Khulna, Bangladesh, 9100'}
           </Typography>
           <Typography variant="body1">
-            📞 {settings?.phone || '01842-144844'} | ✉️ {settings?.email || 'smartplazabd@gmail.com'}
+            📞 {settings?.phone || '01842-144844'} | ✉️ {settings?.email || 'admin@yourskybridge.com'}
           </Typography>
         </Container>
       </Box>

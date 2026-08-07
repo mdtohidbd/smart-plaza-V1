@@ -13,7 +13,7 @@ import { useSettings } from '../../context/SettingsContext';
 
 const Testimonials = () => {
   const { settings } = useSettings();
-  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const companyName = settings?.companyName || 'Demo Electronics ERP';
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);

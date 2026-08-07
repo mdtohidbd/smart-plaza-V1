@@ -17,10 +17,10 @@ const getInitialSettings = () => {
     console.error('Error reading cached settings:', e);
   }
   return {
-    companyName: 'Smart Plaza BD',
+    companyName: 'Demo Electronics ERP',
     companyAddress: '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
     phone: '01842-144844',
-    email: 'smartplazabd@gmail.com',
+    email: 'admin@yourskybridge.com',
     website: '',
     logo: ''
   };
@@ -80,9 +80,12 @@ export const SettingsProvider = ({ children }) => {
         const iconSrc = data.favicon || data.logo;
         if (iconSrc && !iconSrc.includes('google.com/imgres')) {
           const links = document.querySelectorAll("link[rel*='icon']");
-          links.forEach(link => {
-            link.href = iconSrc;
-          });
+          links.forEach(link => link.remove());
+          
+          const newLink = document.createElement('link');
+          newLink.rel = 'icon';
+          newLink.href = iconSrc;
+          document.head.appendChild(newLink);
         }
       }
     } catch (err) {

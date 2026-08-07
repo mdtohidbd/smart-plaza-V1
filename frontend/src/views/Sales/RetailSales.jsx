@@ -214,6 +214,8 @@ const RetailSales = () => {
     }
   );
 
+  const individualCustomers = (customers || []).filter(c => c.customerType !== 'Business');
+
   // Fetch employees for Sold By
   const { data: employees } = useQuery(
     'sales-employees',
@@ -440,7 +442,8 @@ const RetailSales = () => {
           quantity: item.quantity,
           unitPrice: item.unitPrice,
           discount: item.discount,
-          tax: item.tax
+          tax: item.tax,
+          color: item.selectedColor || null
         };
         
         if (item.warranties && item.warranties.length > 0) {
@@ -650,9 +653,18 @@ const RetailSales = () => {
         trackSerials: isTrackingSerials,
         availableSerials: allAvailableSerials,
         selectedSerials: isTrackingSerials && allAvailableSerials.length > 0 ? [allAvailableSerials[0]] : [],
-        serialNumber: isTrackingSerials && allAvailableSerials.length > 0 ? allAvailableSerials[0] : ''
+        serialNumber: isTrackingSerials && allAvailableSerials.length > 0 ? allAvailableSerials[0] : '',
+        selectedColor: (product.colors && product.colors.length > 0) ? product.colors[0].name : (product.color || null)
       }]);
     }
+  };
+
+  // Update selected color in cart
+  const updateCartColor = (productId, colorName) => {
+    setCart(cart.map(item => {
+      if (item.product._id !== productId) return item;
+      return { ...item, selectedColor: colorName };
+    }));
   };
 
   // Toggle warranty in cart
@@ -791,9 +803,10 @@ const RetailSales = () => {
     try {
       const response = await api.post('/api/contacts/customers', {
         ...newCustomer,
-        contactType: 'Customer'
+        contactType: 'Customer',
+        customerType: 'Individual'
       });
-      setSuccess('New customer created successfully!');
+      setSuccess('New individual customer created successfully!');
       
       // Update local cache immediately so the newly created customer's name renders in the dropdown
       queryClient.setQueryData('customers', old => {
@@ -896,6 +909,7 @@ const RetailSales = () => {
                 toggleWarranty={toggleWarranty}
                 updateCartSerialAtIndex={updateCartSerialAtIndex}
                 updateDiscount={updateDiscount}
+                updateCartColor={updateCartColor}
                 warrantyTemplates={warrantyTemplates}
               />
 
@@ -948,7 +962,8 @@ const RetailSales = () => {
                         />
                       </Grid>
                       <CustomerSelection
-                        customers={customers}
+                        customers={individualCustomers}
+                        isIndividual={true}
                         customer={customer}
                         setCustomer={setCustomer}
                         openCustomerDialog={openCustomerDialog}
@@ -1188,6 +1203,7 @@ const RetailSales = () => {
                 toggleWarranty={toggleWarranty}
                 updateCartSerialAtIndex={updateCartSerialAtIndex}
                 updateDiscount={updateDiscount}
+                updateCartColor={updateCartColor}
                 warrantyTemplates={warrantyTemplates}
               />
               
@@ -1267,7 +1283,8 @@ const RetailSales = () => {
                   </Grid>
                   
                   <CustomerSelection
-                    customers={customers}
+                    customers={individualCustomers}
+                    isIndividual={true}
                     customer={customer}
                     setCustomer={setCustomer}
                     openCustomerDialog={openCustomerDialog}

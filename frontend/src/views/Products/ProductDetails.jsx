@@ -121,7 +121,7 @@ const ProductDetails = () => {
   // Dynamic SEO Title and Metadata updates & Color Selection Initialization
   useEffect(() => {
     if (product) {
-      document.title = product.metaTitle || `${product.name} - SmartPlaza`;
+      document.title = product.metaTitle || `${product.name} - DemoERP`;
       
       let metaDesc = document.querySelector('meta[name="description"]');
       if (!metaDesc) {
@@ -129,7 +129,7 @@ const ProductDetails = () => {
         metaDesc.setAttribute('name', 'description');
         document.head.appendChild(metaDesc);
       }
-      metaDesc.setAttribute('content', product.metaDescription || product.description || `Buy ${product.name} at SmartPlaza.`);
+      metaDesc.setAttribute('content', product.metaDescription || product.description || `Buy ${product.name} at DemoERP.`);
 
       // Preselect first color option
       if (product.colors && product.colors.length > 0) {
@@ -233,7 +233,7 @@ const ProductDetails = () => {
         {
           category: 'General',
           items: [
-            { label: 'Brand', value: product?.brand?.name || 'SmartPlaza' },
+            { label: 'Brand', value: product?.brand?.name || 'DemoERP' },
             { label: 'Supplier', value: product?.supplier?.name || 'N/A' },
             { label: 'Model', value: product?.model || 'N/A' },
             { label: 'Category', value: product?.category?.name || 'Electronics' },
@@ -680,7 +680,7 @@ const ProductDetails = () => {
                       <Button
                         variant="outlined"
                         fullWidth
-                        onClick={() => navigate(`/shop/checkout/${product._id}`)}
+                        onClick={() => navigate(`/shop/checkout/${product._id}`, { state: { selectedColor: selectedColor?.name || product.color || null } })}
                         sx={{ 
                           border: '2px solid #14B8A6', 
                           color: '#14B8A6', 
@@ -997,7 +997,7 @@ const ProductDetails = () => {
                   <Typography variant="h6" fontWeight={700} sx={{ mb: 2, px: 2 }}>Description</Typography>
                   <Card sx={{ p: 3, borderRadius: '12px', border: '1px solid #E2E8F0', boxShadow: 'none' }}>
                     <Typography variant="body1" sx={{ color: '#475569', lineHeight: 1.8, whiteSpace: 'pre-wrap' }}>
-                      {product.description || "Premium quality product from SmartPlaza. Designed for durability and performance."}
+                      {product.description || "Premium quality product from DemoERP. Designed for durability and performance."}
                     </Typography>
                   </Card>
                 </Box>
@@ -1019,7 +1019,7 @@ const ProductDetails = () => {
                             </Typography>
                             {q.answerText && (
                               <Box sx={{ mt: 1.5, ml: 4, pl: 2, borderLeft: '3px solid #14B8A6' }}>
-                                <Typography variant="body2" sx={{ fontWeight: 600, color: '#475569', mb: 0.5 }}>Answer from SmartPlaza Admin:</Typography>
+                                <Typography variant="body2" sx={{ fontWeight: 600, color: '#475569', mb: 0.5 }}>Answer from DemoERP Admin:</Typography>
                                 <Typography variant="body2" sx={{ color: '#64748B' }}>{q.answerText}</Typography>
                               </Box>
                             )}

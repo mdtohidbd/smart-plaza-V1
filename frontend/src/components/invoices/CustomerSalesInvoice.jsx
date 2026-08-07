@@ -6,9 +6,9 @@ import { useSettings } from '../../context/SettingsContext';
 const CustomerSalesInvoice = ({ invoiceData, sale, title }) => {
   const { settings } = useSettings();
   const logo = settings?.logo || '/logo-final.jpeg';
-  const companyName = settings?.companyName || 'Smart Plaza BD';
+  const companyName = settings?.companyName || 'Demo Electronics ERP';
   const phone = settings?.phone || '01842-144844';
-  const email = settings?.email || 'smartplazabd@gmail.com';
+  const email = settings?.email || 'admin@yourskybridge.com';
   const address = settings?.companyAddress || '1, KDA Avenue, Khulna';
   const website = settings?.website || email;
   if (!invoiceData) return null;
@@ -235,7 +235,7 @@ const CustomerSalesInvoice = ({ invoiceData, sale, title }) => {
             
             {(invoiceData.discount > 0) && (
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.3, px: 0.5 }}>
-                <Typography sx={{ fontSize: '10px', fontWeight: 'bold', color: BRAND.orange }}>Smart Plaza Discount</Typography>
+                <Typography sx={{ fontSize: '10px', fontWeight: 'bold', color: BRAND.orange }}>Demo ERP Discount</Typography>
                 <Typography sx={{ fontSize: '10px', fontWeight: 'bold', color: BRAND.orange }}>- {invoiceData.discount?.toLocaleString()}</Typography>
               </Box>
             )}

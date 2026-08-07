@@ -1,4 +1,4 @@
-# SmartPlaza - Feature Update Log
+# DemoERP - Feature Update Log
 
 ## Release v1.0.0-EMIOverdue (May 18, 2026)
 

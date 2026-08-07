@@ -384,10 +384,10 @@ exports.getPublicSettings = async (req, res) => {
     let settings = await Setting.findOne().sort({ updatedAt: -1 }).lean();
     if (!settings) {
       settings = {
-        companyName: 'Smart Plaza BD',
+        companyName: 'Demo Electronics ERP',
         companyAddress: '1 KDA Avenue, Shibbari, Khulna, Khulna, Bangladesh, 9100',
         phone: '01842-144844',
-        email: 'smartplazabd@gmail.com',
+        email: 'admin@yourskybridge.com',
         logo: '/website-logo.png',
         website: ''
       };

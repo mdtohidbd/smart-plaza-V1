@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import EcommerceLayout from '../../ecommerce/layout/EcommerceLayout';
@@ -32,6 +32,7 @@ import { ArrowBack, ShoppingCart, LocalShipping } from '@mui/icons-material';
 const Checkout = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const token = localStorage.getItem('token');
 
@@ -183,7 +184,8 @@ const Checkout = () => {
         model: product.model,
         quantity: quantity,
         price: product.sellingPrice,
-        image: (product.images && product.images.length > 0) ? product.images[0] : (product.image || null)
+        image: (product.images && product.images.length > 0) ? product.images[0] : (product.image || null),
+        color: location.state?.selectedColor || null
       }];
     } else {
       orderItems = cartItems.map(item => ({
@@ -192,7 +194,8 @@ const Checkout = () => {
         model: item.product.model,
         quantity: item.quantity,
         price: item.product?.price || item.product?.sellingPrice || item.price || 0,
-        image: (item.product.images && item.product.images.length > 0) ? item.product.images[0] : (item.product.image || null)
+        image: (item.product.images && item.product.images.length > 0) ? item.product.images[0] : (item.product.image || null),
+        color: item.selectedColor || null
       }));
     }
 

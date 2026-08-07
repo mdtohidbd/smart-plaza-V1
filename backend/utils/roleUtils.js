@@ -10,6 +10,12 @@ const isInvestor = (user) =>
 const isSalesStaff = (user) =>
   user?.role?.toLowerCase() === 'sales staff';
 
+const isSR = (user) =>
+  user?.role?.toLowerCase() === 'sr';
+
+const isDSR = (user) =>
+  user?.role?.toLowerCase() === 'dsr';
+
 const isManager = (user) =>
   user?.role?.toLowerCase() === 'manager';
 
@@ -103,8 +109,8 @@ const sanitizeSaleForRole = (saleObj, user) => {
     obj.invoices = sanitizeInvoicesForRole(obj.invoices, user);
   }
   
-  // Now handle Sales Staff - remove all profit-related fields
-  if (isSalesStaff(user)) {
+  // Now handle Sales Staff and SR/DSR - remove all profit-related fields
+  if (isSalesStaff(user) || isSR(user) || isDSR(user)) {
     delete obj.calculatedNetProfit;
     delete obj.netProfit;
     delete obj.profitMargin;
@@ -158,6 +164,8 @@ module.exports = {
   isSuperAdmin,
   isInvestor,
   isSalesStaff,
+  isSR,
+  isDSR,
   isManager,
   hasSuperAdminPlusPermission,
   hasInvestorPermission,

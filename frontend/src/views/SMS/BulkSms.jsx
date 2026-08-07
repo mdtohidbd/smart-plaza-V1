@@ -261,7 +261,7 @@ export default function BulkSms() {
               fullWidth
               multiline
               rows={7}
-              placeholder="Type your promotional SMS message here...&#10;&#10;e.g. Dear Customer, We have an exciting offer! Get 20% off on all electronics this weekend. Visit SmartPlaza now. Reply STOP to unsubscribe."
+              placeholder="Type your promotional SMS message here...&#10;&#10;e.g. Dear Customer, We have an exciting offer! Get 20% off on all electronics this weekend. Visit DemoERP now. Reply STOP to unsubscribe."
               value={message}
               onChange={e => setMessage(e.target.value)}
               sx={{

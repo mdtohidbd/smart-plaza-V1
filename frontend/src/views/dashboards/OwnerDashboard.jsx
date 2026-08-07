@@ -262,83 +262,6 @@ const OwnerDashboard = () => {
   };
 
 
-  const renderSalesByBrand = () => {
-    const brands = dashboardData?.salesByBrand || [];
-    return (
-      <Paper sx={{ p: 4, mb: 3.5, borderRadius: '24px', border: '1px solid #F1F5F9', boxShadow: '0 8px 30px rgba(15, 23, 42, 0.03)' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography sx={{ color: '#0F172A', fontWeight: 800, fontSize: '1.2rem', fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em' }}>Sales by Brand</Typography>
-          <Button 
-            size="small" 
-            onClick={() => navigate('/dashboard/contacts/companies')}
-            sx={{ 
-              color: '#0F766E', 
-              textTransform: 'none', 
-              fontWeight: 600,
-              fontSize: '0.85rem',
-              bgcolor: '#F0FDFA',
-              border: '1px solid #99F6E4',
-              borderRadius: '10px',
-              px: 2,
-              py: 0.75,
-              '&:hover': { bgcolor: '#14B8A6', color: '#FFFFFF', borderColor: '#14B8A6' }
-            }}
-          >
-            View Brands <OpenInNewIcon sx={{ ml: 1, fontSize: 14 }} />
-          </Button>
-        </Box>
-        <Box sx={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '2px solid #F1F5F9' }}>
-                <th style={{ textAlign: 'left', padding: '14px 10px', color: '#64748B', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Brand</th>
-                <th style={{ textAlign: 'right', padding: '14px 10px', color: '#64748B', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Orders</th>
-                <th style={{ textAlign: 'right', padding: '14px 10px', color: '#64748B', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Revenue</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                Array.from(new Array(3)).map((_, idx) => (
-                  <tr key={`skeleton-${idx}`} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                    <td style={{ padding: '16px 10px' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                        <Skeleton variant="circular" width={28} height={28} />
-                        <Skeleton variant="text" width={80} />
-                      </Box>
-                    </td>
-                    <td style={{ padding: '16px 10px', textAlign: 'right' }}><Skeleton variant="text" width={40} sx={{ ml: 'auto' }} /></td>
-                    <td style={{ padding: '16px 10px', textAlign: 'right' }}><Skeleton variant="text" width={60} sx={{ ml: 'auto' }} /></td>
-                  </tr>
-                ))
-              ) : brands.length === 0 ? (
-                <tr>
-                  <td colSpan={3} style={{ padding: '32px 10px', textAlign: 'center', color: '#94A3B8', fontSize: '0.9rem' }}>No brand sales found</td>
-                </tr>
-              ) : brands.map((brand, idx) => (
-                <tr key={idx} style={{ 
-                  borderBottom: '1px solid #F1F5F9',
-                  transition: 'all 0.2s',
-                  cursor: 'pointer'
-                }} className="hover-row">
-                  <td style={{ padding: '16px 10px' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                      <Avatar sx={{ width: 28, height: 28, bgcolor: 'rgba(20, 184, 166, 0.1)', color: '#0F766E', fontSize: '0.8rem', fontWeight: 700 }}>
-                        {brand.brand ? brand.brand[0] : '?'}
-                      </Avatar>
-                      <Typography sx={{ color: '#0F172A', fontWeight: 700, fontSize: '0.9rem', fontFamily: 'Outfit, sans-serif' }}>{brand.brand}</Typography>
-                    </Box>
-                  </td>
-                  <td style={{ padding: '16px 10px', textAlign: 'right', color: '#334155', fontWeight: 600, fontSize: '0.875rem' }}>{brand.orderCount}</td>
-                  <td style={{ padding: '16px 10px', textAlign: 'right', color: '#10B981', fontWeight: 800, fontSize: '0.9rem' }}>{showValues ? `৳${(brand.totalSales || 0).toLocaleString()}` : '•••••'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Box>
-      </Paper>
-    );
-  };
-
   const renderRecentSales = () => {
     const MAX_VISIBLE = 4;
     const allSales = dashboardData?.recentOrders || [];
@@ -981,7 +904,6 @@ const OwnerDashboard = () => {
 
       {/* Main Grid Content */}
       <Grid container spacing={3}>
-        {hasPermission('sales', 'read') && <Grid item xs={12}>{renderSalesByBrand()}</Grid>}
         {showAlertsSidebar && (
           <Grid item xs={12} md={6}>
             {renderAlertsSidebar()}

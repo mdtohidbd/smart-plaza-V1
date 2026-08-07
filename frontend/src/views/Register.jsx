@@ -171,7 +171,7 @@ const Register = ({ isEcommerce = false }) => {
             mb: 2,
           }}>
             {isEcommerce ? 'Join ' : 'Join the '}
-            <Box component="span" sx={{ color: '#14B8A6' }}>Smart Plaza</Box>
+            <Box component="span" sx={{ color: '#14B8A6' }}>Demo ERP</Box>
             {isEcommerce ? '' : ' team'}
           </Typography>
           <Typography sx={{
@@ -179,7 +179,7 @@ const Register = ({ isEcommerce = false }) => {
             color: '#94A3B8', fontSize: '1.05rem', lineHeight: 1.7,
             maxWidth: '340px',
           }}>
-            {isEcommerce ? 'Create an account to track your orders, save your wishlist, and check out faster.' : 'Create your administrator account to manage the SmartPlaza business operations.'}
+            {isEcommerce ? 'Create an account to track your orders, save your wishlist, and check out faster.' : 'Create your administrator account to manage the DemoERP business operations.'}
           </Typography>
 
           {/* Steps */}
@@ -234,7 +234,7 @@ const Register = ({ isEcommerce = false }) => {
           fontSize: '0.8rem', color: '#64748B',
           position: 'relative', zIndex: 1
         }}>
-          © {new Date().getFullYear()} {settings?.companyName || 'Smart Plaza BD'}. All rights reserved.
+          © {new Date().getFullYear()} {settings?.companyName || 'Demo Electronics ERP'}. All rights reserved.
         </Typography>
       </Box>
 
@@ -334,7 +334,7 @@ const Register = ({ isEcommerce = false }) => {
               <TextField
                 required fullWidth
                 id="email" name="email" type="email"
-                placeholder="admin@smartplaza.com"
+                placeholder="admin@DemoERP.com"
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
