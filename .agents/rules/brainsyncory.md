@@ -1,7 +1,7 @@
 
 
 # Project Memory — smart-plaza-V1
-> 92 notes | Score threshold: >40
+> 55 notes | Score threshold: >40
 
 ## Safety — Never Run Destructive Commands
 
@@ -20,14 +20,18 @@
 
 ## 📝 NOTE: 1 uncommitted file(s) in working tree.\n\n## Project Standards
 
-- 🟢 Edited backend/scripts/inspect_today_sales.js (17 changes, 69min) — confirmed 3x
-- 🟢 Edited backend/.env (76 changes, 10min) — confirmed 3x
-- 🟢 Edited frontend/.env (10 changes, 21min) — confirmed 3x
-- convention in .gitignore
-- Rate limit API endpoints to prevent abuse
-- Validate request body with a schema validator (Joi, Zod)
-- Use helmet for security headers
+- convention in auth.js
+- convention in emiController.js
+- Extract repeated class patterns into components
+- Use responsive prefixes consistently (sm:, md:, lg:, xl:)
+- Don't use arbitrary values when a utility class exists
 - Use Suspense and Error Boundaries for async operations
+- Don't prop-drill more than 2 levels — use Context or state management
+- Use useMemo for expensive computations, useCallback for stable references
+
+## Recent Decisions
+
+- decision in settings.js
 
 ## Verified Best Practices
 

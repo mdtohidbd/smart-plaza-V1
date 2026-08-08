@@ -1,0 +1,27 @@
+{
+  "version": 4,
+  "sessionId": "session_1770518423000",
+  "createdAt": "2026-08-08T02:40:00Z",
+  "updatedAt": "2026-08-08T02:40:00Z",
+  "projectPath": "e:\\Skybridge Digital\\demo-erp-electronic-shop",
+  "lang": "en",
+  "mode": "planning",
+  "originalPrompt": "I want to create a USER MANUAL DOCX for this demo erp electronic shop, go through the veiws of panel one by one and give expalantion of what does what and how to do it, write it in a md file and also write how that feature helps the shop owner, dont miss anyuthing",
+  "current": {
+    "iterationId": "iter-001",
+    "optimizedPrompt": "# Task: Comprehensive User Manual Generation for Demo ERP Electronic Shop\n\n## 1. Role and Goal\nYou will act as a Senior Technical Writer and ERP Systems Specialist for Consumer Electronics Retail. Your core objective is to produce an exhaustive, professional User Manual in Markdown format (`USER_MANUAL.md`) that covers every single panel, view, sub-module, and action in the Demo ERP Electronic Shop platform, detailing what each feature does, step-by-step instructions on how to use it, and how it helps the shop owner maximize revenue, prevent inventory leakage, and streamline operations.\n\n## 2. Background and Context\nThe system is a full-featured Electronics Shop ERP & E-Commerce solution featuring:\n- **Core ERP Stack**: React 18, Vite, Material UI (MUI), Node.js, Express, MongoDB.\n- **Key Retail Electronics Needs**: Serial/IMEI tracking, Warranty & Claim handling, EMI (Installment) management with collector tracking, Multi-Shop/Branch inventory, Wholesale & Retail Point-of-Sale (POS), Customer Fraud & Courier delivery check, SMS automation, and Investor equity tracking.\n\n## 3. Key Steps\n1. System Overview & Architecture Setup\n2. Dashboard Modules Walkthrough\n3. Sales & Point of Sale (POS)\n4. EMI & Installment Sales Management\n5. Products & Inventory Control\n6. Purchase & Supplier Management\n7. Warranty & RMA Claims\n8. Accounts & Financial Management\n9. Contacts & CRM\n10. Fraud Checker & Risk Mitigation\n11. SMS Campaigns & Notifications\n12. Offers, Banners & E-Commerce Management\n13. Investors & Capital Management\n14. Employees, Users & Access Roles\n15. Settings & Branch Configuration\n\n## 4. Output Requirements\n- Format: Clean, beautifully formatted GitHub-flavored Markdown file saved at `./USER_MANUAL.md`.",
+    "reviewReport": "The original requirement lacked detailed module breakdown and explicit structural constraints. The optimized prompt addresses code structure, serial/IMEI nuances, financial controls, and risk checker features specific to this codebase.",
+    "evaluationReport": "Score: 95/100 (Excellent). Intent clarity: 30/30, Information completeness: 28/30, Format compliance: 19/20, Optimization degree: 18/20.",
+    "score": 95,
+    "suggestedDirections": [
+      {
+        "id": "dir-1",
+        "label": "Add PDF/DOCX Export Script",
+        "description": "Provide a script to convert the generated Markdown file to formatted DOCX or PDF."
+      }
+    ]
+  },
+  "history": [],
+  "lastAction": null,
+  "status": "completed"
+}
